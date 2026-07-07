@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { store } from '../utils/store.js';
+import { store, isUsingPostgres } from '../utils/store.js';
 import { authMiddleware, optionalAuth } from '../middleware/auth.js';
 
 const router = Router();
 
-router.post('/', optionalAuth, (req, res) => {
+router.post('/', optionalAuth, async (req, res) => {
   try {
     const { items, shipping, payment, address, customer } = req.body;
 
@@ -13,7 +13,7 @@ router.post('/', optionalAuth, (req, res) => {
       return res.status(400).json({ error: 'Carrinho vazio' });
     }
 
-    const products = store.getProducts();
+    const products = await store.getProducts();
     const orderItems = items.map(item => {
       const product = products.find(p => p.id === item.id);
       if (!product) throw new Error(`Produto ${item.id} não encontrado`);
@@ -46,9 +46,13 @@ router.post('/', optionalAuth, (req, res) => {
       trackingCode: null,
     };
 
-    const orders = store.getOrders();
-    orders.push(order);
-    store.saveOrders(orders);
+    if (isUsingPostgres()) {
+      await store.insertOrder(order);
+    } else {
+      const orders = await store.getOrders();
+      orders.push(order);
+      await store.saveOrders(orders);
+    }
 
     res.status(201).json(order);
   } catch (err) {
@@ -56,21 +60,18 @@ router.post('/', optionalAuth, (req, res) => {
   }
 });
 
-router.get('/', authMiddleware, (req, res) => {
-  const orders = store.getOrders().filter(o => o.userId === req.user.id);
-  res.json(orders.reverse());
+router.get('/', authMiddleware, async (req, res) => {
+  const orders = isUsingPostgres()
+    ? await store.getOrdersByUser(req.user.id)
+    : (await store.getOrders()).filter(o => o.userId === req.user.id).reverse();
+  res.json(orders);
 });
 
-router.get('/:id', authMiddleware, (req, res) => {
-  const orders = store.getOrders();
-  const order = orders.find(o => o.id === req.params.id && o.userId === req.user.id);
-  if (!order) return res.status(404).json({ error: 'Pedido não encontrado' });
-  res.json(order);
-});
+router.get('/track/:code', async (req, res) => {
+  const order = isUsingPostgres()
+    ? await store.findOrderByTracking(req.params.code)
+    : (await store.getOrders()).find(o => o.id === req.params.code || o.trackingCode === req.params.code);
 
-router.get('/track/:code', (req, res) => {
-  const orders = store.getOrders();
-  const order = orders.find(o => o.id === req.params.code || o.trackingCode === req.params.code);
   if (!order) return res.status(404).json({ error: 'Pedido não encontrado' });
 
   res.json({
@@ -81,6 +82,17 @@ router.get('/track/:code', (req, res) => {
     items: order.items.map(i => ({ name: i.name, qty: i.qty })),
     total: order.total,
   });
+});
+
+router.get('/:id', authMiddleware, async (req, res) => {
+  const order = isUsingPostgres()
+    ? await store.findOrderById(req.params.id)
+    : (await store.getOrders()).find(o => o.id === req.params.id && o.userId === req.user.id);
+
+  if (!order || order.userId !== req.user.id) {
+    return res.status(404).json({ error: 'Pedido não encontrado' });
+  }
+  res.json(order);
 });
 
 export default router;

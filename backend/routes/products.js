@@ -3,15 +3,13 @@ import { store } from '../utils/store.js';
 
 const router = Router();
 
-router.get('/', (req, res) => {
-  const products = store.getProducts();
+router.get('/', async (req, res) => {
+  const products = await store.getProducts();
   const { category, search, minPrice, maxPrice, sort } = req.query;
 
   let filtered = [...products];
 
-  if (category) {
-    filtered = filtered.filter(p => p.category === category);
-  }
+  if (category) filtered = filtered.filter(p => p.category === category);
 
   if (search) {
     const q = search.toLowerCase();
@@ -33,8 +31,8 @@ router.get('/', (req, res) => {
   res.json(filtered);
 });
 
-router.get('/:id', (req, res) => {
-  const products = store.getProducts();
+router.get('/:id', async (req, res) => {
+  const products = await store.getProducts();
   const product = products.find(p => p.id === Number(req.params.id) || p.slug === req.params.id);
 
   if (!product) return res.status(404).json({ error: 'Produto não encontrado' });

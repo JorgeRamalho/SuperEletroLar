@@ -1,40 +1,48 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { initDatabase } from './store-pg.js';
+import { jsonStore } from './store-json.js';
+import { pgStore } from './store-pg.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DATA_DIR = path.join(__dirname, '..', 'data');
+let activeStore = jsonStore;
+let usingPostgres = false;
 
-function readJSON(filename) {
-  const filePath = path.join(DATA_DIR, filename);
-  if (!fs.existsSync(filePath)) return [];
-  return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+export async function initStore() {
+  usingPostgres = await initDatabase();
+  if (usingPostgres) {
+    activeStore = pgStore;
+    console.log('🐘 PostgreSQL conectado');
+  } else {
+    console.log('📁 Armazenamento JSON (desenvolvimento)');
+  }
+  return usingPostgres;
 }
 
-function writeJSON(filename, data) {
-  const filePath = path.join(DATA_DIR, filename);
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+export function isUsingPostgres() {
+  return usingPostgres;
 }
 
 export const store = {
-  getProducts: () => readJSON('products.json'),
-  saveProducts: (products) => writeJSON('products.json', products),
-  getCategories: () => readJSON('categories.json'),
-  getCarousel: () => readJSON('carousel.json'),
-  getUsers: () => readJSON('users.json'),
-  saveUsers: (users) => writeJSON('users.json', users),
-  getOrders: () => readJSON('orders.json'),
-  saveOrders: (orders) => writeJSON('orders.json', orders),
-  getPayments: () => readJSON('payments.json'),
-  savePayments: (payments) => writeJSON('payments.json', payments),
+  getProducts: (...a) => activeStore.getProducts(...a),
+  saveProducts: (...a) => activeStore.saveProducts(...a),
+  getCategories: (...a) => activeStore.getCategories(...a),
+  getCarousel: (...a) => activeStore.getCarousel(...a),
+  getUsers: (...a) => activeStore.getUsers(...a),
+  saveUsers: (...a) => activeStore.saveUsers(...a),
+  getOrders: (...a) => activeStore.getOrders(...a),
+  saveOrders: (...a) => activeStore.saveOrders(...a),
+  getPayments: (...a) => activeStore.getPayments(...a),
+  savePayments: (...a) => activeStore.savePayments(...a),
+  decrementStock: (...a) => activeStore.decrementStock(...a),
 
-  decrementStock(orderItems) {
-    const products = readJSON('products.json');
-    orderItems.forEach(item => {
-      const product = products.find(p => p.id === item.productId || p.id === item.id);
-      if (product) product.stock = Math.max(0, product.stock - (item.qty || 1));
-    });
-    writeJSON('products.json', products);
-    return products;
-  },
+  insertUser: (...a) => activeStore.insertUser?.(...a),
+  findUserByEmail: (...a) => activeStore.findUserByEmail?.(...a),
+  findUserById: (...a) => activeStore.findUserById?.(...a),
+  insertOrder: (...a) => activeStore.insertOrder?.(...a),
+  updateOrder: (...a) => activeStore.updateOrder?.(...a),
+  findOrderById: (...a) => activeStore.findOrderById?.(...a),
+  findOrderByTracking: (...a) => activeStore.findOrderByTracking?.(...a),
+  getOrdersByUser: (...a) => activeStore.getOrdersByUser?.(...a),
+  insertPayment: (...a) => activeStore.insertPayment?.(...a),
+  updatePayment: (...a) => activeStore.updatePayment?.(...a),
+  findPaymentById: (...a) => activeStore.findPaymentById?.(...a),
+  findPaymentByExternalId: (...a) => activeStore.findPaymentByExternalId?.(...a),
 };
