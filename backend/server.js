@@ -10,9 +10,11 @@ import orderRoutes from './routes/orders.js';
 import paymentRoutes from './routes/payments.js';
 import cepRoutes from './routes/cep.js';
 import carouselRoutes from './routes/carousel.js';
+import { ensureRuntimeData } from './utils/seed.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '.env') });
+ensureRuntimeData();
 const ROOT = path.join(__dirname, '..');
 const REACT_DIST = path.join(ROOT, 'react', 'dist');
 const app = express();
@@ -53,8 +55,10 @@ app.get('/api/health', (_req, res) => {
   res.json({
     status: 'ok',
     name: 'SuperEletroLar API',
-    version: '1.0.0',
+    version: '1.1.0',
     environment: process.env.NODE_ENV || 'development',
+    url: process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`,
+    deploy: process.env.RENDER ? 'render' : 'local',
   });
 });
 

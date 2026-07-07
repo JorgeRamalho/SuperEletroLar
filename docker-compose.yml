@@ -3,6 +3,8 @@ services:
     build: .
     ports:
       - "4000:4000"
+    volumes:
+      - super-eletrolar-data:/app/backend/data
     environment:
       NODE_ENV: production
       PORT: 4000
@@ -14,3 +16,6 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
+
+volumes:
+  super-eletrolar-data:

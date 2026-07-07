@@ -11,7 +11,8 @@
     "start": "cd backend && node server.js",
     "start:prod": "cross-env NODE_ENV=production node backend/server.js",
     "deploy:build": "npm run install:all && npm run build",
-    "deploy:docker": "docker build -t super-eletrolar . && docker run -p 4000:4000 -e NODE_ENV=production -e JWT_SECRET=prod-secret super-eletrolar"
+    "deploy:check": "node --input-type=module -e \"import fs from 'fs'; ['react/dist/index.html','index.html','render.yaml'].forEach(f=>{if(!fs.existsSync(f))throw new Error('Missing: '+f)}); console.log('Deploy check OK');\"",
+    "deploy:docker": "docker-compose up -d --build"
   },
   "engines": {
     "node": ">=18.0.0"
