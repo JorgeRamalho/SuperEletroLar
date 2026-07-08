@@ -1,4 +1,4 @@
-# ── SuperEletroLar — Production Dockerfile ──
+# ── Trampolim — Production Dockerfile ──
 FROM node:20-alpine AS builder
 
 WORKDIR /app

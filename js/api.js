@@ -1,5 +1,5 @@
 /**
- * SuperEletroLar — API Client
+ * Trampolim — API Client
  */
 
 const API_BASE = (() => {
@@ -138,6 +138,94 @@ class ApiClient {
       method: 'POST',
       body: JSON.stringify({ orderId, amount, paymentMethod }),
     });
+  }
+
+  /* Marketplace Hub */
+  async getMarketplacePlatforms() {
+    return this.request('/marketplace/platforms');
+  }
+
+  async searchMarketplace(params = {}) {
+    const query = new URLSearchParams(params).toString();
+    return this.request(`/marketplace/search${query ? `?${query}` : ''}`);
+  }
+
+  async getHubListing(id) {
+    return this.request(`/marketplace/listings/${id}`);
+  }
+
+  async registerHubSeller(data) {
+    return this.request('/marketplace/sellers/register', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async createHubListing(data) {
+    return this.request('/marketplace/listings', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async linkHubIdentity(data) {
+    return this.request('/marketplace/identities/link', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getHubProfile() {
+    return this.request('/marketplace/profile');
+  }
+
+  async getHubAnalytics() {
+    return this.request('/marketplace/analytics');
+  }
+
+  async recordHubTransaction(data) {
+    return this.request('/marketplace/transactions', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getFeeRules() {
+    return this.request('/marketplace/fee-rules');
+  }
+
+  async getFeePreview(listingId, amount) {
+    const params = new URLSearchParams({ listingId });
+    if (amount != null) params.set('amount', amount);
+    return this.request(`/marketplace/fee-preview?${params}`);
+  }
+
+  async createHubDeal(data) {
+    return this.request('/marketplace/deals', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async payHubDeal(dealId, data = {}) {
+    return this.request(`/marketplace/deals/${dealId}/pay`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async confirmHubDeal(dealId) {
+    return this.request(`/marketplace/deals/${dealId}/confirm`, {
+      method: 'POST',
+    });
+  }
+
+  async getHubDeal(id) {
+    return this.request(`/marketplace/deals/${id}`);
+  }
+
+  async getMyHubDeals() {
+    return this.request('/marketplace/deals/mine');
   }
 }
 

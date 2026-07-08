@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "id": "afecc0ce-7d87-40f2-8001-542f62b8b276",
+    "name": "Teste Deal",
+    "email": "deal@test.com",
+    "password": "$2a$10$DAAQbE6J0DxbciyE7qzmDu0nlFhmNPTBMcOcHJtrMjTEk7FbMbl.6",
+    "phone": "",
+    "createdAt": "2026-07-08T00:48:37.659Z"
+  }
+]

@@ -10,6 +10,7 @@ import orderRoutes from './routes/orders.js';
 import paymentRoutes from './routes/payments.js';
 import cepRoutes from './routes/cep.js';
 import carouselRoutes from './routes/carousel.js';
+import marketplaceRoutes from './routes/marketplace.js';
 import { ensureRuntimeData } from './utils/seed.js';
 import { initStore, isUsingPostgres } from './utils/store.js';
 import { validateMercadoPago } from './services/mercadopago.js';
@@ -54,6 +55,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/cep', cepRoutes);
 app.use('/api/carousel', carouselRoutes);
+app.use('/api/marketplace', marketplaceRoutes);
 
 app.get('/api/health', async (_req, res) => {
   const mp = await validateMercadoPago();
@@ -72,8 +74,8 @@ app.get('/api/health', async (_req, res) => {
 
   res.json({
     status: 'ok',
-    name: 'SuperEletroLar API',
-    version: '1.2.0',
+    name: 'Trampolim API',
+    version: '1.3.0',
     environment: process.env.NODE_ENV || 'development',
     url: process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`,
     deploy: process.env.RENDER ? 'render' : 'local',
@@ -110,7 +112,7 @@ async function start() {
   await initStore();
 
   app.listen(PORT, '0.0.0.0', () => {
-    console.log(`⚡ SuperEletroLar ${isProd ? 'PRODUCTION' : 'DEV'} → port ${PORT}`);
+    console.log(`🚀 Trampolim ${isProd ? 'PRODUCTION' : 'DEV'} → port ${PORT}`);
     console.log(`🌐 Site:  http://localhost:${PORT}`);
     console.log(`⚛️  React: http://localhost:${PORT}/app`);
     console.log(`📦 API:   http://localhost:${PORT}/api/health`);

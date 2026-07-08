@@ -1,11 +1,22 @@
-const CACHE_NAME = 'super-eletrolar-v2';
+const CACHE_NAME = 'trampolim-v1';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/css/style.css',
+  '/css/responsive.css',
   '/js/script.js',
   '/js/api.js',
   '/assets/logo.svg',
+  '/assets/brand/trampolim-hero.png',
+  '/assets/brand/trampolim-illustration.svg',
+  '/assets/brand/logo-full.svg',
+  '/assets/showcase/geladeiras.png',
+  '/assets/showcase/smart-tvs.png',
+  '/assets/showcase/aspiradores.png',
+  '/assets/showcase/ar-condicionado.png',
+  '/assets/showcase/micro-ondas.png',
+  '/assets/showcase/fritadeiras.png',
+  '/assets/showcase/audio.png',
   '/manifest.json',
   '/robots.txt',
   '/sitemap.xml',
@@ -78,7 +89,7 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('push', (event) => {
-  const data = event.data?.json() || { title: 'SuperEletroLar', body: 'Nova oferta disponível!' };
+  const data = event.data?.json() || { title: 'Trampolim', body: 'Nova oportunidade disponível! 🚀' };
   event.waitUntil(
     self.registration.showNotification(data.title, {
       body: data.body,

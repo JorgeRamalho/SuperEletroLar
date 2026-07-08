@@ -1,7 +1,7 @@
 {
-  "name": "super-eletrolar-api",
+  "name": "trampolim-api",
   "version": "1.0.0",
-  "description": "API backend SuperEletroLar",
+  "description": "API backend Trampolim — Seu impulso para o trampo",
   "type": "module",
   "main": "server.js",
   "scripts": {

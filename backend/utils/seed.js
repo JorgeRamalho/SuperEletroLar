@@ -8,6 +8,9 @@ const RUNTIME_FILES = {
   'users.json': [],
   'orders.json': [],
   'payments.json': [],
+  'user-identities.json': [],
+  'hub-transactions.json': [],
+  'hub-deals.json': [],
 };
 
 export function ensureRuntimeData() {

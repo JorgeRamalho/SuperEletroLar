@@ -1,52 +1,82 @@
 [
   {
     "id": 1,
-    "badge": "⚡ Novidade",
-    "title": "Tecnologia que transforma seu lar",
-    "subtitle": "Eletrodomésticos, linha branca e eletrônicos para a família brasileira.",
-    "image": "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=1200&q=80",
+    "badge": "🚀 Trampolim",
+    "title": "Seu impulso para o trampo",
+    "subtitle": "Trabalho, serviços e oportunidades em um só lugar.",
+    "image": "assets/brand/trampolim-hero.png",
     "gradient": "gradient-brand",
-    "cta": "explore",
-    "ctaLabel": "Explorar produtos"
+    "cta": "hub",
+    "ctaLabel": "Abrir Radar"
   },
   {
     "id": 2,
-    "badge": "🔥 Ofertas",
-    "title": "Até 40% OFF em Linha Branca",
-    "subtitle": "Geladeiras, fogões, lavadoras e muito mais com frete grátis.",
-    "image": "https://images.unsplash.com/photo-1571175443880-49e1b58a9b91?w=1200&q=80",
+    "badge": "📺 Smart TV",
+    "title": "Filmes, séries e diversão em casa",
+    "subtitle": "Família reunida na sala — o melhor do entretenimento no seu lar.",
+    "image": "assets/carousel/lifestyle/tv-casa.png",
+    "gradient": "gradient-cool",
+    "cta": "offers",
+    "ctaLabel": "Ver Smart TVs"
+  },
+  {
+    "id": 3,
+    "badge": "🔊 Áudio",
+    "title": "Música em cada canto do lar",
+    "subtitle": "Fones, caixas de som e soundbars para o seu dia a dia.",
+    "image": "assets/carousel/lifestyle/musica-casa.png",
+    "gradient": "gradient-purple",
+    "cta": "categories",
+    "ctaLabel": "Ver áudio"
+  },
+  {
+    "id": 4,
+    "badge": "🛏️ Conforto",
+    "title": "Descanso merecido no seu quarto",
+    "subtitle": "Ar-condicionado, climatização e bem-estar para noites tranquilas.",
+    "image": "assets/carousel/lifestyle/cama-descanso.png",
+    "gradient": "gradient-ocean",
+    "cta": "categories",
+    "ctaLabel": "Climatização"
+  },
+  {
+    "id": 5,
+    "badge": "🍳 Cozinha",
+    "title": "Eletrodomésticos que facilitam o dia",
+    "subtitle": "Geladeira, fogão, micro-ondas e muito mais para sua rotina.",
+    "image": "assets/carousel/lifestyle/cozinha-eletro.png",
     "gradient": "gradient-warm",
+    "cta": "categories",
+    "ctaLabel": "Linha branca"
+  },
+  {
+    "id": 6,
+    "badge": "🫧 Lavanderia",
+    "title": "Roupas limpas sem complicação",
+    "subtitle": "Lavadoras e lava e seca para ganhar tempo em casa.",
+    "image": "assets/carousel/lifestyle/lavanderia.png",
+    "gradient": "gradient-electric",
+    "cta": "categories",
+    "ctaLabel": "Ver lavadoras"
+  },
+  {
+    "id": 7,
+    "badge": "❄️ Sala",
+    "title": "Seu refúgio no fim do dia",
+    "subtitle": "Sofá, ar-condicionado e o conforto que você merece em casa.",
+    "image": "assets/carousel/lifestyle/sala-conforto.png",
+    "gradient": "gradient-sunset",
     "cta": "offers",
     "ctaLabel": "Ver ofertas"
   },
   {
-    "id": 3,
-    "badge": "📺 Smart TVs",
-    "title": "Smart TVs 4K em 12x sem juros",
-    "subtitle": "Samsung, LG, TCL e as melhores marcas com entrega rápida.",
-    "image": "https://images.unsplash.com/photo-1593359677877-bcde3a3d7718?w=1200&q=80",
-    "gradient": "gradient-cool",
-    "cta": "categories",
-    "ctaLabel": "Ver categorias"
-  },
-  {
-    "id": 4,
-    "badge": "📱 Eletrônicos",
-    "title": "Celulares, notebooks e áudio",
-    "subtitle": "Os melhores gadgets com parcelamento e garantia estendida.",
-    "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=1200&q=80",
-    "gradient": "gradient-electric",
-    "cta": "explore",
-    "ctaLabel": "Comprar agora"
-  },
-  {
-    "id": 5,
-    "badge": "🔧 Eletroportáteis",
-    "title": "Máquinas para o dia a dia",
-    "subtitle": "Aspiradores, cafeteiras, fritadeiras e muito mais para sua casa.",
-    "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80",
-    "gradient": "gradient-cool",
-    "cta": "categories",
-    "ctaLabel": "Descobrir"
+    "id": 8,
+    "badge": "📡 Radar",
+    "title": "Compre, venda e encontre serviços",
+    "subtitle": "Produtos novos e usados, profissionais e oportunidades no Radar Trampolim.",
+    "image": "assets/carousel/lifestyle/tv-casa.png",
+    "gradient": "gradient-brand",
+    "cta": "hub",
+    "ctaLabel": "Abrir Radar"
   }
 ]

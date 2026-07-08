@@ -1,39 +1,10 @@
 {
-  "name": "SuperEletroLar",
-  "short_name": "SuperEletroLar",
-  "description": "Tecnologia que transforma seu lar. Eletrodomésticos e eletrônicos para a família brasileira.",
-  "start_url": "/",
+  "name": "Trampolim",
+  "short_name": "Trampolim",
+  "description": "Seu impulso para o trampo. Trabalho, serviços e oportunidades.",
+  "start_url": "/app/",
   "display": "standalone",
   "background_color": "#F0F4F8",
-  "theme_color": "#0066FF",
-  "orientation": "portrait-primary",
-  "lang": "pt-BR",
-  "categories": ["shopping", "lifestyle"],
-  "icons": [
-    {
-      "src": "assets/logo.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "assets/logo-super-eletrolar.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
-  ],
-  "screenshots": [],
-  "shortcuts": [
-    {
-      "name": "Ofertas",
-      "url": "/?view=offers",
-      "description": "Ver ofertas imperdíveis"
-    },
-    {
-      "name": "Carrinho",
-      "url": "/?view=cart",
-      "description": "Meu carrinho de compras"
-    }
-  ]
+  "theme_color": "#FF6B35",
+  "icons": [{ "src": "assets/logo.svg", "sizes": "any", "type": "image/svg+xml" }]
 }

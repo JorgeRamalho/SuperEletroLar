@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" role="img" aria-label="Trampolim ilustração de marca">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF6B35"/>
+      <stop offset="50%" stop-color="#FF8C42"/>
+      <stop offset="100%" stop-color="#00C9A7"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="400" rx="32" fill="url(#bg)"/>
+  <ellipse cx="400" cy="340" rx="280" ry="40" fill="#1A1D29" fill-opacity="0.15"/>
+  <path d="M120 260 Q400 180 680 260" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" opacity="0.9"/>
+  <path d="M160 280 L640 280" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  <path d="M200 280 V310 M280 280 V320 M400 280 V330 M520 280 V320 M600 280 V310" stroke="#FFFFFF" stroke-width="3" opacity="0.45"/>
+  <path d="M400 250 L400 80 M400 80 L340 140 M400 80 L460 140" fill="none" stroke="#FFFFFF" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="360" y="160" width="80" height="56" rx="8" fill="#FFFFFF" opacity="0.95"/>
+  <path d="M376 160 V140 C376 124 388 112 400 112 C412 112 424 124 424 140 V160" fill="none" stroke="#FFFFFF" stroke-width="6"/>
+  <circle cx="320" cy="120" r="36" fill="url(#glow)"/>
+  <text x="400" y="60" text-anchor="middle" font-family="system-ui,sans-serif" font-size="48" font-weight="800" fill="#FFFFFF">=€ Trampolim</text>
+  <text x="400" y="380" text-anchor="middle" font-family="system-ui,sans-serif" font-size="22" font-weight="600" fill="#FFFFFF" opacity="0.92">Trabalho · Serviços · Oportunidades</text>
+  <!-- Decorative icons -->
+  <text x="120" y="200" font-size="40" opacity="0.85">=¼</text>
+  <text x="640" y="200" font-size="40" opacity="0.85">=Ò</text>
+  <text x="680" y="120" font-size="36" opacity="0.85">='</text>
+  <text x="100" y="120" font-size="36" opacity="0.85">=ñ</text>
+</svg>

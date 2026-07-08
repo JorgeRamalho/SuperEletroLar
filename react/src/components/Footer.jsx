@@ -3,8 +3,8 @@ export default function Footer({ onTrack }) {
     <footer className="site-footer" role="contentinfo">
       <div className="footer-grid">
         <div className="footer-brand">
-          <div className="brand-name" style={{ fontSize: '1.25rem' }}>SuperEletroLar</div>
-          <p>Tecnologia que transforma seu lar. Eletrodomésticos e eletrônicos para toda a família brasileira.</p>
+          <div className="brand-name" style={{ fontSize: '1.25rem' }}>Trampolim</div>
+          <p>Seu impulso para o trampo. Eletrodomésticos e eletrônicos para toda a família brasileira.</p>
         </div>
         <div>
           <h3 className="footer-title">Institucional</h3>
@@ -26,13 +26,13 @@ export default function Footer({ onTrack }) {
           <h3 className="footer-title">Contato</h3>
           <ul className="footer-links">
             <li><a href="tel:08001234567">📞 0800 123 4567</a></li>
-            <li><a href="mailto:contato@supereletrolar.com.br">✉️ contato@supereletrolar.com.br</a></li>
+            <li><a href="mailto:contato@trampolim.com.br">✉️ contato@trampolim.com.br</a></li>
             <li><a href="#">💬 WhatsApp</a></li>
           </ul>
         </div>
       </div>
       <div className="footer-bottom">
-        <p>© 2026 SuperEletroLar. Todos os direitos reservados. Feito com ⚡ para o lar brasileiro.</p>
+        <p>© 2026 Trampolim. Todos os direitos reservados. Feito com 🚀 para quem busca o próximo salto.</p>
       </div>
     </footer>
   );

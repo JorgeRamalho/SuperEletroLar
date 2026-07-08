@@ -222,4 +222,17 @@ export const pgStore = {
     const { rows } = await pool.query('SELECT * FROM payments WHERE external_id = $1', [String(externalId)]);
     return mapPayment(rows[0]);
   },
+
+  getMarketplaces: () => jsonStore.getMarketplaces(),
+  getListings: () => jsonStore.getListings(),
+  saveListings: (l) => jsonStore.saveListings(l),
+  getSellers: () => jsonStore.getSellers(),
+  saveSellers: (s) => jsonStore.saveSellers(s),
+  getUserIdentities: () => jsonStore.getUserIdentities(),
+  saveUserIdentities: (d) => jsonStore.saveUserIdentities(d),
+  getHubTransactions: () => jsonStore.getHubTransactions(),
+  saveHubTransactions: (d) => jsonStore.saveHubTransactions(d),
+  getHubDeals: () => jsonStore.getHubDeals(),
+  saveHubDeals: (d) => jsonStore.saveHubDeals(d),
+  getFeeRules: () => jsonStore.getFeeRules(),
 };

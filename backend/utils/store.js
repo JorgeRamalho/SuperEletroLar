@@ -45,4 +45,17 @@ export const store = {
   updatePayment: (...a) => activeStore.updatePayment?.(...a),
   findPaymentById: (...a) => activeStore.findPaymentById?.(...a),
   findPaymentByExternalId: (...a) => activeStore.findPaymentByExternalId?.(...a),
+
+  getMarketplaces: (...a) => activeStore.getMarketplaces(...a),
+  getListings: (...a) => activeStore.getListings(...a),
+  saveListings: (...a) => activeStore.saveListings(...a),
+  getSellers: (...a) => activeStore.getSellers(...a),
+  saveSellers: (...a) => activeStore.saveSellers(...a),
+  getUserIdentities: (...a) => activeStore.getUserIdentities(...a),
+  saveUserIdentities: (...a) => activeStore.saveUserIdentities(...a),
+  getHubTransactions: (...a) => activeStore.getHubTransactions(...a),
+  saveHubTransactions: (...a) => activeStore.saveHubTransactions(...a),
+  getHubDeals: (...a) => activeStore.getHubDeals(...a),
+  saveHubDeals: (...a) => activeStore.saveHubDeals(...a),
+  getFeeRules: (...a) => activeStore.getFeeRules(...a),
 };

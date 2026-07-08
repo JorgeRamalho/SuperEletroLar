@@ -12,11 +12,11 @@ export default function Header({ showBack, onBack, onHome, onCart, onTheme, them
         </svg>
       </button>
 
-      <a href="#" className="header-brand" onClick={(e) => { e.preventDefault(); onHome(); }} aria-label="SuperEletroLar — Página inicial">
+      <a href="#" className="header-brand" onClick={(e) => { e.preventDefault(); onHome(); }} aria-label="Trampolim — Página inicial">
         <img src="/assets/logo.svg" alt="" width="40" height="40" />
         <div>
-          <div className="brand-name">SuperEletroLar</div>
-          <div className="brand-slogan">Tecnologia que transforma seu lar</div>
+          <div className="brand-name">🚀 Trampolim</div>
+          <div className="brand-slogan">Seu impulso para o trampo</div>
         </div>
       </a>
 

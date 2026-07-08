@@ -1,6 +1,6 @@
 @echo off
 echo ============================================
-echo   SuperEletroLar - Deploy Script
+echo   Trampolim - Deploy Script
 echo ============================================
 echo.
 

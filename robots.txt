@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /api/
-Disallow: /app/
 
-Sitemap: https://supereletrolar.com.br/sitemap.xml
+Sitemap: https://trampolim.com.br/sitemap.xml

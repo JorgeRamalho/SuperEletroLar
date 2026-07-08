@@ -1,9 +1,9 @@
 /**
- * SuperEletroLar — Script principal v2
+ * Trampolim — Script principal v2
  * API, auth, checkout, detalhe de produto, PWA
  */
 
-const SuperEletroLar = (() => {
+const Trampolim = (() => {
   'use strict';
 
   let CATEGORIES = [];
@@ -22,7 +22,111 @@ const SuperEletroLar = (() => {
   let currentOrder = null;
   let currentPayment = null;
   let deferredPrompt = null;
+  let HUB_PLATFORMS = [];
+  let hubFilters = { q: '', marketplace: '', condition: '', listingType: '', minPrice: '', maxPrice: '', state: '', sort: 'relevance' };
+  let hubSearchTimer = null;
 
+  const CONDITION_COLORS = {
+    new: '#0066FF',
+    semi_used: '#00C9A7',
+    used: '#FF6B35',
+    service: '#7C3AED',
+  };
+
+  const SHOWCASE_THEMES = [
+    {
+      id: 'theme-tv-casa',
+      badge: '📺 TV',
+      name: 'Diversão em casa',
+      description: 'Smart TVs para a família',
+      image: 'assets/carousel/lifestyle/tv-casa.png',
+      action: 'offers',
+      gradient: 'cool',
+    },
+    {
+      id: 'theme-musica',
+      badge: '🔊 Áudio',
+      name: 'Música no lar',
+      description: 'Som em todo canto',
+      image: 'assets/carousel/lifestyle/musica-casa.png',
+      action: 'categories',
+      gradient: 'purple',
+    },
+    {
+      id: 'theme-cama',
+      badge: '🛏️ Quarto',
+      name: 'Descanso em casa',
+      description: 'Conforto e climatização',
+      image: 'assets/carousel/lifestyle/cama-descanso.png',
+      action: 'categories',
+      gradient: 'ocean',
+    },
+    {
+      id: 'theme-cozinha',
+      badge: '🍳 Cozinha',
+      name: 'Dia a dia na cozinha',
+      description: 'Eletrodomésticos essenciais',
+      image: 'assets/carousel/lifestyle/cozinha-eletro.png',
+      action: 'categories',
+      gradient: 'warm',
+    },
+    {
+      id: 'theme-lavanderia',
+      badge: '🫧 Lavar',
+      name: 'Lavanderia prática',
+      description: 'Lavadoras e lava e seca',
+      image: 'assets/carousel/lifestyle/lavanderia.png',
+      action: 'categories',
+      gradient: 'electric',
+    },
+    {
+      id: 'theme-sala',
+      badge: '❄️ Sala',
+      name: 'Conforto no sofá',
+      description: 'Ar e bem-estar em casa',
+      image: 'assets/carousel/lifestyle/sala-conforto.png',
+      action: 'offers',
+      gradient: 'ocean',
+    },
+    {
+      id: 'theme-servicos',
+      badge: '🔧 Serviços',
+      name: 'Profissional no seu lar',
+      description: 'Técnicos e reparos perto de você',
+      image: 'assets/carousel/lifestyle/servicos-casa.png',
+      action: 'hub',
+      gradient: 'warm',
+    },
+    {
+      id: 'theme-negociacao',
+      badge: '🤝 Usados',
+      name: 'Compre e negocie',
+      description: 'Venda segura entre vizinhos',
+      image: 'assets/carousel/lifestyle/negociacao-lar.png',
+      action: 'hub',
+      gradient: 'purple',
+    },
+    {
+      id: 'theme-games',
+      badge: '🎮 Games',
+      name: 'Diversão garantida',
+      description: 'Consoles e TVs para jogar',
+      image: 'assets/carousel/lifestyle/games-casa.png',
+      action: 'offers',
+      gradient: 'electric',
+    },
+    {
+      id: 'theme-familia',
+      badge: '👨‍👩‍👧 Família',
+      name: 'Lar para todos',
+      description: 'Eletros que unem a família',
+      image: 'assets/carousel/lifestyle/familia-lar.png',
+      action: 'categories',
+      gradient: 'cool',
+    },
+  ];
+
+  const SHOWCASE_SCROLL_STEP = 216;
   const formatPrice = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   const installment = (p) => `ou 12x de ${formatPrice(p / 12)} sem juros`;
   const saveCart = () => localStorage.setItem('sel-cart', JSON.stringify(cart));
@@ -58,21 +162,30 @@ const SuperEletroLar = (() => {
 
   function getFallbackHero() {
     return [
-      { id: 1, badge: '⚡ Novidade', title: 'Tecnologia que transforma seu lar', subtitle: 'Eletrodomésticos para a família brasileira.', image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=1200&q=80', gradient: 'gradient-brand', cta: 'explore', ctaLabel: 'Explorar produtos' },
-      { id: 2, badge: '🔥 Ofertas', title: 'Até 40% OFF em Linha Branca', subtitle: 'Geladeiras, fogões e lavadoras.', image: 'https://images.unsplash.com/photo-1571175443880-49e1b58a9b91?w=1200&q=80', gradient: 'gradient-warm', cta: 'offers', ctaLabel: 'Ver ofertas' },
+      { id: 1, badge: '🚀 Trampolim', title: 'Seu impulso para o trampo', subtitle: 'Trabalho, serviços e oportunidades para o Brasil.', image: 'assets/brand/trampolim-hero.png', gradient: 'gradient-brand', cta: 'hub', ctaLabel: 'Abrir Radar' },
+      { id: 2, badge: '📺 Smart TV', title: 'Filmes, séries e diversão em casa', subtitle: 'Família reunida na sala — entretenimento no seu lar.', image: 'assets/carousel/lifestyle/tv-casa.png', gradient: 'gradient-cool', cta: 'offers', ctaLabel: 'Ver Smart TVs' },
+      { id: 3, badge: '🔊 Áudio', title: 'Música em cada canto do lar', subtitle: 'Fones, caixas de som e soundbars.', image: 'assets/carousel/lifestyle/musica-casa.png', gradient: 'gradient-purple', cta: 'categories', ctaLabel: 'Ver áudio' },
+      { id: 4, badge: '🛏️ Conforto', title: 'Descanso merecido no seu quarto', subtitle: 'Climatização e bem-estar para noites tranquilas.', image: 'assets/carousel/lifestyle/cama-descanso.png', gradient: 'gradient-ocean', cta: 'categories', ctaLabel: 'Climatização' },
+      { id: 5, badge: '🍳 Cozinha', title: 'Eletrodomésticos que facilitam o dia', subtitle: 'Geladeira, fogão, micro-ondas e mais.', image: 'assets/carousel/lifestyle/cozinha-eletro.png', gradient: 'gradient-warm', cta: 'categories', ctaLabel: 'Linha branca' },
+      { id: 6, badge: '🫧 Lavanderia', title: 'Roupas limpas sem complicação', subtitle: 'Lavadoras e lava e seca para ganhar tempo.', image: 'assets/carousel/lifestyle/lavanderia.png', gradient: 'gradient-electric', cta: 'categories', ctaLabel: 'Ver lavadoras' },
+      { id: 7, badge: '❄️ Sala', title: 'Seu refúgio no fim do dia', subtitle: 'Conforto e ar-condicionado em casa.', image: 'assets/carousel/lifestyle/sala-conforto.png', gradient: 'gradient-sunset', cta: 'offers', ctaLabel: 'Ver ofertas' },
     ];
   }
 
   function getFallbackCategories() {
     return [
-      { id: 'geladeiras', name: 'Geladeiras', icon: '🧊' },
-      { id: 'fogoes', name: 'Fogões', icon: '🔥' },
-      { id: 'lavadoras', name: 'Lavadoras', icon: '🫧' },
-      { id: 'tvs', name: 'Smart TVs', icon: '📺' },
-      { id: 'ar', name: 'Ar-condicionado', icon: '❄️' },
-      { id: 'micro', name: 'Micro-ondas', icon: '📡' },
-      { id: 'celulares', name: 'Celulares', icon: '📱' },
-      { id: 'notebooks', name: 'Notebooks', icon: '💻' },
+      { id: 'geladeiras', name: 'Geladeiras', icon: '🧊', description: 'Refrigeradores frost free e duplex', image: 'assets/carousel/lifestyle/geladeira-casa.png', fallbackImage: 'assets/showcase/geladeiras.png' },
+      { id: 'fogoes', name: 'Fogões', icon: '🔥', description: 'Fogões a gás e cooktops', image: 'assets/carousel/lifestyle/fogao-casa.png', fallbackImage: 'assets/showcase/geladeiras.png' },
+      { id: 'lavadoras', name: 'Lavadoras', icon: '🫧', description: 'Lavadoras e lava e seca', image: 'assets/carousel/lifestyle/lavadora-casa.png', fallbackImage: 'assets/showcase/geladeiras.png' },
+      { id: 'tvs', name: 'Smart TVs', icon: '📺', description: 'Smart TVs 4K e QLED', image: 'assets/showcase/smart-tvs.png', fallbackImage: 'assets/showcase/smart-tvs.png' },
+      { id: 'ar', name: 'Ar-condicionado', icon: '❄️', description: 'Splits e inverter', image: 'assets/carousel/lifestyle/ar-casa.png', fallbackImage: 'assets/showcase/ar-condicionado.png' },
+      { id: 'micro', name: 'Micro-ondas', icon: '📡', description: 'Micro-ondas com grill', image: 'assets/carousel/lifestyle/micro-casa.png', fallbackImage: 'assets/showcase/micro-ondas.png' },
+      { id: 'celulares', name: 'Celulares', icon: '📱', description: 'Smartphones 5G', image: 'assets/carousel/lifestyle/celular-casa.png', fallbackImage: 'assets/showcase/smart-tvs.png' },
+      { id: 'notebooks', name: 'Notebooks', icon: '💻', description: 'Notebooks para trabalho e estudo', image: 'assets/carousel/lifestyle/notebook-casa.png', fallbackImage: 'assets/showcase/smart-tvs.png' },
+      { id: 'aspiradores', name: 'Aspiradores', icon: '🌀', description: 'Robôs e aspiradores verticais', image: 'assets/carousel/lifestyle/aspirador-casa.png', fallbackImage: 'assets/showcase/aspiradores.png' },
+      { id: 'cafeteiras', name: 'Cafeteiras', icon: '☕', description: 'Espresso e cápsulas', image: 'assets/carousel/lifestyle/cafe-casa.png', fallbackImage: 'assets/showcase/fritadeiras.png' },
+      { id: 'fritadeiras', name: 'Fritadeiras', icon: '🍳', description: 'Air fryers sem óleo', image: 'assets/carousel/lifestyle/fritadeira-casa.png', fallbackImage: 'assets/showcase/fritadeiras.png' },
+      { id: 'audio', name: 'Áudio', icon: '🔊', description: 'Soundbars e caixas de som', image: 'assets/showcase/audio.png', fallbackImage: 'assets/showcase/audio.png' },
     ];
   }
 
@@ -155,7 +268,7 @@ const SuperEletroLar = (() => {
       <div class="hero-slide ${slide.gradient || 'gradient-brand'}" role="tabpanel" aria-label="${slide.title}" ${i === 0 ? '' : 'aria-hidden="true"'}>
         <div class="hero-slide-bg" style="background-image:url('${slide.image}')"></div>
         <div class="hero-slide-content">
-          <span class="hero-slide-badge">${slide.badge || '⚡ SuperEletroLar'}</span>
+          <span class="hero-slide-badge">${slide.badge || '🚀 Trampolim'}</span>
           <h2>${slide.title}</h2>
           <p>${slide.subtitle}</p>
           <div class="hero-actions">
@@ -190,24 +303,74 @@ const SuperEletroLar = (() => {
     heroTimer = setInterval(() => goToHeroSlide(heroIndex + 1), 5000);
   }
 
+  function getShowcaseImage(cat) {
+    return cat.image || cat.fallbackImage || '';
+  }
+
+  function updateShowcaseArrows() {
+    const track = document.getElementById('showcase-track');
+    const prev = document.getElementById('showcase-prev');
+    const next = document.getElementById('showcase-next');
+    if (!track || !prev || !next) return;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    prev.disabled = track.scrollLeft <= 4;
+    next.disabled = track.scrollLeft >= maxScroll - 4;
+  }
+
   function renderShowcase() {
     const track = document.getElementById('showcase-track');
     if (!track) return;
 
-    const items = CATEGORIES.map(cat => {
-      const product = PRODUCTS.find(p => p.category === cat.id);
-      return { ...cat, productPrice: product?.price, badge: product?.badge };
-    });
-
-    track.innerHTML = items.map(cat => `
-      <div class="showcase-item" role="listitem" data-category="${cat.id}" tabindex="0">
-        ${cat.badge ? `<span class="showcase-item-badge">${cat.badge}</span>` : ''}
-        <img src="${cat.image}" alt="${cat.name}" loading="lazy" width="200" height="140">
+    const themeCards = SHOWCASE_THEMES.map(theme => `
+      <div class="showcase-item showcase-theme showcase-theme-${theme.gradient}" role="listitem" data-showcase-action="${theme.action}" tabindex="0" aria-label="${theme.name}">
+        <span class="showcase-item-badge">${theme.badge}</span>
+        <div class="showcase-item-visual">
+          <img src="${theme.image}" alt="${theme.name}" loading="lazy" width="200" height="140" class="showcase-img showcase-theme-img">
+        </div>
         <div class="showcase-item-info">
-          <h4>${cat.icon} ${cat.name}</h4>
-          <span>${cat.description?.slice(0, 40) || 'Ver produtos'}...</span>
+          <h4>${theme.name}</h4>
+          <span>${theme.description}</span>
+          <span class="showcase-theme-cta">Explorar →</span>
         </div>
       </div>`).join('');
+
+    const categoryCards = CATEGORIES.map(cat => {
+      const product = PRODUCTS.find(p => p.category === cat.id);
+      const image = getShowcaseImage(cat);
+      const imgHtml = image
+        ? `<img src="${image}" alt="${cat.name} — ${cat.description}" loading="lazy" width="200" height="140" data-fallback="${cat.fallbackImage || ''}" class="showcase-img showcase-cat-img">`
+        : `<div class="showcase-item-placeholder" aria-hidden="true">${cat.icon}</div>`;
+
+      return `
+      <div class="showcase-item" role="listitem" data-category="${cat.id}" tabindex="0">
+        ${product?.badge ? `<span class="showcase-item-badge">${product.badge}</span>` : ''}
+        <div class="showcase-item-visual">${imgHtml}</div>
+        <div class="showcase-item-info">
+          <h4>${cat.icon} ${cat.name}</h4>
+          <span>${product?.name || cat.description}</span>
+          ${product?.price ? `<span class="showcase-price">a partir de ${formatPrice(product.price)}</span>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+
+    track.innerHTML = themeCards + categoryCards;
+
+    track.querySelectorAll('.showcase-img').forEach(img => {
+      img.addEventListener('error', function onErr() {
+        const fallback = this.dataset.fallback;
+        if (fallback && this.src !== fallback) {
+          this.src = fallback;
+        } else if (!this.classList.contains('showcase-theme-img')) {
+          this.replaceWith(Object.assign(document.createElement('div'), {
+            className: 'showcase-item-placeholder',
+            textContent: this.alt?.split('—')[0]?.trim()?.charAt(0) || '📦',
+          }));
+        }
+        this.removeEventListener('error', onErr);
+      });
+    });
+
+    updateShowcaseArrows();
   }
 
   function renderFavorites() {
@@ -271,7 +434,7 @@ const SuperEletroLar = (() => {
     }
     if (!currentProduct) return;
 
-    document.title = `${currentProduct.name} — SuperEletroLar`;
+    document.title = `${currentProduct.name} — Trampolim`;
     updateProductSchema([currentProduct]);
 
     const specs = currentProduct.specs
@@ -388,6 +551,14 @@ const SuperEletroLar = (() => {
     if (badge) {
       badge.textContent = total;
       badge.dataset.count = total;
+    }
+  }
+
+  function updateFavoritesBadge() {
+    const badge = document.getElementById('favorites-badge');
+    if (badge) {
+      badge.textContent = favorites.length;
+      badge.dataset.count = favorites.length;
     }
   }
 
@@ -647,6 +818,533 @@ const SuperEletroLar = (() => {
     }
   }
 
+  /* ── Marketplace Hub ── */
+  function hubListingCardHTML(item) {
+    const mp = item.marketplace || {};
+    const loc = item.location ? `${item.location.city}, ${item.location.state}` : '';
+    const condColor = CONDITION_COLORS[item.condition] || '#64748B';
+    return `
+      <article class="hub-card" role="listitem" data-hub-listing="${item.id}">
+        <div class="hub-card-image" data-open-hub="${item.id}">
+          <img src="${item.image}" alt="" loading="lazy" onerror="this.src='assets/showcase/smart-tvs.png'">
+          <span class="hub-card-condition" style="background:${condColor}">${item.conditionLabel || item.condition}</span>
+          <span class="hub-card-platform" style="background:${mp.color || '#333'};color:${mp.textColor || '#fff'}">${mp.icon || ''} ${mp.name || ''}</span>
+        </div>
+        <div class="hub-card-body" data-open-hub="${item.id}">
+          <h3 class="hub-card-title">${item.title}</h3>
+          <p class="hub-card-location">📍 ${loc}</p>
+          <div class="hub-card-price">
+            <strong>${formatPrice(item.price)}</strong>
+            ${item.oldPrice ? `<s>${formatPrice(item.oldPrice)}</s>` : ''}
+          </div>
+          ${item.seller ? `<p class="hub-card-seller">${item.seller.verified ? '✓' : ''} ${item.seller.name} · ⭐ ${item.seller.rating}</p>` : ''}
+        </div>
+        <div class="hub-card-actions">
+          ${item.isRetail
+            ? `<button class="btn btn-primary btn-sm" data-add="${item.productId}">Comprar na loja</button>`
+            : `<button class="btn btn-outline btn-sm" data-open-hub="${item.id}">Ver anúncio</button>`
+          }
+        </div>
+      </article>`;
+  }
+
+  async function runHubSearch() {
+    const stats = document.getElementById('hub-stats');
+    const results = document.getElementById('hub-results');
+    const empty = document.getElementById('hub-empty');
+    if (!results) return;
+
+    results.innerHTML = '<div class="hub-loading">Buscando em todas as plataformas...</div>';
+    empty?.classList.add('hidden');
+
+    try {
+      const params = Object.fromEntries(
+        Object.entries(hubFilters).filter(([, v]) => v !== '' && v != null)
+      );
+      const data = await api.searchMarketplace(params);
+      const items = data.items || [];
+
+      if (stats) {
+        stats.innerHTML = `
+          <span><strong>${data.pagination?.total || items.length}</strong> resultados</span>
+          <span class="hub-stats-sep">·</span>
+          <span>${data.facets?.totalCatalog || 0} no catálogo unificado</span>`;
+      }
+
+      if (!items.length) {
+        results.innerHTML = '';
+        empty?.classList.remove('hidden');
+        return;
+      }
+
+      results.innerHTML = items.map(hubListingCardHTML).join('');
+    } catch {
+      results.innerHTML = '<p class="hub-muted">Erro ao buscar. Verifique se a API está rodando.</p>';
+    }
+  }
+
+  function renderHubPlatforms() {
+    const el = document.getElementById('hub-platforms');
+    if (!el) return;
+    el.innerHTML = `
+      <button type="button" class="hub-platform-tab active" data-hub-marketplace="" aria-selected="true">
+        <span>🌐</span> Todas
+      </button>
+      ${HUB_PLATFORMS.map(mp => `
+        <button type="button" class="hub-platform-tab" data-hub-marketplace="${mp.id}" style="--mp-color:${mp.color}">
+          <span>${mp.icon}</span> ${mp.name}
+        </button>`).join('')}`;
+  }
+
+  async function initHub() {
+    try {
+      HUB_PLATFORMS = await api.getMarketplacePlatforms();
+    } catch {
+      HUB_PLATFORMS = [];
+    }
+    renderHubPlatforms();
+    await runHubSearch();
+    await renderHubAnalytics();
+  }
+
+  function renderHub() {
+    initHub();
+  }
+
+  async function openHubListing(id) {
+    try {
+      const listing = await api.getHubListing(id);
+      if (!listing) { showToast('Anúncio não encontrado'); return; }
+
+      const el = document.getElementById('hub-listing-detail');
+      if (!el) return;
+
+      const mp = listing.marketplace || {};
+      const seller = listing.seller || {};
+      el.innerHTML = `
+        <div class="hub-detail">
+          <div class="hub-detail-gallery">
+            <img src="${listing.image}" alt="${listing.title}" onerror="this.src='assets/showcase/smart-tvs.png'">
+            <span class="hub-card-platform" style="background:${mp.color};color:${mp.textColor || '#fff'}">${mp.icon} ${mp.name}</span>
+          </div>
+          <div class="hub-detail-info">
+            <span class="hub-detail-condition" style="background:${CONDITION_COLORS[listing.condition]}">${listing.conditionLabel}</span>
+            <h1>${listing.title}</h1>
+            <p class="hub-detail-price">${formatPrice(listing.price)} ${listing.oldPrice ? `<s>${formatPrice(listing.oldPrice)}</s>` : ''}</p>
+            <p class="hub-detail-desc">${listing.description || ''}</p>
+            <div class="hub-detail-meta">
+              <p>📍 ${listing.location?.city}, ${listing.location?.state}</p>
+              <p>👤 ${seller.name} ${seller.verified ? '✓ Verificado' : ''} · ⭐ ${seller.rating} · ${seller.salesCount} vendas</p>
+              <p>👁 ${listing.views || 0} visualizações</p>
+            </div>
+            <div class="hub-detail-actions">
+              ${listing.isRetail
+                ? `<button class="btn btn-primary" data-open-product="${listing.productId}">Comprar na Trampolim</button>`
+                : `<button class="btn btn-primary" id="btn-hub-deal">Contratar via Trampolim 🚀</button>
+                   <p class="hub-fee-hint" id="hub-fee-hint">Comissão calculada automaticamente · pagamento seguro</p>
+                   ${listing.externalUrl ? `<a class="btn btn-outline" href="${listing.externalUrl}" target="_blank" rel="noopener">Ver na ${mp.name}</a>` : ''}`
+              }
+            </div>
+          </div>
+        </div>`;
+
+      document.getElementById('btn-hub-deal')?.addEventListener('click', () => {
+        if (!api.token) {
+          showToast('Faça login para contratar via Trampolim');
+          showAuthModal('login');
+          return;
+        }
+        openHubDealCheckout(listing);
+      });
+
+      api.getFeePreview(listing.id).then(preview => {
+        const hint = document.getElementById('hub-fee-hint');
+        if (hint && preview?.fees) {
+          const f = preview.fees;
+          hint.textContent = `Comissão ${formatPrice(f.platformFee)} · vendedor recebe ${formatPrice(f.netAmount)}`;
+        }
+      }).catch(() => {});
+
+      navigateTo('hub-listing');
+    } catch {
+      showToast('Erro ao carregar anúncio');
+    }
+  }
+
+  async function openHubDealCheckout(listing, existingDeal = null) {
+    let fees;
+    try {
+      if (existingDeal) {
+        fees = {
+          grossAmount: existingDeal.grossAmount,
+          platformFee: existingDeal.platformFee,
+          processingFee: existingDeal.processingFee,
+          netAmount: existingDeal.netAmount,
+          buyerTotal: existingDeal.buyerTotal,
+          effectivePercent: existingDeal.feeBreakdown?.platform?.percent,
+          breakdown: existingDeal.feeBreakdown,
+        };
+      } else {
+        const preview = await api.getFeePreview(listing.id);
+        fees = preview.fees;
+      }
+    } catch (err) {
+      showToast(err.message || 'Erro ao calcular taxas');
+      return;
+    }
+
+    const breakdown = fees.breakdown || {};
+    const platform = breakdown.platform || {};
+    const processing = breakdown.processing || {};
+
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay visible';
+    overlay.id = 'hub-deal-modal';
+    overlay.innerHTML = `
+      <div class="modal hub-modal hub-deal-modal" role="dialog" aria-label="Contratar via Trampolim">
+        <div class="modal-header">
+          <h2 class="modal-title">Contratar via Trampolim 🚀</h2>
+          <button class="modal-close" type="button" aria-label="Fechar">✕</button>
+        </div>
+        <p class="hub-deal-listing">${listing.title}</p>
+        <div class="hub-deal-fees">
+          <div class="hub-deal-fee-row"><span>Valor acordado</span><strong>${formatPrice(fees.grossAmount || listing.price)}</strong></div>
+          <div class="hub-deal-fee-row hub-deal-fee-deduct"><span>${platform.label || 'Comissão Trampolim'} (${fees.effectivePercent ?? '—'}%)</span><strong>− ${formatPrice(fees.platformFee || 0)}</strong></div>
+          ${processing.amount ? `<div class="hub-deal-fee-row hub-deal-fee-deduct"><span>${processing.label || 'Taxa pagamento'}</span><strong>− ${formatPrice(processing.amount)}</strong></div>` : ''}
+          <div class="hub-deal-fee-row hub-deal-fee-total"><span>Vendedor recebe</span><strong>${formatPrice(fees.netAmount ?? breakdown.sellerReceives ?? 0)}</strong></div>
+          <div class="hub-deal-fee-row hub-deal-fee-pay"><span>Você paga</span><strong>${formatPrice(fees.buyerTotal || fees.grossAmount || listing.price)}</strong></div>
+        </div>
+        <div class="hub-deal-methods">
+          <label class="hub-deal-method active"><input type="radio" name="deal-pay" value="pix" checked> Pix</label>
+          <label class="hub-deal-method"><input type="radio" name="deal-pay" value="checkout"> Checkout Mercado Pago</label>
+        </div>
+        <div id="hub-deal-payment-area"></div>
+        <button type="button" class="btn btn-primary" id="btn-hub-deal-pay" style="width:100%">Iniciar pagamento</button>
+        <p class="hub-muted hub-deal-legal">Valores retidos pela Trampolim até confirmação. Comissão automática conforme tipo de anúncio.</p>
+      </div>`;
+
+    document.body.appendChild(overlay);
+    overlay.querySelector('.modal-close').addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+
+    overlay.querySelectorAll('.hub-deal-method').forEach(label => {
+      label.addEventListener('click', () => {
+        overlay.querySelectorAll('.hub-deal-method').forEach(l => l.classList.remove('active'));
+        label.classList.add('active');
+        label.querySelector('input').checked = true;
+      });
+    });
+
+    const payBtn = overlay.querySelector('#btn-hub-deal-pay');
+    payBtn.addEventListener('click', async () => {
+      payBtn.disabled = true;
+      payBtn.textContent = 'Processando…';
+      try {
+        const method = overlay.querySelector('input[name="deal-pay"]:checked')?.value || 'pix';
+        let deal = existingDeal;
+        if (!deal) {
+          deal = await api.createHubDeal({ listingId: listing.id });
+        }
+        const user = api.getUser();
+        const result = await api.payHubDeal(deal.id, {
+          method: method === 'checkout' ? 'checkout' : 'pix',
+          email: user?.email,
+        });
+
+        if (result.payment?.checkoutUrl || result.payment?.sandboxUrl) {
+          const url = result.payment.sandboxUrl || result.payment.checkoutUrl;
+          window.location.href = url;
+          return;
+        }
+
+        const area = overlay.querySelector('#hub-deal-payment-area');
+        area.innerHTML = `
+          <div class="hub-deal-pix">
+            <img src="${result.payment.pixQrCode}" alt="QR Code Pix" width="200" height="200">
+            <p class="hub-muted">Escaneie ou copie o código Pix</p>
+            <textarea class="form-input hub-pix-code" readonly rows="3">${result.payment.pixCode || ''}</textarea>
+            <button type="button" class="btn btn-outline btn-sm" id="btn-copy-deal-pix">Copiar código</button>
+            ${result.payment.mode === 'simulated' ? `<button type="button" class="btn btn-primary" id="btn-confirm-deal-pix" style="width:100%;margin-top:0.75rem">Confirmar pagamento (simulado)</button>` : ''}
+          </div>`;
+
+        payBtn.style.display = 'none';
+        area.querySelector('#btn-copy-deal-pix')?.addEventListener('click', () => {
+          navigator.clipboard?.writeText(result.payment.pixCode || '');
+          showToast('Código Pix copiado');
+        });
+        area.querySelector('#btn-confirm-deal-pix')?.addEventListener('click', async () => {
+          try {
+            const completed = await api.confirmHubDeal(deal.id);
+            showToast(`✅ Pagamento confirmado! Código: ${completed.trackingCode || deal.id}`);
+            overlay.remove();
+            await renderHubAnalytics();
+          } catch (err) {
+            showToast(err.message);
+          }
+        });
+      } catch (err) {
+        showToast(err.message || 'Erro ao iniciar pagamento');
+        payBtn.disabled = false;
+        payBtn.textContent = 'Iniciar pagamento';
+      }
+    });
+  }
+
+  async function openHubDealFromUrl(dealId) {
+    try {
+      const deal = await api.getHubDeal(dealId);
+      const listing = await api.getHubListing(deal.listingId);
+      if (deal.status === 'completed') {
+        showToast(`✅ Negociação concluída · ${deal.trackingCode || deal.id}`);
+        navigateTo('hub', false);
+        return;
+      }
+      openHubDealCheckout(listing, deal);
+    } catch {
+      showToast('Negociação não encontrada');
+    }
+  }
+
+  async function renderHubAnalytics() {
+    const el = document.getElementById('hub-analytics-content');
+    if (!el) return;
+
+    if (!api.token) {
+      el.innerHTML = '<p class="hub-muted">Faça login para ver seu fluxo de transações e cruzamento de contas.</p>';
+      return;
+    }
+
+    try {
+      const profile = await api.getHubProfile();
+      const s = profile.analytics?.summary || {};
+      const cross = profile.crossReference || {};
+      el.innerHTML = `
+        <div class="hub-analytics-grid">
+          <div class="hub-stat"><span class="hub-stat-value">${s.transactionCount || 0}</span><span class="hub-stat-label">Transações</span></div>
+          <div class="hub-stat"><span class="hub-stat-value">${formatPrice(s.totalGross || 0)}</span><span class="hub-stat-label">Volume bruto</span></div>
+          <div class="hub-stat"><span class="hub-stat-value">${formatPrice(s.totalNet || 0)}</span><span class="hub-stat-label">Líquido</span></div>
+          <div class="hub-stat"><span class="hub-stat-value">${cross.matches?.length || 0}</span><span class="hub-stat-label">Contas cruzadas</span></div>
+        </div>
+        ${profile.seller ? `<p class="hub-muted">Vendedor: <strong>${profile.seller.name}</strong> · ${profile.seller.salesCount} vendas</p>` : ''}
+        ${cross.matches?.length ? `<p class="hub-cross-ref">🔗 ${cross.matches.length} vínculo(s) detectado(s) entre plataformas (email/telefone)</p>` : ''}`;
+    } catch {
+      el.innerHTML = '<p class="hub-muted">Erro ao carregar painel.</p>';
+    }
+  }
+
+  function openAnnounceFree() {
+    if (!api.token) {
+      showToast('Faça login para anunciar grátis');
+      showAuthModal('login');
+      return;
+    }
+    navigateTo('hub');
+    setTimeout(() => showHubListingForm(), 350);
+  }
+
+  async function openMyListings() {
+    if (!api.token) {
+      showToast('Faça login para ver seus anúncios');
+      showAuthModal('login');
+      return;
+    }
+    navigateTo('hub');
+    await renderHubAnalytics();
+    setTimeout(() => {
+      document.querySelector('.hub-seller-cta')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 300);
+  }
+
+  async function showChatModal() {
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay visible';
+    overlay.id = 'chat-modal';
+    overlay.innerHTML = `
+      <div class="modal hub-modal chat-modal" role="dialog" aria-label="Chat Trampolim">
+        <div class="modal-header">
+          <h2 class="modal-title">💬 Chat</h2>
+          <button class="modal-close" type="button" aria-label="Fechar">✕</button>
+        </div>
+        <p class="hub-muted chat-modal-hint">Negociações e mensagens dos seus anúncios e compras.</p>
+        <div id="chat-modal-list" class="chat-modal-list">
+          <p class="hub-muted">Carregando conversas…</p>
+        </div>
+        <button type="button" class="btn btn-outline" id="btn-chat-go-hub" style="width:100%;margin-top:0.75rem">Abrir Radar Trampolim</button>
+      </div>`;
+    document.body.appendChild(overlay);
+    overlay.querySelector('.modal-close').addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+    overlay.querySelector('#btn-chat-go-hub')?.addEventListener('click', () => {
+      overlay.remove();
+      navigateTo('hub');
+    });
+
+    const list = overlay.querySelector('#chat-modal-list');
+    if (!api.token) {
+      list.innerHTML = '<p class="hub-muted">Faça login para ver suas conversas de negociação.</p>';
+      return;
+    }
+
+    try {
+      const deals = await api.getMyHubDeals();
+      if (!deals.length) {
+        list.innerHTML = '<p class="hub-muted">Nenhuma conversa ainda. Contrate ou anuncie no Radar Trampolim.</p>';
+        return;
+      }
+      list.innerHTML = deals.slice(0, 8).map(d => `
+        <button type="button" class="chat-thread" data-deal-id="${d.id}">
+          <span class="chat-thread-title">${d.listingTitle || 'Negociação'}</span>
+          <span class="chat-thread-meta">${d.status === 'completed' ? '✅ Concluída' : '💬 Em andamento'} · ${formatPrice(d.grossAmount || 0)}</span>
+        </button>`).join('');
+      list.querySelectorAll('.chat-thread').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          overlay.remove();
+          try {
+            const deal = await api.getHubDeal(btn.dataset.dealId);
+            const listing = await api.getHubListing(deal.listingId);
+            openHubDealCheckout(listing, deal);
+          } catch {
+            showToast('Não foi possível abrir a conversa');
+          }
+        });
+      });
+    } catch {
+      list.innerHTML = '<p class="hub-muted">Erro ao carregar conversas.</p>';
+    }
+  }
+
+  async function updateChatBadge() {
+    const badge = document.getElementById('chat-badge');
+    if (!badge) return;
+    let count = 0;
+    if (api.token) {
+      try {
+        const deals = await api.getMyHubDeals();
+        count = deals.filter(d => d.status === 'awaiting_payment' || d.status === 'pending_payment').length;
+      } catch { /* ignore */ }
+    }
+    badge.textContent = count;
+    badge.dataset.count = count;
+  }
+
+  function showHubListingForm() {
+    if (!api.token) { showToast('Faça login para publicar'); navigateTo('account'); return; }
+
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay visible';
+    modal.innerHTML = `
+      <div class="modal hub-modal">
+        <div class="modal-header">
+          <h2>📣 Publicar anúncio</h2>
+          <button class="modal-close" id="hub-modal-close" aria-label="Fechar">✕</button>
+        </div>
+        <form id="hub-listing-form" class="hub-form">
+          <div class="form-group"><label class="form-label">Título</label><input class="form-input" name="title" required placeholder="Ex: Geladeira usada 380L"></div>
+          <div class="form-group"><label class="form-label">Descrição</label><textarea class="form-input" name="description" rows="3"></textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Preço (R$)</label><input class="form-input" name="price" type="number" min="0" step="0.01" required></div>
+            <div class="form-group"><label class="form-label">Condição</label>
+              <select class="form-input" name="condition">
+                <option value="new">Novo</option>
+                <option value="semi_used">Semi-novo</option>
+                <option value="used" selected>Usado</option>
+                <option value="service">Serviço</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group"><label class="form-label">Tipo</label>
+            <select class="form-input" name="listingType">
+              <option value="product">Produto</option>
+              <option value="service">Serviço</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%">Publicar no Trampolim</button>
+        </form>
+      </div>`;
+    document.body.appendChild(modal);
+
+    modal.querySelector('#hub-modal-close')?.addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+    modal.querySelector('#hub-listing-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      try {
+        await api.createHubListing(Object.fromEntries(fd));
+        showToast('✅ Anúncio publicado!');
+        modal.remove();
+        runHubSearch();
+      } catch (err) {
+        showToast(err.message || 'Erro ao publicar');
+      }
+    });
+  }
+
+  async function registerHubSeller() {
+    if (!api.token) { showToast('Faça login primeiro'); navigateTo('account'); return; }
+    const user = api.getUser();
+    try {
+      const result = await api.registerHubSeller({
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        location: { city: 'São Paulo', state: 'SP' },
+      });
+      showToast(result.created ? '✅ Cadastro de vendedor concluído!' : 'Você já é vendedor');
+      await renderHubAnalytics();
+    } catch (err) {
+      showToast(err.message || 'Erro no cadastro');
+    }
+  }
+
+  function bindHubEvents() {
+    document.getElementById('hub-search-btn')?.addEventListener('click', () => {
+      hubFilters.q = document.getElementById('hub-search-input')?.value || '';
+      runHubSearch();
+    });
+
+    document.getElementById('hub-search-input')?.addEventListener('input', (e) => {
+      hubFilters.q = e.target.value;
+      clearTimeout(hubSearchTimer);
+      hubSearchTimer = setTimeout(runHubSearch, 400);
+    });
+
+    document.getElementById('hub-platforms')?.addEventListener('click', (e) => {
+      const tab = e.target.closest('[data-hub-marketplace]');
+      if (!tab) return;
+      document.querySelectorAll('[data-hub-marketplace]').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      hubFilters.marketplace = tab.dataset.hubMarketplace;
+      runHubSearch();
+    });
+
+    document.getElementById('hub-filters')?.addEventListener('click', (e) => {
+      const chip = e.target.closest('[data-hub-filter]');
+      if (!chip) return;
+      const key = chip.dataset.hubFilter;
+      const val = chip.dataset.value;
+      document.querySelectorAll(`[data-hub-filter="${key}"]`).forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      hubFilters[key] = val;
+      runHubSearch();
+    });
+
+    ['hub-min-price', 'hub-max-price', 'hub-state', 'hub-sort'].forEach(id => {
+      document.getElementById(id)?.addEventListener('change', (e) => {
+        const map = { 'hub-min-price': 'minPrice', 'hub-max-price': 'maxPrice', 'hub-state': 'state', 'hub-sort': 'sort' };
+        hubFilters[map[id]] = e.target.value;
+        runHubSearch();
+      });
+    });
+
+    document.getElementById('btn-hub-seller-register')?.addEventListener('click', registerHubSeller);
+    document.getElementById('btn-hub-new-listing')?.addEventListener('click', showHubListingForm);
+
+    document.getElementById('hub-results')?.addEventListener('click', (e) => {
+      const card = e.target.closest('[data-open-hub]');
+      if (card) { openHubListing(card.dataset.openHub); return; }
+    });
+  }
+
   /* ── Navigation ── */
   function navigateTo(view, pushHistory = true) {
     if (pushHistory && view !== currentView) viewHistory.push(view);
@@ -671,7 +1369,14 @@ const SuperEletroLar = (() => {
     if (view === 'checkout') { checkoutStep = 1; renderCheckout(); }
     if (view === 'orders') renderOrders();
     if (view === 'favorites') renderFavorites();
-    if (view === 'home') document.title = 'SuperEletroLar — Tecnologia que transforma seu lar';
+    if (view === 'hub') renderHub();
+    if (view === 'home') document.title = 'Trampolim — Seu impulso para o trampo';
+    if (view === 'hub') document.title = 'Radar Trampolim — Busca';
+    if (view === 'hub-listing') document.title = 'Anúncio — Trampolim';
+    if (view === 'privacy') document.title = 'Política de Privacidade — Trampolim';
+    if (view === 'cookies') document.title = 'Política de Cookies — Trampolim';
+
+    if (view !== 'home' && window.innerWidth < 1024) toggleHeaderSearch(false);
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -748,13 +1453,49 @@ const SuperEletroLar = (() => {
     window.addEventListener('offline', () => document.getElementById('offline-badge')?.classList.add('visible'));
   }
 
+  /* ── Cookie consent (LGPD) ── */
+  const COOKIE_CONSENT_KEY = 'sel-cookie-consent';
+
+  function getCookieConsent() {
+    return localStorage.getItem(COOKIE_CONSENT_KEY);
+  }
+
+  function setCookieConsent(type) {
+    localStorage.setItem(COOKIE_CONSENT_KEY, type);
+    localStorage.setItem('sel-cookie-consent-date', new Date().toISOString());
+    hideCookieBanner();
+    if (type === 'all') showToast('Preferências de cookies salvas');
+  }
+
+  function showCookieBanner(force = false) {
+    if (!force && getCookieConsent()) return;
+    const banner = document.getElementById('cookie-banner');
+    if (!banner) return;
+    banner.hidden = false;
+    document.body.classList.add('cookie-banner-visible');
+  }
+
+  function hideCookieBanner() {
+    const banner = document.getElementById('cookie-banner');
+    if (!banner) return;
+    banner.hidden = true;
+    document.body.classList.remove('cookie-banner-visible');
+  }
+
+  function initCookieConsent() {
+    document.getElementById('cookie-accept-all')?.addEventListener('click', () => setCookieConsent('all'));
+    document.getElementById('cookie-essential-only')?.addEventListener('click', () => setCookieConsent('essential'));
+    document.getElementById('cookie-settings')?.addEventListener('click', () => showCookieBanner(true));
+    showCookieBanner();
+  }
+
   function showInstallBanner() {
     if (document.getElementById('install-banner')) return;
     const banner = document.createElement('div');
     banner.id = 'install-banner';
     banner.className = 'install-banner';
     banner.innerHTML = `
-      <p>📲 Instale o SuperEletroLar no seu celular!</p>
+      <p>📲 Instale o Trampolim no seu celular!</p>
       <button class="btn" id="btn-install">Instalar</button>
       <button class="modal-close" id="btn-dismiss-install" aria-label="Fechar">✕</button>`;
     document.body.appendChild(banner);
@@ -781,14 +1522,198 @@ const SuperEletroLar = (() => {
     localStorage.setItem('sel-theme', html.dataset.theme);
   }
 
+  /* ── Header scroll & search ── */
+  function initStateSelects() {
+    fillBrazilianStates(document.getElementById('search-state'));
+    fillBrazilianStates(document.getElementById('header-search-state'));
+    fillBrazilianStates(document.getElementById('hub-state'));
+  }
+
+  function getSearchState() {
+    return document.getElementById('search-state')?.value
+      || document.getElementById('header-search-state')?.value
+      || '';
+  }
+
+  function syncSearchState(value) {
+    const home = document.getElementById('search-state');
+    const header = document.getElementById('header-search-state');
+    if (home && home.value !== value) home.value = value;
+    if (header && header.value !== value) header.value = value;
+  }
+
+  function runProductSearch(query, gridId = 'products-grid', state) {
+    const q = query.trim();
+    const uf = state !== undefined ? state : getSearchState();
+    const params = {};
+    if (q) params.search = q;
+    if (uf) params.state = uf;
+
+    const filterLocal = (list) => {
+      let results = [...list];
+      if (q) {
+        const lower = q.toLowerCase();
+        results = results.filter(p =>
+          p.name.toLowerCase().includes(lower) ||
+          p.brand?.toLowerCase().includes(lower) ||
+          p.description?.toLowerCase().includes(lower)
+        );
+      }
+      if (uf) results = results.filter(p => (p.state || '').toUpperCase() === uf.toUpperCase());
+      return results;
+    };
+
+    const search = async () => {
+      try {
+        const results = Object.keys(params).length
+          ? await api.getProducts(params)
+          : (uf ? await api.getProducts({ state: uf }) : PRODUCTS.slice(0, 8));
+        renderProducts(gridId, results.length ? results : []);
+        if (results.length === 0 && (q || uf)) {
+          const grid = document.getElementById(gridId);
+          if (grid) {
+            grid.innerHTML = '<p style="text-align:center;color:var(--color-text-muted);padding:2rem;grid-column:1/-1">Nenhum produto encontrado para este filtro.</p>';
+          }
+        }
+      } catch {
+        const base = q || uf ? PRODUCTS : PRODUCTS.slice(0, 8);
+        const results = filterLocal(base);
+        renderProducts(gridId, results);
+        if (!results.length && (q || uf)) {
+          const grid = document.getElementById(gridId);
+          if (grid) {
+            grid.innerHTML = '<p style="text-align:center;color:var(--color-text-muted);padding:2rem;grid-column:1/-1">Nenhum produto encontrado para este filtro.</p>';
+          }
+        }
+      }
+    };
+    return search();
+  }
+
+  function syncSearchInputs(value) {
+    const homeInput = document.getElementById('search-input');
+    const headerInput = document.getElementById('header-search-input');
+    if (homeInput && homeInput.value !== value) homeInput.value = value;
+    if (headerInput && headerInput.value !== value) headerInput.value = value;
+    document.getElementById('btn-search-clear')?.toggleAttribute('hidden', !value);
+  }
+
+  function toggleHeaderSearch(forceOpen) {
+    const header = document.getElementById('app-header');
+    const btn = document.getElementById('btn-search');
+    const input = document.getElementById('header-search-input');
+    if (!header || !btn) return;
+
+    const isOpen = typeof forceOpen === 'boolean' ? forceOpen : !header.classList.contains('search-open');
+    header.classList.toggle('search-open', isOpen);
+    btn.classList.toggle('active', isOpen);
+    btn.setAttribute('aria-expanded', String(isOpen));
+
+    if (isOpen) {
+      navigateTo('home');
+      setTimeout(() => input?.focus(), 120);
+    }
+  }
+
+  function initHeaderScroll() {
+    const header = document.getElementById('app-header');
+    const progress = document.getElementById('header-scroll-progress');
+    if (!header) return;
+
+    const SCROLL_LIGHT = 48;
+    const SCROLL_DEEP = 220;
+    let ticking = false;
+
+    const update = () => {
+      const y = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = docHeight > 0 ? Math.min(100, (y / docHeight) * 100) : 0;
+
+      header.classList.toggle('header-scrolled', y > SCROLL_LIGHT);
+      header.classList.toggle('header-scrolled-deep', y > SCROLL_DEEP);
+      if (progress) progress.style.width = `${pct}%`;
+      ticking = false;
+    };
+
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    update();
+  }
+
+  function initHeaderSearch() {
+    const headerInput = document.getElementById('header-search-input');
+    const homeInput = document.getElementById('search-input');
+    const clearBtn = document.getElementById('btn-search-clear');
+    const homeState = document.getElementById('search-state');
+    const headerState = document.getElementById('header-search-state');
+
+    const handleSearch = (value) => {
+      syncSearchInputs(value);
+      if (currentView !== 'home') navigateTo('home');
+      runProductSearch(value);
+    };
+
+    const handleStateChange = (value) => {
+      syncSearchState(value);
+      if (currentView !== 'home') navigateTo('home');
+      runProductSearch(homeInput?.value || headerInput?.value || '');
+    };
+
+    headerInput?.addEventListener('input', (e) => handleSearch(e.target.value));
+    homeInput?.addEventListener('input', (e) => {
+      syncSearchInputs(e.target.value);
+      runProductSearch(e.target.value);
+    });
+
+    homeState?.addEventListener('change', (e) => handleStateChange(e.target.value));
+    headerState?.addEventListener('change', (e) => handleStateChange(e.target.value));
+
+    clearBtn?.addEventListener('click', () => {
+      syncSearchInputs('');
+      runProductSearch('');
+      headerInput?.focus();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') toggleHeaderSearch(false);
+    });
+
+    document.addEventListener('click', (e) => {
+      const header = document.getElementById('app-header');
+      if (!header?.classList.contains('search-open')) return;
+      if (e.target.closest('#header-search') || e.target.closest('#btn-search')) return;
+      if (window.innerWidth >= 1024) return;
+      toggleHeaderSearch(false);
+    });
+  }
+
   /* ── Carousel ── */
   function initCarousel() {
     const scroll = document.getElementById('categories-scroll');
     const prev = document.getElementById('cat-prev');
     const next = document.getElementById('cat-next');
-    if (!scroll) return;
-    prev?.addEventListener('click', () => scroll.scrollBy({ left: -200, behavior: 'smooth' }));
-    next?.addEventListener('click', () => scroll.scrollBy({ left: 200, behavior: 'smooth' }));
+    if (scroll) {
+      prev?.addEventListener('click', () => scroll.scrollBy({ left: -200, behavior: 'smooth' }));
+      next?.addEventListener('click', () => scroll.scrollBy({ left: 200, behavior: 'smooth' }));
+    }
+
+    const showcase = document.getElementById('showcase-track');
+    const showcasePrev = document.getElementById('showcase-prev');
+    const showcaseNext = document.getElementById('showcase-next');
+    showcasePrev?.addEventListener('click', () => {
+      showcase?.scrollBy({ left: -SHOWCASE_SCROLL_STEP, behavior: 'smooth' });
+    });
+    showcaseNext?.addEventListener('click', () => {
+      showcase?.scrollBy({ left: SHOWCASE_SCROLL_STEP, behavior: 'smooth' });
+    });
+    showcase?.addEventListener('scroll', updateShowcaseArrows, { passive: true });
+    window.addEventListener('resize', updateShowcaseArrows);
 
     document.getElementById('hero-prev')?.addEventListener('click', () => { goToHeroSlide(heroIndex - 1); startHeroAutoplay(); });
     document.getElementById('hero-next')?.addEventListener('click', () => { goToHeroSlide(heroIndex + 1); startHeroAutoplay(); });
@@ -798,16 +1723,18 @@ const SuperEletroLar = (() => {
       if (dot) { goToHeroSlide(Number(dot.dataset.heroDot)); startHeroAutoplay(); }
     });
 
-    const showcase = document.getElementById('showcase-track');
     if (showcase) {
       let showcaseTimer = setInterval(() => {
-        if (showcase.scrollLeft + showcase.clientWidth >= showcase.scrollWidth - 10) {
+        const maxScroll = showcase.scrollWidth - showcase.clientWidth;
+        if (maxScroll <= 0) return;
+        if (showcase.scrollLeft >= maxScroll - 10) {
           showcase.scrollTo({ left: 0, behavior: 'smooth' });
         } else {
-          showcase.scrollBy({ left: 220, behavior: 'smooth' });
+          showcase.scrollBy({ left: SHOWCASE_SCROLL_STEP, behavior: 'smooth' });
         }
-      }, 4000);
+      }, 4500);
       showcase.addEventListener('mouseenter', () => clearInterval(showcaseTimer));
+      updateShowcaseArrows();
     }
   }
 
@@ -830,6 +1757,7 @@ const SuperEletroLar = (() => {
 
   /* ── Events ── */
   function bindEvents() {
+    bindHubEvents();
     document.querySelectorAll('[data-view]').forEach(el => {
       el.addEventListener('click', (e) => { e.preventDefault(); navigateTo(el.dataset.view); });
     });
@@ -841,8 +1769,12 @@ const SuperEletroLar = (() => {
     document.getElementById('btn-cart-header')?.addEventListener('click', () => navigateTo('cart'));
     document.getElementById('btn-theme')?.addEventListener('click', toggleTheme);
     document.getElementById('btn-search')?.addEventListener('click', () => {
-      document.getElementById('search-input')?.focus();
-      navigateTo('home');
+      if (window.innerWidth >= 1024) {
+        document.getElementById('header-search-input')?.focus();
+        navigateTo('home');
+        return;
+      }
+      toggleHeaderSearch();
     });
 
     document.addEventListener('click', (e) => {
@@ -852,23 +1784,17 @@ const SuperEletroLar = (() => {
         if (a === 'explore') { viewHistory = ['home']; navigateTo('home', false); }
         if (a === 'offers') navigateTo('offers');
         if (a === 'categories') navigateTo('categories');
+        if (a === 'hub') navigateTo('hub');
+        if (a === 'announce') openAnnounceFree();
+        if (a === 'my-listings') openMyListings();
+        if (a === 'chat') showChatModal();
+        if (a === 'cookie-settings') { e.preventDefault(); showCookieBanner(true); }
       }
     });
 
     document.addEventListener('blur', (e) => {
       if (e.target.id === 'ck-cep') lookupCep(e.target.value);
     }, true);
-
-    document.getElementById('search-input')?.addEventListener('input', async (e) => {
-      const q = e.target.value;
-      try {
-        const results = q ? await api.getProducts({ search: q }) : PRODUCTS.slice(0, 8);
-        renderProducts('products-grid', results);
-      } catch {
-        const results = PRODUCTS.filter(p => p.name.toLowerCase().includes(q.toLowerCase()));
-        renderProducts('products-grid', results);
-      }
-    });
 
     document.addEventListener('click', async (e) => {
       const openProd = e.target.closest('[data-open-product]');
@@ -887,6 +1813,7 @@ const SuperEletroLar = (() => {
         if (idx >= 0) { favorites.splice(idx, 1); showToast('Removido dos favoritos'); }
         else { favorites.push(id); showToast('❤️ Adicionado aos favoritos'); }
         saveFavorites();
+        updateFavoritesBadge();
         renderAll();
         return;
       }
@@ -944,6 +1871,10 @@ const SuperEletroLar = (() => {
 
       const showcase = e.target.closest('.showcase-item');
       if (showcase) {
+        const themeAction = showcase.dataset.showcaseAction;
+        if (themeAction === 'hub') { navigateTo('hub'); return; }
+        if (themeAction === 'offers') { navigateTo('offers'); return; }
+        if (themeAction === 'categories') { navigateTo('categories'); return; }
         activeCategory = showcase.dataset.category;
         const c = CATEGORIES.find(x => x.id === activeCategory);
         document.getElementById('category-products-title').textContent = `${c?.icon || ''} ${c?.name || ''}`;
@@ -985,7 +1916,13 @@ const SuperEletroLar = (() => {
         return;
       }
 
-      if (e.target.id === 'btn-logout') { api.logout(); updateAccountView(); showToast('Você saiu da conta'); return; }
+      if (e.target.id === 'btn-logout') {
+        api.logout();
+        updateAccountView();
+        updateChatBadge();
+        showToast('Você saiu da conta');
+        return;
+      }
 
       const authTab = e.target.closest('[data-auth-tab]');
       if (authTab) {
@@ -1016,7 +1953,8 @@ const SuperEletroLar = (() => {
           }
           modal?.remove();
           updateAccountView();
-          showToast('✅ Bem-vindo à SuperEletroLar!');
+          updateChatBadge();
+          showToast('✅ Bem-vindo à Trampolim!');
         } catch (err) {
           if (errorEl) { errorEl.textContent = err.message; errorEl.style.display = 'block'; }
         }
@@ -1069,18 +2007,26 @@ const SuperEletroLar = (() => {
 
     const params = new URLSearchParams(window.location.search);
     const viewParam = params.get('view');
+    const dealParam = params.get('deal');
     if (viewParam) currentView = viewParam;
 
     bindEvents();
+    initStateSelects();
     initCarousel();
     initPWA();
+    initCookieConsent();
+    initHeaderScroll();
+    initHeaderSearch();
     updateCartBadge();
+    updateFavoritesBadge();
+    updateChatBadge();
 
     document.getElementById('app-loading')?.classList.remove('hidden');
     await loadData();
     document.getElementById('app-loading')?.classList.add('hidden');
 
     if (viewParam) navigateTo(viewParam, false);
+    if (dealParam && api.token) openHubDealFromUrl(dealParam);
   }
 
   document.addEventListener('DOMContentLoaded', init);

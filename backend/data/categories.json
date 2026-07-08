@@ -4,83 +4,95 @@
     "name": "Geladeiras",
     "icon": "🧊",
     "description": "Refrigeradores frost free, duplex e side by side para sua cozinha",
-    "image": "https://images.unsplash.com/photo-1571175443880-49e1b58a9b91?w=600&q=80"
+    "image": "assets/carousel/lifestyle/geladeira-casa.png",
+    "fallbackImage": "assets/showcase/geladeiras.png"
   },
   {
     "id": "fogoes",
     "name": "Fogões",
     "icon": "🔥",
     "description": "Fogões a gás, cooktops e fornos elétricos",
-    "image": "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=600&q=80"
+    "image": "assets/carousel/lifestyle/fogao-casa.png",
+    "fallbackImage": "assets/showcase/geladeiras.png"
   },
   {
     "id": "lavadoras",
     "name": "Lavadoras",
     "icon": "🫧",
     "description": "Lavadoras e lava e seca com tecnologia inverter",
-    "image": "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?w=600&q=80"
+    "image": "assets/carousel/lifestyle/lavadora-casa.png",
+    "fallbackImage": "assets/showcase/geladeiras.png"
   },
   {
     "id": "tvs",
     "name": "Smart TVs",
     "icon": "📺",
     "description": "Smart TVs 4K, QLED e OLED das melhores marcas",
-    "image": "https://images.unsplash.com/photo-1593359677877-bcde3a3d7718?w=600&q=80"
+    "image": "assets/showcase/smart-tvs.png",
+    "fallbackImage": "assets/showcase/smart-tvs.png"
   },
   {
     "id": "ar",
     "name": "Ar-condicionado",
     "icon": "❄️",
     "description": "Splits, inverter e portáteis para todo conforto",
-    "image": "https://images.unsplash.com/photo-1631545806609-95fceaa9a626?w=600&q=80"
+    "image": "assets/carousel/lifestyle/ar-casa.png",
+    "fallbackImage": "assets/showcase/ar-condicionado.png"
   },
   {
     "id": "micro",
     "name": "Micro-ondas",
     "icon": "📡",
     "description": "Micro-ondas com grill e função descongelar",
-    "image": "https://images.unsplash.com/photo-1585659722983-1f0d9992f331?w=600&q=80"
+    "image": "assets/carousel/lifestyle/micro-casa.png",
+    "fallbackImage": "assets/showcase/micro-ondas.png"
   },
   {
     "id": "celulares",
     "name": "Celulares",
     "icon": "📱",
     "description": "Smartphones 5G com câmeras profissionais",
-    "image": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&q=80"
+    "image": "assets/carousel/lifestyle/celular-casa.png",
+    "fallbackImage": "assets/showcase/smart-tvs.png"
   },
   {
     "id": "notebooks",
     "name": "Notebooks",
     "icon": "💻",
     "description": "Notebooks para trabalho, estudo e entretenimento",
-    "image": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&q=80"
+    "image": "assets/carousel/lifestyle/notebook-casa.png",
+    "fallbackImage": "assets/showcase/smart-tvs.png"
   },
   {
     "id": "aspiradores",
     "name": "Aspiradores",
     "icon": "🌀",
     "description": "Aspiradores verticais, robôs e portáteis",
-    "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80"
+    "image": "assets/carousel/lifestyle/aspirador-casa.png",
+    "fallbackImage": "assets/showcase/aspiradores.png"
   },
   {
     "id": "cafeteiras",
     "name": "Cafeteiras",
     "icon": "☕",
     "description": "Cafeteiras espresso, cápsulas e filtro",
-    "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80"
+    "image": "assets/carousel/lifestyle/cafe-casa.png",
+    "fallbackImage": "assets/showcase/fritadeiras.png"
   },
   {
     "id": "fritadeiras",
     "name": "Fritadeiras",
     "icon": "🍳",
     "description": "Air fryers e fritadeiras elétricas sem óleo",
-    "image": "https://images.unsplash.com/photo-1585515320310-259814833e62?w=600&q=80"
+    "image": "assets/carousel/lifestyle/fritadeira-casa.png",
+    "fallbackImage": "assets/showcase/fritadeiras.png"
   },
   {
     "id": "audio",
     "name": "Áudio",
     "icon": "🔊",
     "description": "Caixas de som, soundbars e fones bluetooth",
-    "image": "https://images.unsplash.com/photo-1545454675-3531b543be6d?w=600&q=80"
+    "image": "assets/showcase/audio.png",
+    "fallbackImage": "assets/showcase/audio.png"
   }
 ]

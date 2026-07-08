@@ -5,7 +5,7 @@ const router = Router();
 
 router.get('/', async (req, res) => {
   const products = await store.getProducts();
-  const { category, search, minPrice, maxPrice, sort } = req.query;
+  const { category, search, minPrice, maxPrice, sort, state } = req.query;
 
   let filtered = [...products];
 
@@ -22,6 +22,11 @@ router.get('/', async (req, res) => {
 
   if (minPrice) filtered = filtered.filter(p => p.price >= Number(minPrice));
   if (maxPrice) filtered = filtered.filter(p => p.price <= Number(maxPrice));
+
+  if (state) {
+    const uf = state.toUpperCase();
+    filtered = filtered.filter(p => (p.state || '').toUpperCase() === uf);
+  }
 
   if (sort === 'price-asc') filtered.sort((a, b) => a.price - b.price);
   else if (sort === 'price-desc') filtered.sort((a, b) => b.price - a.price);

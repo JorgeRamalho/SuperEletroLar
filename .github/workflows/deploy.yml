@@ -1,4 +1,4 @@
-name: Deploy SuperEletroLar
+name: Deploy Trampolim
 
 on:
   push:

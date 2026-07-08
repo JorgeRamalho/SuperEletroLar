@@ -1,0 +1,20 @@
+[
+  {
+    "id": "tx-1783471718111",
+    "listingId": "lst-ml-001",
+    "buyerId": "afecc0ce-7d87-40f2-8001-542f62b8b276",
+    "sellerId": "seller-ml-001",
+    "marketplaceId": "mercadolivre",
+    "grossAmount": 1899,
+    "platformFee": 189.9,
+    "netAmount": 1632.94,
+    "status": "completed",
+    "type": "deal",
+    "metadata": {
+      "dealId": "deal-f39edd5e",
+      "trackingCode": "TRPMRBD1N6F"
+    },
+    "createdAt": "2026-07-08T00:48:38.111Z",
+    "completedAt": "2026-07-08T00:49:32.823Z"
+  }
+]

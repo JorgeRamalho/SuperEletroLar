@@ -25,7 +25,7 @@ export default function AccountView({ onLogin, onRegister }) {
         ) : (
           <>
             <div className="profile-avatar">👤</div>
-            <h2>Bem-vindo à SuperEletroLar</h2>
+            <h2>Bem-vindo à Trampolim</h2>
             <p style={{ color: 'var(--color-text-secondary)', marginTop: '0.5rem' }}>Entre ou cadastre-se para aproveitar todas as vantagens</p>
             <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', marginTop: '1.5rem' }}>
               <button className="btn btn-primary btn-sm" onClick={onLogin}>Entrar</button>

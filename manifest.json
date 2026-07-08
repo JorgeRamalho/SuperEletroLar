@@ -1,14 +1,14 @@
 {
-  "name": "SuperEletroLar",
-  "short_name": "SuperEletroLar",
-  "description": "Tecnologia que transforma seu lar. Eletrodomésticos e eletrônicos para a família brasileira.",
+  "name": "Trampolim",
+  "short_name": "Trampolim",
+  "description": "Seu impulso para o trampo. Trabalho, serviços e oportunidades.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#F0F4F8",
-  "theme_color": "#0066FF",
+  "theme_color": "#FF6B35",
   "orientation": "portrait-primary",
   "lang": "pt-BR",
-  "categories": ["shopping", "lifestyle"],
+  "categories": ["shopping", "business", "lifestyle"],
   "icons": [
     {
       "src": "assets/logo.svg",
@@ -25,14 +25,19 @@
   ],
   "screenshots": [
     {
-      "src": "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=800&q=80",
-      "sizes": "800x600",
-      "type": "image/jpeg",
+      "src": "assets/brand/trampolim-hero.png",
+      "sizes": "800x450",
+      "type": "image/png",
       "form_factor": "wide",
-      "label": "SuperEletroLar — Página inicial"
+      "label": "Trampolim — Seu impulso para o trampo"
     }
   ],
   "shortcuts": [
+    {
+      "name": "Radar Trampolim",
+      "url": "/?view=hub",
+      "description": "Buscar trabalho, serviços e produtos"
+    },
     {
       "name": "Ofertas",
       "url": "/?view=offers",
@@ -41,7 +46,7 @@
     {
       "name": "Carrinho",
       "url": "/?view=cart",
-      "description": "Meu carrinho de compras"
+      "description": "Meu carrinho"
     }
   ]
 }

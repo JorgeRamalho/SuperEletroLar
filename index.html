@@ -3,50 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="description" content="SuperEletroLar — Tecnologia que transforma seu lar. Eletrodomésticos, linha branca e eletrônicos para a família brasileira.">
-  <meta name="theme-color" content="#0066FF">
-  <meta name="keywords" content="eletrodomésticos, geladeira, fogão, smart tv, linha branca, eletrônicos, ofertas">
-  <meta name="author" content="SuperEletroLar">
+  <meta name="description" content="Trampolim — Seu impulso para o trampo. Trabalho, serviços, produtos novos e usados. Busca em OLX, Mercado Livre, Meta e muito mais.">
+  <meta name="theme-color" content="#FF6B35">
+  <meta name="keywords" content="trampo, trabalho, serviços, emprego, marketplace, produtos usados, OLX, Mercado Livre, oportunidades">
+  <meta name="author" content="Trampolim">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://supereletrolar.com.br/">
+  <link rel="canonical" href="https://trampolim.com.br/">
 
   <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="SuperEletroLar — Tecnologia que transforma seu lar">
-  <meta property="og:description" content="Eletrodomésticos, linha branca e eletrônicos com as melhores condições para a família brasileira.">
-  <meta property="og:image" content="assets/logo.svg">
-  <meta property="og:url" content="https://supereletrolar.com.br">
+  <meta property="og:title" content="Trampolim — Seu impulso para o trampo">
+  <meta property="og:description" content="Trabalho, serviços e oportunidades. Produtos novos, usados e semi-novos em um só lugar.">
+  <meta property="og:image" content="assets/brand/trampolim-hero.png">
+  <meta property="og:url" content="https://trampolim.com.br">
   <meta property="og:locale" content="pt_BR">
-  <meta property="og:site_name" content="SuperEletroLar">
+  <meta property="og:site_name" content="Trampolim">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="SuperEletroLar — Tecnologia que transforma seu lar">
-  <meta name="twitter:description" content="Eletrodomésticos e eletrônicos para toda a família brasileira.">
-  <meta name="twitter:image" content="assets/logo.svg">
+  <meta name="twitter:title" content="Trampolim — Seu impulso para o trampo">
+  <meta name="twitter:description" content="Trabalho, serviços e oportunidades para quem busca o próximo salto.">
+  <meta name="twitter:image" content="assets/brand/trampolim-hero.png">
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="assets/logo.svg">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="SuperEletroLar">
+  <meta name="apple-mobile-web-app-title" content="Trampolim">
 
-  <title>SuperEletroLar — Tecnologia que transforma seu lar</title>
+  <title>Trampolim — Seu impulso para o trampo</title>
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/responsive.css">
 
   <!-- Schema.org -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Store",
-    "name": "SuperEletroLar",
-    "description": "Tecnologia que transforma seu lar. Eletrodomésticos e eletrônicos para a família brasileira.",
-    "url": "https://supereletrolar.com.br",
+    "name": "Trampolim",
+    "description": "Seu impulso para o trampo. Trabalho, serviços, produtos e oportunidades para o Brasil.",
+    "url": "https://trampolim.com.br",
     "logo": "assets/logo.svg",
     "telephone": "0800-123-4567",
-    "email": "contato@supereletrolar.com.br",
+    "email": "contato@trampolim.com.br",
     "address": {
       "@type": "PostalAddress",
       "addressCountry": "BR",
@@ -61,49 +62,128 @@
 
   <a href="#main-content" class="skip-link">Ir para o conteúdo principal</a>
   <div class="offline-badge" id="offline-badge" role="status">📡 Você está offline</div>
-  <div class="loading-spinner hidden" id="app-loading" style="position:fixed;inset:0;z-index:600;background:var(--color-bg)"><div class="spinner"></div> Carregando...</div>
+  <div class="loading-spinner hidden app-loading-overlay" id="app-loading"><div class="spinner"></div> Carregando...</div>
 
   <!-- HEADER -->
-  <header class="app-header" role="banner">
-    <button class="header-back" id="btn-back" aria-label="Voltar" title="Voltar">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <path d="M19 12H5M12 19l-7-7 7-7"/>
-      </svg>
-    </button>
+  <header class="app-header" id="app-header" role="banner">
+    <div class="header-scroll-progress" id="header-scroll-progress" aria-hidden="true"></div>
 
-    <a href="#" class="header-brand" id="brand-link" aria-label="SuperEletroLar — Página inicial">
-      <img src="assets/logo.svg" alt="" width="40" height="40">
-      <div>
-        <div class="brand-name">SuperEletroLar</div>
-        <div class="brand-slogan">Tecnologia que transforma seu lar</div>
+    <div class="header-inner">
+      <button class="header-back" id="btn-back" aria-label="Voltar" title="Voltar">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+
+      <a href="#" class="header-brand" id="brand-link" aria-label="Trampolim — Página inicial">
+        <span class="header-brand-mark" aria-hidden="true">
+          <img src="assets/logo.svg" alt="" width="40" height="40">
+        </span>
+        <span class="header-brand-text">
+          <span class="brand-name">🚀 Trampolim</span>
+          <span class="brand-slogan">Seu impulso para o trampo</span>
+        </span>
+      </a>
+
+      <div class="header-search" id="header-search" role="search">
+        <div class="header-search-field">
+          <svg class="header-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          <label for="header-search-input" class="sr-only">Buscar produtos</label>
+          <input type="search" id="header-search-input" placeholder="Buscar geladeira, TV, fogão..." autocomplete="off" enterkeyhint="search">
+          <button type="button" class="header-search-clear" id="btn-search-clear" aria-label="Limpar busca" hidden>✕</button>
+        </div>
+        <label for="header-search-state" class="sr-only">Filtrar por estado</label>
+        <select id="header-search-state" class="search-state-select" aria-label="Estado">
+          <option value="">Todos os estados</option>
+        </select>
       </div>
-    </a>
 
-    <nav class="desktop-nav" aria-label="Navegação principal">
-      <a href="#" data-view="home" class="active">Início</a>
-      <a href="#" data-view="categories">Categorias</a>
-      <a href="#" data-view="offers">Ofertas</a>
-      <a href="#" data-view="account">Conta</a>
-    </nav>
+      <nav class="desktop-nav" aria-label="Navegação principal">
+        <a href="#" data-view="home" class="active">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span>Início</span>
+        </a>
+        <a href="#" data-view="categories">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+          <span>Categorias</span>
+        </a>
+        <a href="#" data-view="hub">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6M8 11h6"/></svg>
+          <span>Busca</span>
+        </a>
+        <a href="#" data-view="offers">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          <span>Ofertas</span>
+        </a>
+        <a href="#" data-view="account">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Conta</span>
+        </a>
+      </nav>
 
-    <div class="header-actions">
-      <button class="icon-btn" id="btn-search" aria-label="Buscar produtos" title="Buscar">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-        </svg>
-      </button>
-      <button class="icon-btn" id="btn-theme" aria-label="Alternar tema claro/escuro" title="Tema">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" id="icon-theme">
-          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-        </svg>
-      </button>
-      <button class="icon-btn" id="btn-cart-header" aria-label="Carrinho de compras" title="Carrinho">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
-          <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
-        </svg>
-        <span class="badge" id="cart-badge" data-count="0" aria-label="Itens no carrinho">0</span>
-      </button>
+      <div class="header-actions" role="toolbar" aria-label="Ações rápidas">
+        <button type="button" class="header-action-btn header-action-cta" id="btn-announce" data-action="announce" aria-label="Anunciar grátis" title="Anunciar grátis">
+          <span class="header-action-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+          </span>
+          <span class="header-action-label">Anunciar Grátis</span>
+        </button>
+
+        <button type="button" class="header-action-btn" id="btn-my-listings" data-action="my-listings" data-accent="cool" aria-label="Meus anúncios" title="Meus anúncios">
+          <span class="header-action-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
+          </span>
+          <span class="header-action-label">Meus Anúncios</span>
+        </button>
+
+        <button type="button" class="header-action-btn" id="btn-chat-header" data-action="chat" data-accent="purple" aria-label="Chat" title="Chat">
+          <span class="header-action-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+          </span>
+          <span class="header-action-label">Chat</span>
+          <span class="badge badge-chat" id="chat-badge" data-count="0" aria-label="Mensagens não lidas">0</span>
+        </button>
+
+        <button type="button" class="header-action-btn" id="btn-favorites-header" data-view="favorites" data-accent="warm" aria-label="Favoritos" title="Favoritos">
+          <span class="header-action-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          </span>
+          <span class="header-action-label">Favoritos</span>
+          <span class="badge badge-fav" id="favorites-badge" data-count="0" aria-label="Itens favoritos">0</span>
+        </button>
+
+        <button type="button" class="header-action-btn" id="btn-search" data-accent="primary" aria-label="Buscar produtos" aria-expanded="false" aria-controls="header-search" title="Buscar">
+          <span class="header-action-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          </span>
+          <span class="header-action-label">Buscar</span>
+        </button>
+
+        <button type="button" class="header-action-btn" id="btn-account-header" data-view="account" data-accent="accent" aria-label="Minha conta" title="Conta">
+          <span class="header-action-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+          <span class="header-action-label">Conta</span>
+        </button>
+
+        <button type="button" class="header-action-btn header-action-cart" id="btn-cart-header" data-accent="secondary" aria-label="Carrinho de compras" title="Carrinho">
+          <span class="header-action-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          </span>
+          <span class="header-action-label">Carrinho</span>
+          <span class="badge badge-cart" id="cart-badge" data-count="0" aria-label="Itens no carrinho">0</span>
+        </button>
+
+        <button type="button" class="header-action-btn header-action-theme" id="btn-theme" data-accent="electric" aria-label="Alternar tema claro/escuro" title="Tema">
+          <span class="header-action-icon header-action-icon-theme" aria-hidden="true">
+            <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+            <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+          </span>
+          <span class="header-action-label">Tema</span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -126,25 +206,6 @@
         <div class="hero-carousel-dots" id="hero-dots" role="tablist" aria-label="Navegação do carrossel"></div>
       </div>
 
-      <div class="section-header">
-        <h2 class="section-title">🏠 Tudo para o seu lar</h2>
-        <button class="section-link" data-action="categories">Ver categorias →</button>
-      </div>
-
-      <div class="showcase-carousel">
-        <div class="showcase-track" id="showcase-track" role="list" aria-label="Galeria de produtos por categoria">
-          <!-- Preenchido via JS -->
-        </div>
-      </div>
-
-      <div class="search-bar" role="search">
-        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-        </svg>
-        <label for="search-input" class="sr-only">Buscar produtos</label>
-        <input type="search" id="search-input" placeholder="Buscar geladeira, TV, fogão..." autocomplete="off">
-      </div>
-
       <div class="promo-banners">
         <div class="promo-card blue">
           <h3>🏷️ Até 40% OFF em Linha Branca</h3>
@@ -162,6 +223,47 @@
           <h3>🔧 Máquinas e eletroportáteis</h3>
           <p>Aspiradores, cafeteiras e muito mais</p>
         </div>
+      </div>
+
+      <div class="search-bar search-bar-with-state" role="search">
+        <div class="search-bar-field">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          <label for="search-input" class="sr-only">Buscar produtos</label>
+          <input type="search" id="search-input" placeholder="Buscar geladeira, TV, fogão..." autocomplete="off">
+        </div>
+        <label for="search-state" class="sr-only">Filtrar por estado</label>
+        <select id="search-state" class="search-state-select" aria-label="Estado">
+          <option value="">Todos os estados</option>
+        </select>
+      </div>
+
+      <div class="section-header">
+        <h2 class="section-title">🚀 Impulsione seu trampo</h2>
+        <button class="section-link" data-action="hub">Abrir Radar →</button>
+      </div>
+
+      <div class="showcase-wrapper carousel-wrapper">
+        <button class="carousel-arrow prev" id="showcase-prev" type="button" aria-label="Blocos anteriores" disabled>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <div class="showcase-carousel">
+          <div class="showcase-track" id="showcase-track" role="list" aria-label="Oportunidades Trampolim e categorias de produtos">
+            <!-- Preenchido via JS -->
+          </div>
+        </div>
+        <button class="carousel-arrow next" id="showcase-next" type="button" aria-label="Próximos blocos">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+
+      <div class="hub-home-banner" data-view="hub" role="button" tabindex="0" aria-label="Abrir Radar Trampolim">
+        <div class="hub-home-banner-text">
+          <strong>🚀 Radar Trampolim</strong>
+          <span>Trabalho, serviços e oportunidades — OLX, Mercado Livre, Meta, Yahoo e loja oficial</span>
+        </div>
+        <span class="hub-home-banner-cta">Explorar →</span>
       </div>
 
       <div class="section-header">
@@ -191,15 +293,110 @@
       </div>
     </section>
 
+    <!-- VIEW: HUB MULTI-MARKETPLACE -->
+    <section class="view" id="view-hub" aria-label="Radar Trampolim — busca multi-marketplace">
+      <div class="hub-hero hub-hero-branded">
+        <img class="hub-hero-bg" src="assets/brand/trampolim-hero.png" alt="" aria-hidden="true">
+        <div class="hub-hero-content">
+          <span class="hub-hero-badge">💼 Trabalho · Serviços · Oportunidades</span>
+          <h1 class="hub-hero-title">🚀 Radar Trampolim</h1>
+          <p class="hub-hero-subtitle">Seu impulso para o trampo — produtos novos, usados, semi-novos e serviços em OLX, Mercado Livre, Meta, Yahoo e na loja Trampolim.</p>
+        </div>
+        <div class="hub-platforms" id="hub-platforms" role="tablist" aria-label="Plataformas"></div>
+      </div>
+
+      <div class="hub-search-panel">
+        <div class="hub-search-main">
+          <svg class="hub-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <label for="hub-search-input" class="sr-only">Buscar no hub</label>
+          <input type="search" id="hub-search-input" placeholder="Buscar trampo, serviço, produto usado..." autocomplete="off">
+          <button type="button" class="btn btn-primary hub-search-btn" id="hub-search-btn">Buscar</button>
+        </div>
+
+        <div class="hub-filters" id="hub-filters">
+          <div class="hub-filter-group">
+            <span class="hub-filter-label">Condição</span>
+            <div class="hub-chips" role="group" aria-label="Condição">
+              <button type="button" class="hub-chip active" data-hub-filter="condition" data-value="">Todos</button>
+              <button type="button" class="hub-chip" data-hub-filter="condition" data-value="new">Novo</button>
+              <button type="button" class="hub-chip" data-hub-filter="condition" data-value="semi_used">Semi-novo</button>
+              <button type="button" class="hub-chip" data-hub-filter="condition" data-value="used">Usado</button>
+              <button type="button" class="hub-chip" data-hub-filter="condition" data-value="service">Serviços</button>
+            </div>
+          </div>
+          <div class="hub-filter-group">
+            <span class="hub-filter-label">Tipo</span>
+            <div class="hub-chips" role="group" aria-label="Tipo">
+              <button type="button" class="hub-chip active" data-hub-filter="listingType" data-value="">Todos</button>
+              <button type="button" class="hub-chip" data-hub-filter="listingType" data-value="product">Produtos</button>
+              <button type="button" class="hub-chip" data-hub-filter="listingType" data-value="service">Serviços</button>
+            </div>
+          </div>
+          <div class="hub-filter-row">
+            <div class="hub-filter-field">
+              <label for="hub-min-price">Preço mín.</label>
+              <input type="number" id="hub-min-price" placeholder="R$ 0" min="0">
+            </div>
+            <div class="hub-filter-field">
+              <label for="hub-max-price">Preço máx.</label>
+              <input type="number" id="hub-max-price" placeholder="R$ 9999" min="0">
+            </div>
+            <div class="hub-filter-field">
+              <label for="hub-state">Estado</label>
+              <select id="hub-state">
+                <option value="">Todos os estados</option>
+              </select>
+            </div>
+            <div class="hub-filter-field">
+              <label for="hub-sort">Ordenar</label>
+              <select id="hub-sort">
+                <option value="relevance">Relevância</option>
+                <option value="price_asc">Menor preço</option>
+                <option value="price_desc">Maior preço</option>
+                <option value="newest">Mais recentes</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hub-stats" id="hub-stats" aria-live="polite"></div>
+      <div class="hub-results" id="hub-results" role="list" aria-label="Resultados da busca"></div>
+      <div class="hub-empty hidden" id="hub-empty">
+        <span aria-hidden="true">🔍</span>
+        <p>Nenhum resultado encontrado. Tente outros filtros ou termos.</p>
+      </div>
+
+      <div class="hub-seller-cta">
+        <div class="hub-seller-card">
+          <h3>📣 Venda ou ofereça serviços</h3>
+          <p>Cadastre-se como vendedor, publique anúncios e acompanhe o volume gerado na plataforma.</p>
+          <div class="hub-seller-actions">
+            <button type="button" class="btn btn-primary" id="btn-hub-seller-register">Cadastrar como vendedor</button>
+            <button type="button" class="btn btn-outline" id="btn-hub-new-listing">Publicar anúncio</button>
+          </div>
+        </div>
+        <div class="hub-analytics-card" id="hub-analytics-panel">
+          <h3>📊 Painel de valores</h3>
+          <div id="hub-analytics-content"><p class="hub-muted">Faça login para ver seu fluxo de transações e cruzamento de contas.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: DETALHE HUB LISTING -->
+    <section class="view" id="view-hub-listing" aria-label="Detalhe do anúncio">
+      <div id="hub-listing-detail"></div>
+    </section>
+
     <!-- VIEW: CATEGORIAS -->
     <section class="view" id="view-categories" aria-label="Categorias">
       <div class="section-header">
         <h2 class="section-title">Todas as Categorias</h2>
       </div>
-      <div class="products-grid" id="categories-grid" style="grid-template-columns: repeat(2, 1fr);">
+      <div class="products-grid categories-grid" id="categories-grid">
         <!-- Preenchido via JS -->
       </div>
-      <div class="section-header" style="margin-top: 2rem;">
+      <div class="section-header section-header-spaced">
         <h2 class="section-title" id="category-products-title">Produtos</h2>
       </div>
       <div class="products-grid" id="category-products-grid" role="list"></div>
@@ -207,7 +404,7 @@
 
     <!-- VIEW: OFERTAS -->
     <section class="view" id="view-offers" aria-label="Ofertas especiais">
-      <div class="hero" style="min-height: 200px; margin-bottom: 1.5rem;">
+      <div class="hero hero-compact">
         <div class="hero-content">
           <span class="hero-emoji" aria-hidden="true">🔥💰</span>
           <h1>Ofertas Imperdíveis</h1>
@@ -246,13 +443,13 @@
         <h2 class="section-title">📦 Rastrear Pedido</h2>
       </div>
       <div class="checkout-panel">
-        <p style="color:var(--color-text-secondary);margin-bottom:1rem">Digite o código de rastreamento do seu pedido.</p>
+        <p class="text-secondary-block">Digite o código de rastreamento do seu pedido.</p>
         <form id="track-form">
           <div class="form-group">
             <label class="form-label" for="track-code">Código de rastreamento</label>
             <input class="form-input" id="track-code" placeholder="Ex: SEL1A2B3C4D" required>
           </div>
-          <button type="submit" class="btn btn-primary" style="width:100%">Rastrear</button>
+          <button type="submit" class="btn btn-primary btn-full-width">Rastrear</button>
         </form>
         <div id="track-result"></div>
       </div>
@@ -278,9 +475,9 @@
     <section class="view" id="view-account" aria-label="Minha conta">
       <div class="profile-header">
         <div class="profile-avatar" aria-hidden="true">👤</div>
-        <h2>Bem-vindo à SuperEletroLar</h2>
-        <p style="color: var(--color-text-secondary); margin-top: 0.5rem;">Entre ou cadastre-se para aproveitar todas as vantagens</p>
-        <div style="display: flex; gap: 0.75rem; justify-content: center; margin-top: 1.5rem;">
+        <h2>Bem-vindo à Trampolim</h2>
+        <p class="text-secondary-block" style="margin-top: 0.5rem;">Entre ou cadastre-se para aproveitar todas as vantagens</p>
+        <div class="account-auth-actions">
           <button class="btn btn-primary btn-sm">Entrar</button>
           <button class="btn btn-outline btn-sm">Cadastrar</button>
         </div>
@@ -297,6 +494,11 @@
           <span class="menu-item-text">Favoritos</span>
           <span class="menu-item-arrow" aria-hidden="true">›</span>
         </button>
+        <button class="menu-item" type="button" data-view="hub">
+          <span class="menu-item-icon" aria-hidden="true">🔎</span>
+          <span class="menu-item-text">Radar Trampolim</span>
+          <span class="menu-item-arrow" aria-hidden="true">›</span>
+        </button>
         <button class="menu-item" type="button" data-view="track">
           <span class="menu-item-icon" aria-hidden="true">❓</span>
           <span class="menu-item-text">Ajuda e Suporte</span>
@@ -305,21 +507,91 @@
       </nav>
     </section>
 
+    <!-- VIEW: POLÍTICA DE PRIVACIDADE -->
+    <section class="view" id="view-privacy" aria-label="Política de privacidade">
+      <div class="legal-page">
+        <h1 class="section-title">🔒 Política de Privacidade</h1>
+        <p class="legal-updated">Última atualização: 7 de julho de 2026</p>
+        <div class="legal-content">
+          <p>A <strong>Trampolim</strong> ("nós") respeita sua privacidade e trata seus dados pessoais em conformidade com a <strong>Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018)</strong>.</p>
+
+          <h2>1. Dados que coletamos</h2>
+          <ul>
+            <li><strong>Cadastro:</strong> nome, e-mail, telefone e senha (criptografada).</li>
+            <li><strong>Compras:</strong> endereço de entrega, histórico de pedidos e pagamentos.</li>
+            <li><strong>Navegação:</strong> preferências (tema, carrinho, favoritos) armazenadas localmente no seu dispositivo.</li>
+            <li><strong>Cookies:</strong> identificadores para funcionamento do site e melhoria da experiência (veja nossa <a href="#" data-view="cookies">Política de Cookies</a>).</li>
+          </ul>
+
+          <h2>2. Finalidade do tratamento</h2>
+          <p>Utilizamos seus dados para processar pedidos, autenticar sua conta, enviar confirmações de compra, melhorar nossos serviços e cumprir obrigações legais.</p>
+
+          <h2>3. Compartilhamento</h2>
+          <p>Podemos compartilhar dados com processadores de pagamento (Mercado Pago), serviços de entrega e provedores de hospedagem, sempre no limite necessário para a operação do e-commerce.</p>
+
+          <h2>4. Seus direitos (LGPD)</h2>
+          <p>Você pode solicitar acesso, correção, exclusão, portabilidade ou revogação do consentimento pelo e-mail <a href="mailto:privacidade@trampolim.com.br">privacidade@trampolim.com.br</a>.</p>
+
+          <h2>5. Retenção e segurança</h2>
+          <p>Mantemos os dados pelo tempo necessário para as finalidades descritas e adotamos medidas técnicas como HTTPS, senhas criptografadas e controle de acesso à API.</p>
+
+          <h2>6. Encarregado de dados (DPO)</h2>
+          <p>Contato: <a href="mailto:privacidade@trampolim.com.br">privacidade@trampolim.com.br</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: POLÍTICA DE COOKIES -->
+    <section class="view" id="view-cookies" aria-label="Política de cookies">
+      <div class="legal-page">
+        <h1 class="section-title">🍪 Política de Cookies</h1>
+        <p class="legal-updated">Última atualização: 7 de julho de 2026</p>
+        <div class="legal-content">
+          <p>Cookies são pequenos arquivos armazenados no seu navegador para que o site funcione corretamente e ofereça uma melhor experiência de compra.</p>
+
+          <h2>1. Cookies essenciais (obrigatórios)</h2>
+          <p>Necessários para o funcionamento do site. Sem eles, recursos como carrinho, login e checkout podem não funcionar.</p>
+          <table class="legal-table">
+            <thead><tr><th>Cookie / Armazenamento</th><th>Finalidade</th><th>Duração</th></tr></thead>
+            <tbody>
+              <tr><td>sel-cart</td><td>Itens do carrinho</td><td>Persistente</td></tr>
+              <tr><td>sel-token / sel-user</td><td>Sessão de login</td><td>7 dias</td></tr>
+              <tr><td>sel-theme</td><td>Tema claro/escuro</td><td>Persistente</td></tr>
+              <tr><td>sel-favorites</td><td>Lista de favoritos</td><td>Persistente</td></tr>
+            </tbody>
+          </table>
+
+          <h2>2. Cookies de preferência</h2>
+          <p>Guardam suas escolhas, como consentimento de cookies e preferência de instalação do app (PWA).</p>
+
+          <h2>3. Cookies de análise (opcionais)</h2>
+          <p>Utilizados apenas com seu consentimento para entender como o site é utilizado e melhorar a navegação. Atualmente não utilizamos ferramentas de analytics de terceiros.</p>
+
+          <h2>4. Como gerenciar</h2>
+          <p>Você pode aceitar ou recusar cookies não essenciais pelo banner do site ou limpar os dados pelo navegador. A recusa de cookies essenciais pode limitar funcionalidades.</p>
+
+          <p>Para mais informações, consulte nossa <a href="#" data-view="privacy">Política de Privacidade</a>.</p>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- FOOTER -->
   <footer class="site-footer" role="contentinfo">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="brand-name" style="font-size: 1.25rem;">SuperEletroLar</div>
-        <p>Tecnologia que transforma seu lar. Eletrodomésticos e eletrônicos para toda a família brasileira.</p>
+        <div class="brand-name footer-brand-name">Trampolim</div>
+        <p>Seu impulso para o trampo. Trabalho, serviços e oportunidades para todo o Brasil.</p>
       </div>
       <div>
         <h3 class="footer-title">Institucional</h3>
         <ul class="footer-links">
           <li><a href="#">Sobre nós</a></li>
           <li><a href="#">Trabalhe conosco</a></li>
-          <li><a href="#">Política de privacidade</a></li>
+          <li><a href="#" data-view="privacy">Política de privacidade</a></li>
+          <li><a href="#" data-view="cookies">Política de cookies</a></li>
+          <li><a href="#" data-action="cookie-settings">Gerenciar cookies</a></li>
         </ul>
       </div>
       <div>
@@ -334,15 +606,31 @@
         <h3 class="footer-title">Contato</h3>
         <ul class="footer-links">
           <li><a href="tel:08001234567">📞 0800 123 4567</a></li>
-          <li><a href="mailto:contato@supereletrolar.com.br">✉️ contato@supereletrolar.com.br</a></li>
+          <li><a href="mailto:contato@trampolim.com.br">✉️ contato@trampolim.com.br</a></li>
           <li><a href="#">💬 WhatsApp</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 SuperEletroLar. Todos os direitos reservados. Feito com ⚡ para o lar brasileiro.</p>
+      <p>© 2026 Trampolim. Todos os direitos reservados. Feito com 🚀 para quem busca o próximo salto. <a href="#" data-view="privacy">Privacidade</a> · <a href="#" data-view="cookies">Cookies</a></p>
     </div>
   </footer>
+
+  <!-- Cookie consent (LGPD) -->
+  <div id="cookie-banner" class="cookie-banner" role="dialog" aria-labelledby="cookie-banner-title" aria-describedby="cookie-banner-desc" hidden>
+    <div class="cookie-banner-inner">
+      <p id="cookie-banner-desc" class="cookie-banner-text">
+        <strong id="cookie-banner-title">🍪 Cookies e privacidade</strong><br>
+        Utilizamos cookies essenciais para carrinho, login e preferências. Com seu consentimento, podemos usar cookies para melhorar sua experiência.
+        Leia nossa <a href="#" data-view="privacy">Política de Privacidade</a> e <a href="#" data-view="cookies">Política de Cookies</a>.
+      </p>
+      <div class="cookie-banner-actions">
+        <button type="button" class="btn-primary" id="cookie-accept-all">Aceitar todos</button>
+        <button type="button" class="btn-outline" id="cookie-essential-only">Apenas essenciais</button>
+        <button type="button" class="cookie-banner-link" id="cookie-settings" data-action="cookie-settings">Gerenciar preferências</button>
+      </div>
+    </div>
+  </div>
 
   <!-- BOTTOM NAV (estilo app) -->
   <nav class="bottom-nav" aria-label="Navegação inferior">
@@ -358,6 +646,12 @@
         <rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
       </svg>
       <span>Categorias</span>
+    </button>
+    <button class="nav-item" data-view="hub" aria-label="Radar Trampolim">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6M8 11h6"/>
+      </svg>
+      <span>Busca</span>
     </button>
     <button class="nav-item" data-view="offers" aria-label="Ofertas">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -381,6 +675,7 @@
   </nav>
 
   <script src="js/api.js"></script>
+  <script src="js/br-states.js"></script>
   <script src="js/script.js"></script>
 </body>
 </html>

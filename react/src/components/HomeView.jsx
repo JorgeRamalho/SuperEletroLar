@@ -22,7 +22,7 @@ export default function HomeView({ searchQuery, setSearchQuery, navigateTo, onOp
       <div className="hero" role="region" aria-label="Destaque principal">
         <div className="hero-content">
           <span className="hero-emoji" aria-hidden="true">⚡🏠</span>
-          <h1>Tecnologia que transforma seu lar</h1>
+          <h1>Seu impulso para o trampo</h1>
           <p>Eletrodomésticos, linha branca e eletrônicos com as melhores condições para a família brasileira.</p>
           <div className="hero-actions">
             <button className="btn btn-primary" onClick={() => setSearchQuery('')}>Explorar produtos</button>

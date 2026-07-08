@@ -8,12 +8,13 @@ import {
   createPreference,
   getPaymentStatus,
 } from '../services/mercadopago.js';
+import { handleDealWebhook } from '../services/deals.js';
 
 const router = Router();
 
 function generatePixCode(orderId, amount) {
   const random = Math.random().toString(36).substring(2, 10).toUpperCase();
-  return `00020126580014BR.GOV.BCB.PIX0136${random}520400005303986540${amount.toFixed(2)}5802BR5913SuperEletroLar6009SAO PAULO62070503***6304${orderId.slice(0, 4).toUpperCase()}`;
+  return `00020126580014BR.GOV.BCB.PIX0136${random}520400005303986540${amount.toFixed(2)}5802BR5913Trampolim6009SAO PAULO62070503***6304${orderId.slice(0, 4).toUpperCase()}`;
 }
 
 async function approveOrder(orderId, paymentMethod) {
@@ -76,7 +77,14 @@ router.post('/webhook', async (req, res) => {
     const { type, data } = req.body;
     if (type === 'payment' && data?.id) {
       const mpPayment = await getPaymentStatus(data.id);
-      if (mpPayment.status === 'approved' && mpPayment.external_reference) {
+      const ref = mpPayment.external_reference;
+
+      if (ref?.startsWith('deal-')) {
+        await handleDealWebhook(ref, mpPayment.status);
+        return res.sendStatus(200);
+      }
+
+      if (mpPayment.status === 'approved' && ref) {
         let payment;
         if (isUsingPostgres()) {
           payment = await store.findPaymentByExternalId(String(data.id));
@@ -89,7 +97,7 @@ router.post('/webhook', async (req, res) => {
           payment.approvedAt = new Date().toISOString();
           await updatePaymentRecord(payment);
         }
-        await approveOrder(mpPayment.external_reference, 'mercadopago');
+        await approveOrder(ref, 'mercadopago');
       }
     }
     res.sendStatus(200);
@@ -216,7 +224,7 @@ router.post('/mercadopago', async (req, res) => {
       }
 
       const pref = await createPreference({
-        items: order?.items || [{ name: 'Pedido SuperEletroLar', qty: 1, price: Number(amount) }],
+        items: order?.items || [{ name: 'Pedido Trampolim', qty: 1, price: Number(amount) }],
         orderId,
         payerEmail: email || order?.customer?.email,
       });

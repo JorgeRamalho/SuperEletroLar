@@ -1,0 +1,104 @@
+[
+  {
+    "id": "tramp-official",
+    "userId": null,
+    "name": "Trampolim Oficial",
+    "email": "contato@trampolim.com.br",
+    "phone": "08001234567",
+    "marketplaceId": "trampolim",
+    "externalId": "sel-store-001",
+    "verified": true,
+    "rating": 4.9,
+    "salesCount": 2840,
+    "location": {
+      "city": "São Paulo",
+      "state": "SP"
+    },
+    "createdAt": "2024-01-15T10:00:00.000Z"
+  },
+  {
+    "id": "seller-ml-001",
+    "userId": null,
+    "name": "TechBrasil Store",
+    "email": "techbrasil@email.com",
+    "phone": "11987654321",
+    "marketplaceId": "mercadolivre",
+    "externalId": "MLB123456789",
+    "verified": true,
+    "rating": 4.7,
+    "salesCount": 893,
+    "location": {
+      "city": "Campinas",
+      "state": "SP"
+    },
+    "createdAt": "2024-06-20T14:30:00.000Z"
+  },
+  {
+    "id": "seller-olx-001",
+    "userId": null,
+    "name": "João — Eletro Usados",
+    "email": "joao.eletro@gmail.com",
+    "phone": "21999887766",
+    "marketplaceId": "olx",
+    "externalId": "OLX-998877",
+    "verified": false,
+    "rating": 4.3,
+    "salesCount": 47,
+    "location": {
+      "city": "Rio de Janeiro",
+      "state": "RJ"
+    },
+    "createdAt": "2025-02-10T09:00:00.000Z"
+  },
+  {
+    "id": "seller-meta-001",
+    "userId": null,
+    "name": "Maria Silva",
+    "email": "maria.silva@outlook.com",
+    "phone": "31988776655",
+    "marketplaceId": "meta",
+    "externalId": "FB-55443322",
+    "verified": true,
+    "rating": 4.5,
+    "salesCount": 23,
+    "location": {
+      "city": "Belo Horizonte",
+      "state": "MG"
+    },
+    "createdAt": "2025-04-05T16:00:00.000Z"
+  },
+  {
+    "id": "seller-yahoo-001",
+    "userId": null,
+    "name": "CompareShop BR",
+    "email": "contato@compareshop.com.br",
+    "phone": "1133445566",
+    "marketplaceId": "yahoo",
+    "externalId": "YH-778899",
+    "verified": true,
+    "rating": 4.6,
+    "salesCount": 156,
+    "location": {
+      "city": "Curitiba",
+      "state": "PR"
+    },
+    "createdAt": "2024-11-01T11:00:00.000Z"
+  },
+  {
+    "id": "seller-olx-002",
+    "userId": null,
+    "name": "Reparo Rápido — Serviços",
+    "email": "reparorapido@email.com",
+    "phone": "11955443322",
+    "marketplaceId": "olx",
+    "externalId": "OLX-SVC-001",
+    "verified": true,
+    "rating": 4.8,
+    "salesCount": 312,
+    "location": {
+      "city": "São Paulo",
+      "state": "SP"
+    },
+    "createdAt": "2024-08-15T08:00:00.000Z"
+  }
+]

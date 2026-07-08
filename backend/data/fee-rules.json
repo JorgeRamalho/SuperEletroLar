@@ -1,0 +1,34 @@
+{
+  "currency": "BRL",
+  "default": {
+    "percent": 10,
+    "fixed": 0,
+    "minFee": 2.5,
+    "label": "Comissão Trampolim"
+  },
+  "byListingType": {
+    "product": { "percent": 8, "fixed": 0, "label": "Produto" },
+    "service": { "percent": 15, "fixed": 1.99, "label": "Serviço" }
+  },
+  "byCondition": {
+    "new": { "percent": 7, "fixed": 0 },
+    "semi_used": { "percent": 10, "fixed": 0 },
+    "used": { "percent": 12, "fixed": 0 },
+    "service": { "percent": 15, "fixed": 1.99 }
+  },
+  "byCategory": {
+    "geral": { "percent": 10, "fixed": 0 },
+    "ar-condicionado": { "percent": 12, "fixed": 0 },
+    "geladeiras": { "percent": 9, "fixed": 0 }
+  },
+  "paymentProcessing": {
+    "percent": 3.99,
+    "fixed": 0.39,
+    "absorbedBy": "seller",
+    "label": "Taxa Mercado Pago (est.)"
+  },
+  "sellerPlans": {
+    "free": { "percentDiscount": 0 },
+    "pro": { "percentDiscount": 2 }
+  }
+}

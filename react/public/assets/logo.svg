@@ -1,18 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="SuperEletroLar">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="Trampolim">
   <defs>
-    <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0066FF"/>
-      <stop offset="50%" stop-color="#0099FF"/>
+    <linearGradient id="trampBg" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF6B35"/>
+      <stop offset="45%" stop-color="#FF8C42"/>
       <stop offset="100%" stop-color="#00C9A7"/>
     </linearGradient>
-    <linearGradient id="boltGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FF6B35"/>
-      <stop offset="100%" stop-color="#FFB347"/>
+    <linearGradient id="trampArc" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.7"/>
+    </linearGradient>
+    <linearGradient id="trampUp" x1="50%" y1="100%" x2="50%" y2="0%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#FFE8DC"/>
     </linearGradient>
   </defs>
-  <rect width="120" height="120" rx="28" fill="url(#brandGrad)"/>
-  <path d="M60 22 L88 42 V78 C88 82 84 86 80 86 H40 C36 86 32 82 32 78 V42 Z" fill="white" fill-opacity="0.95"/>
-  <path d="M60 38 L72 48 V72 H48 V48 Z" fill="url(#brandGrad)" fill-opacity="0.15"/>
-  <path d="M58 44 L66 58 H62 L68 76 L52 58 H56 Z" fill="url(#boltGrad)"/>
-  <circle cx="60" cy="80" r="3" fill="#0066FF"/>
+  <rect width="120" height="120" rx="28" fill="url(#trampBg)"/>
+  <!-- Trampoline base -->
+  <ellipse cx="60" cy="88" rx="38" ry="8" fill="#1A1D29" fill-opacity="0.25"/>
+  <path d="M22 72 Q60 52 98 72" fill="none" stroke="url(#trampArc)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M26 76 L94 76" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+  <!-- Spring lines -->
+  <path d="M32 76 V84 M48 76 V86 M60 76 V88 M72 76 V86 M88 76 V84" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  <!-- Upward impulse / arrow -->
+  <path d="M60 68 L60 28 M60 28 L48 42 M60 28 L72 42" fill="none" stroke="url(#trampUp)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Briefcase dot (trampo) -->
+  <rect x="52" y="48" width="16" height="12" rx="2" fill="#FFFFFF" opacity="0.95"/>
+  <path d="M56 48 V45 C56 43.5 57.5 42 60 42 C62.5 42 64 43.5 64 45 V48" fill="none" stroke="#FFFFFF" stroke-width="2"/>
 </svg>

@@ -1,0 +1,52 @@
+[
+  {
+    "id": "trampolim",
+    "name": "Trampolim",
+    "slug": "trampolim",
+    "color": "#FF6B35",
+    "textColor": "#FFFFFF",
+    "icon": "🚀",
+    "type": "retail",
+    "description": "Loja oficial — produtos novos, serviços e oportunidades"
+  },
+  {
+    "id": "mercadolivre",
+    "name": "Mercado Livre",
+    "slug": "mercadolivre",
+    "color": "#FFE600",
+    "textColor": "#2D3277",
+    "icon": "🤝",
+    "type": "marketplace",
+    "description": "Maior marketplace da América Latina"
+  },
+  {
+    "id": "olx",
+    "name": "OLX",
+    "slug": "olx",
+    "color": "#6E0AD6",
+    "textColor": "#FFFFFF",
+    "icon": "📢",
+    "type": "classified",
+    "description": "Classificados — usados, semi-novos e serviços locais"
+  },
+  {
+    "id": "meta",
+    "name": "Meta Marketplace",
+    "slug": "meta",
+    "color": "#0084FF",
+    "textColor": "#FFFFFF",
+    "icon": "📘",
+    "type": "social",
+    "description": "Compra e venda na sua comunidade (Facebook)"
+  },
+  {
+    "id": "yahoo",
+    "name": "Yahoo Shopping",
+    "slug": "yahoo",
+    "color": "#6001D2",
+    "textColor": "#FFFFFF",
+    "icon": "🔎",
+    "type": "aggregator",
+    "description": "Agregador de ofertas e comparador de preços"
+  }
+]

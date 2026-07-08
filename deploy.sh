@@ -2,7 +2,7 @@
 set -e
 
 echo "============================================"
-echo "  SuperEletroLar - Deploy Script"
+echo "  Trampolim - Deploy Script"
 echo "============================================"
 
 echo "[1/4] Instalando dependências..."

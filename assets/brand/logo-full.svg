@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" role="img" aria-label="Trampolim  Seu impulso para o trampo">
+  <defs>
+    <linearGradient id="logoGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#FF6B35"/>
+      <stop offset="100%" stop-color="#00C9A7"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(8,8) scale(0.533)">
+    <rect width="120" height="120" rx="28" fill="url(#logoGrad)"/>
+    <ellipse cx="60" cy="88" rx="38" ry="8" fill="#1A1D29" fill-opacity="0.25"/>
+    <path d="M22 72 Q60 52 98 72" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" opacity="0.9"/>
+    <path d="M26 76 L94 76" stroke="#fff" stroke-width="2.5" stroke-linecap="round" opacity="0.85"/>
+    <path d="M60 68 L60 28 M60 28 L48 42 M60 28 L72 42" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="52" y="48" width="16" height="12" rx="2" fill="#fff" opacity="0.95"/>
+    <path d="M56 48 V45 C56 43.5 57.5 42 60 42 C62.5 42 64 43.5 64 45 V48" fill="none" stroke="#fff" stroke-width="2"/>
+  </g>
+  <text x="88" y="38" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="28" font-weight="800" fill="#1A1D29">Trampolim</text>
+  <text x="88" y="58" font-family="'Plus Jakarta Sans', system-ui, sans-serif" font-size="11" font-weight="600" fill="#64748B">Seu impulso para o trampo</text>
+</svg>

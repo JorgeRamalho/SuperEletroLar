@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" role="img" aria-label="Profissionais encontrando clientes">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1A1D29"/>
+      <stop offset="40%" stop-color="#FF6B35"/>
+      <stop offset="100%" stop-color="#FFB347"/>
+    </linearGradient>
+    <linearGradient id="card" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.75"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.25"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="600" fill="url(#bg)"/>
+  <circle cx="980" cy="120" r="80" fill="#FFFFFF" fill-opacity="0.08"/>
+  <circle cx="1050" cy="480" r="120" fill="#FFFFFF" fill-opacity="0.06"/>
+  <!-- Connection lines -->
+  <path d="M720 280 Q860 200 980 260" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="8 6" opacity="0.5"/>
+  <path d="M720 320 Q860 400 980 360" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-dasharray="8 6" opacity="0.5"/>
+  <path d="M720 300 Q900 300 1020 310" fill="none" stroke="#00C9A7" stroke-width="4" opacity="0.7"/>
+  <!-- Professional -->
+  <g transform="translate(680, 180)" filter="url(#shadow)">
+    <rect x="0" y="80" width="140" height="200" rx="20" fill="url(#card)"/>
+    <circle cx="70" cy="50" r="42" fill="#FF6B35"/>
+    <circle cx="70" cy="42" r="28" fill="#FFD4C2"/>
+    <rect x="38" y="92" width="64" height="72" rx="12" fill="#0066FF"/>
+    <rect x="20" y="168" width="36" height="48" rx="8" fill="#1A1D29" opacity="0.15"/>
+    <rect x="84" y="168" width="36" height="48" rx="8" fill="#1A1D29" opacity="0.15"/>
+    <text x="70" y="248" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#1A1D29">Profissional</text>
+    <!-- Toolbox -->
+    <rect x="108" y="200" width="56" height="40" rx="6" fill="#FF6B35"/>
+    <rect x="116" y="192" width="40" height="10" rx="3" fill="#E55A28"/>
+    <text x="136" y="226" text-anchor="middle" font-size="18">='</text>
+  </g>
+  <!-- Client avatars -->
+  <g transform="translate(920, 200)" filter="url(#shadow)">
+    <circle cx="50" cy="50" r="50" fill="url(#card)"/>
+    <circle cx="50" cy="42" r="28" fill="#C4B5FD"/>
+    <text x="50" y="115" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#FFFFFF">Cliente 1</text>
+  </g>
+  <g transform="translate(1020, 300)" filter="url(#shadow)">
+    <circle cx="45" cy="45" r="45" fill="url(#card)"/>
+    <circle cx="45" cy="38" r="24" fill="#99F6E4"/>
+    <text x="45" y="105" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#FFFFFF">Cliente 2</text>
+  </g>
+  <g transform="translate(900, 380)" filter="url(#shadow)">
+    <circle cx="40" cy="40" r="40" fill="url(#card)"/>
+    <circle cx="40" cy="34" r="22" fill="#FDE68A"/>
+    <text x="40" y="95" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#FFFFFF">Cliente 3</text>
+  </g>
+  <!-- Notification badges -->
+  <rect x="960" y="175" width="72" height="28" rx="14" fill="#00C9A7"/>
+  <text x="996" y="194" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" font-weight="700" fill="#FFFFFF">+3 pedidos</text>
+  <text x="680" y="520" font-family="system-ui,sans-serif" font-size="72" opacity="0.2">=¼</text>
+  <text x="1100" y="100" font-family="system-ui,sans-serif" font-size="48" opacity="0.25">=Í</text>
+</svg>

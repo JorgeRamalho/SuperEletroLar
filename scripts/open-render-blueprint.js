@@ -1,5 +1,5 @@
 /**
- * Abre o painel Render para aplicar o Blueprint do SuperEletroLar.
+ * Abre o painel Render para aplicar o Blueprint do Trampolim.
  * O Blueprint só pode ser aplicado com login na sua conta Render.
  *
  * Uso: node scripts/open-render-blueprint.js
@@ -11,7 +11,7 @@ const BLUEPRINT_URL = 'https://dashboard.render.com/blueprint/new';
 
 console.log('');
 console.log('═══════════════════════════════════════════════════');
-console.log('  SuperEletroLar — Deploy Blueprint no Render');
+console.log('  Trampolim — Deploy Blueprint no Render');
 console.log('═══════════════════════════════════════════════════');
 console.log('');
 console.log('Repositório:', REPO);

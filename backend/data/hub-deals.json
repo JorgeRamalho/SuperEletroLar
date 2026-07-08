@@ -1,0 +1,53 @@
+[
+  {
+    "id": "deal-f39edd5e",
+    "listingId": "lst-ml-001",
+    "listingTitle": "Smart TV Samsung 55\" Crystal UHD 4K — Semi-novo",
+    "listingType": "product",
+    "buyerId": "afecc0ce-7d87-40f2-8001-542f62b8b276",
+    "sellerId": "seller-ml-001",
+    "sellerUserId": null,
+    "sellerMpCollectorId": null,
+    "marketplaceId": "mercadolivre",
+    "grossAmount": 1899,
+    "platformFee": 189.9,
+    "processingFee": 76.16,
+    "netAmount": 1632.94,
+    "buyerTotal": 1899,
+    "feeBreakdown": {
+      "platform": {
+        "label": "Produto",
+        "percent": 10,
+        "fixed": 0,
+        "amount": 189.9
+      },
+      "processing": {
+        "label": "Taxa Mercado Pago (est.)",
+        "percent": 3.99,
+        "fixed": 0.39,
+        "amount": 76.16,
+        "absorbedBy": "seller"
+      },
+      "sellerReceives": 1632.94,
+      "trampolimReceives": 189.9
+    },
+    "rulesApplied": [
+      "default",
+      "listingType:product",
+      "condition:semi_used"
+    ],
+    "status": "completed",
+    "paymentMethod": "pix_simulated",
+    "paymentId": "sim-deal-f39edd5e",
+    "mpExternalId": "sim-deal-f39edd5e",
+    "transactionId": "tx-1783471718111",
+    "notes": "",
+    "createdAt": "2026-07-08T00:48:38.106Z",
+    "paidAt": "2026-07-08T00:49:32.823Z",
+    "completedAt": "2026-07-08T00:49:32.823Z",
+    "pixCode": "00020126580014BR.GOV.BCB.PIX0136TRAMPOLIM5204000053039865401899.005802BR5913Trampolim6009SAO PAULO62070503***6304DD5E",
+    "pixQrCode": "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020126580014BR.GOV.BCB.PIX0136TRAMPOLIM5204000053039865401899.005802BR5913Trampolim6009SAO%20PAULO62070503***6304DD5E",
+    "mpMode": "simulated",
+    "trackingCode": "TRPMRBD1N6F"
+  }
+]

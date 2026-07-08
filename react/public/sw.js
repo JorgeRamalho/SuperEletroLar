@@ -58,7 +58,7 @@ self.addEventListener('fetch', (event) => {
 });
 
 self.addEventListener('push', (event) => {
-  const data = event.data?.json() || { title: 'SuperEletroLar', body: 'Nova oferta disponível!' };
+  const data = event.data?.json() || { title: 'Trampolim', body: 'Nova oportunidade! 🚀' };
   event.waitUntil(
     self.registration.showNotification(data.title, {
       body: data.body,
