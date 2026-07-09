@@ -1,21 +1,9 @@
 import { useRef } from 'react';
 import { useStore } from '../context/StoreContext';
-import { useCart } from '../context/CartContext';
-import ProductCard from './ProductCard';
 
-export default function HomeView({ searchQuery, setSearchQuery, navigateTo, onOpenProduct }) {
-  const { products, categories } = useStore();
-  const { favorites, addToCart, toggleFavorite } = useCart();
+export default function HomeView({ searchQuery, setSearchQuery, navigateTo }) {
+  const { categories } = useStore();
   const scrollRef = useRef(null);
-
-  const filtered = searchQuery
-    ? products.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    : products.slice(0, 8);
-
-  const handleAdd = (id, name) => {
-    addToCart(id);
-    // toast handled by parent if needed
-  };
 
   return (
     <section aria-label="Página inicial">
@@ -67,13 +55,6 @@ export default function HomeView({ searchQuery, setSearchQuery, navigateTo, onOp
         </button>
       </div>
 
-      <div className="section-header"><h2 className="section-title">🔥 Destaques</h2></div>
-      <div className="products-grid" role="list">
-        {filtered.map(p => (
-          <ProductCard key={p.id} product={p} isFavorite={favorites.includes(p.id)}
-            onAddToCart={handleAdd} onToggleFavorite={toggleFavorite} onOpen={onOpenProduct} />
-        ))}
-      </div>
     </section>
   );
 }

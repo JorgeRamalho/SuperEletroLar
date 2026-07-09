@@ -23,7 +23,7 @@
 body {
   padding-left: env(safe-area-inset-left, 0);
   padding-right: env(safe-area-inset-right, 0);
-  padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0));
+  padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 .main-content {
@@ -105,24 +105,8 @@ body {
     display: none !important;
   }
 
-  /* Bottom nav: ícones compactos, esconde Ofertas (acessível via Hub/Home) */
   .bottom-nav {
-    padding: 4px 2px env(safe-area-inset-bottom, 0);
-    height: calc(var(--bottom-nav-height-mobile) + env(safe-area-inset-bottom, 0));
-  }
-
-  .bottom-nav .nav-item[data-view="offers"] {
-    display: none;
-  }
-
-  .bottom-nav .nav-item svg {
-    width: 22px;
-    height: 22px;
-  }
-
-  .bottom-nav .nav-item span {
-    font-size: 0.5rem;
-    line-height: 1.1;
+    display: none !important;
   }
 
   .hero,
@@ -304,7 +288,7 @@ body {
   .toast-container {
     left: var(--space-sm);
     right: var(--space-sm);
-    bottom: calc(var(--bottom-nav-height) + var(--space-sm) + env(safe-area-inset-bottom, 0));
+    bottom: calc(var(--space-sm) + env(safe-area-inset-bottom, 0));
   }
 }
 
@@ -421,17 +405,17 @@ body {
     min-height: 280px;
   }
 
-  /* Tablet mantém bottom nav — ajuste de altura */
+  /* Sem bottom nav — footer no fim da página */
   body {
-    padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom, 0));
+    padding-bottom: env(safe-area-inset-bottom, 0);
   }
 
   .site-footer {
-    margin-bottom: var(--bottom-nav-height);
+    margin-bottom: 0;
   }
 
   .cookie-banner {
-    bottom: var(--bottom-nav-height);
+    bottom: 0;
   }
 
   .header-inner {
@@ -538,7 +522,7 @@ body {
   }
 
   body.cookie-banner-visible {
-    padding-bottom: calc(var(--bottom-nav-height) + 160px + env(safe-area-inset-bottom, 0));
+    padding-bottom: calc(160px + env(safe-area-inset-bottom, 0));
   }
 }
 

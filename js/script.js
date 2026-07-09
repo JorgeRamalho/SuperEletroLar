@@ -27,9 +27,7 @@ const Trampolim = (() => {
   let hubSearchTimer = null;
   let productFilters = {
     listingType: '',
-    condition: '',
     category: '',
-    brand: '',
     minPrice: '',
     maxPrice: '',
     state: '',
@@ -439,7 +437,7 @@ const Trampolim = (() => {
   function hasActiveProductFilters() {
     const f = productFilters;
     return !!(
-      f.listingType || f.condition || f.category || f.brand ||
+      f.listingType || f.category ||
       f.minPrice || f.maxPrice || f.state ||
       f.freeShipping || f.onSale || (f.sort && f.sort !== 'relevance')
     );
@@ -449,9 +447,7 @@ const Trampolim = (() => {
     const f = productFilters;
     let n = 0;
     if (f.listingType) n++;
-    if (f.condition) n++;
     if (f.category) n++;
-    if (f.brand) n++;
     if (f.minPrice) n++;
     if (f.maxPrice) n++;
     if (f.state) n++;
@@ -474,31 +470,6 @@ const Trampolim = (() => {
   }
 
   function renderFiltersSidebar() {
-    const catEl = document.getElementById('filters-categories');
-    if (catEl) {
-      catEl.innerHTML = `
-        <button type="button" class="filter-cat-btn ${!productFilters.category ? 'active' : ''}" data-filter-category="">
-          <span class="filter-cat-icon" aria-hidden="true">✨</span>
-          <span>Todas as categorias</span>
-        </button>
-        ${CATEGORIES.map(cat => `
-          <button type="button" class="filter-cat-btn ${productFilters.category === cat.id ? 'active' : ''}" data-filter-category="${cat.id}">
-            <span class="filter-cat-icon" aria-hidden="true">${cat.icon || '📦'}</span>
-            <span>${cat.name}</span>
-          </button>
-        `).join('')}`;
-    }
-
-    const brands = [...new Set(PRODUCTS.map(p => p.brand).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
-    const brandEl = document.getElementById('filters-brands');
-    if (brandEl) {
-      brandEl.innerHTML = `
-        <button type="button" class="filter-brand-btn ${!productFilters.brand ? 'active' : ''}" data-filter-brand="">Todas as marcas</button>
-        ${brands.map(brand => `
-          <button type="button" class="filter-brand-btn ${productFilters.brand === brand ? 'active' : ''}" data-filter-brand="${brand}">${brand}</button>
-        `).join('')}`;
-    }
-
     updateFiltersBadge();
   }
 
@@ -518,7 +489,6 @@ const Trampolim = (() => {
     }
 
     if (f.category) results = results.filter(p => p.category === f.category);
-    if (f.brand) results = results.filter(p => p.brand === f.brand);
     if (f.minPrice) results = results.filter(p => p.price >= Number(f.minPrice));
     if (f.maxPrice) results = results.filter(p => p.price <= Number(f.maxPrice));
     if (f.state) results = results.filter(p => (p.state || '').toUpperCase() === f.state.toUpperCase());
@@ -534,10 +504,7 @@ const Trampolim = (() => {
   }
 
   function applyProductFilters() {
-    const openHub = productFilters.listingType === 'service'
-      || productFilters.condition === 'service'
-      || productFilters.condition === 'used'
-      || productFilters.condition === 'semi_used';
+    const openHub = productFilters.listingType === 'service';
     const filtered = getFilteredProducts(PRODUCTS);
     const countEl = document.getElementById('filters-result-count');
 
@@ -557,12 +524,6 @@ const Trampolim = (() => {
       syncSidebarToHub();
       runHubSearch();
     }
-
-    const homeList = hasActiveProductFilters() || (document.getElementById('search-input')?.value || '').trim()
-      ? filtered
-      : filtered.slice(0, 8);
-
-    renderProducts('products-grid', homeList);
 
     const offersBase = PRODUCTS.filter(p => p.badge);
     renderProducts('offers-grid', getFilteredProducts(offersBase));
@@ -584,18 +545,11 @@ const Trampolim = (() => {
         : `${filtered.length} resultados encontrados`;
     }
 
-    const emptyMsg = '<p style="text-align:center;color:var(--color-text-muted);padding:2rem;grid-column:1/-1">Nenhum produto encontrado para este filtro.</p>';
-    if (!homeList.length && (hasActiveProductFilters() || (document.getElementById('search-input')?.value || '').trim())) {
-      const grid = document.getElementById('products-grid');
-      if (grid) grid.innerHTML = emptyMsg;
-    }
-
     updateFiltersBadge();
   }
 
   function syncSidebarToHub() {
     hubFilters.listingType = productFilters.listingType || '';
-    hubFilters.condition = productFilters.condition || '';
     hubFilters.minPrice = productFilters.minPrice || '';
     hubFilters.maxPrice = productFilters.maxPrice || '';
     hubFilters.state = productFilters.state || '';
@@ -615,9 +569,6 @@ const Trampolim = (() => {
     document.querySelectorAll('[data-hub-filter="listingType"]').forEach(chip => {
       chip.classList.toggle('active', chip.dataset.value === (hubFilters.listingType || ''));
     });
-    document.querySelectorAll('[data-hub-filter="condition"]').forEach(chip => {
-      chip.classList.toggle('active', chip.dataset.value === (hubFilters.condition || ''));
-    });
   }
 
   function setFilterChipActive(key, value) {
@@ -629,9 +580,7 @@ const Trampolim = (() => {
   function clearProductFilters() {
     productFilters = {
       listingType: '',
-      condition: '',
       category: '',
-      brand: '',
       minPrice: '',
       maxPrice: '',
       state: '',
@@ -642,17 +591,14 @@ const Trampolim = (() => {
     activeCategory = null;
 
     setFilterChipActive('listingType', '');
-    setFilterChipActive('condition', '');
 
     const min = document.getElementById('filter-min-price');
     const max = document.getElementById('filter-max-price');
-    const state = document.getElementById('filter-state');
     const sort = document.getElementById('filter-sort');
     const free = document.getElementById('filter-free-shipping');
     const sale = document.getElementById('filter-on-sale');
     if (min) min.value = '';
     if (max) max.value = '';
-    if (state) state.value = '';
     if (sort) sort.value = 'relevance';
     if (free) free.checked = false;
     if (sale) sale.checked = false;
@@ -705,24 +651,6 @@ const Trampolim = (() => {
         productFilters[key] = val;
         setFilterChipActive(key, val);
         applyProductFilters();
-        return;
-      }
-
-      const catBtn = e.target.closest('[data-filter-category]');
-      if (catBtn) {
-        productFilters.category = catBtn.dataset.filterCategory || '';
-        activeCategory = productFilters.category || null;
-        renderFiltersSidebar();
-        applyProductFilters();
-        if (productFilters.category && currentView === 'home') navigateTo('categories');
-        return;
-      }
-
-      const brandBtn = e.target.closest('[data-filter-brand]');
-      if (brandBtn) {
-        productFilters.brand = brandBtn.dataset.filterBrand || '';
-        renderFiltersSidebar();
-        applyProductFilters();
       }
     });
 
@@ -733,11 +661,6 @@ const Trampolim = (() => {
     document.getElementById('filter-max-price')?.addEventListener('input', (e) => {
       productFilters.maxPrice = e.target.value;
       scheduleApplyFilters();
-    });
-    document.getElementById('filter-state')?.addEventListener('change', (e) => {
-      productFilters.state = e.target.value;
-      syncSearchState(e.target.value);
-      applyProductFilters();
     });
     document.getElementById('filter-sort')?.addEventListener('change', (e) => {
       productFilters.sort = e.target.value;
@@ -1904,6 +1827,7 @@ const Trampolim = (() => {
     const catalogViews = ['home', 'categories', 'offers', 'hub'];
     document.querySelector('.app-shell')?.classList.toggle('filters-visible', catalogViews.includes(view));
     if (!catalogViews.includes(view)) closeFiltersDrawer();
+    else requestAnimationFrame(() => { syncHeaderOffset(); syncFiltersPanelPosition(); });
 
     if (view === 'cart') renderCart();
     if (view === 'checkout') { checkoutStep = 1; renderCheckout(); }
@@ -1978,7 +1902,131 @@ const Trampolim = (() => {
     setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
   }
 
-  /* ── PWA ── */
+  /* ── PWA / Baixar App ── */
+  function getAppInstallUrl() {
+    const url = new URL(window.location.origin + '/');
+    url.searchParams.set('install', '1');
+    return url.toString();
+  }
+
+  function getAppQrImageUrl(size = 220) {
+    const data = encodeURIComponent(getAppInstallUrl());
+    return `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=${data}&margin=8`;
+  }
+
+  function isAppInstalled() {
+    return window.matchMedia('(display-mode: standalone)').matches
+      || window.navigator.standalone === true;
+  }
+
+  async function promptNativeInstall() {
+    if (!deferredPrompt) return false;
+    deferredPrompt.prompt();
+    const choice = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    document.getElementById('install-banner')?.remove();
+    return choice?.outcome === 'accepted';
+  }
+
+  function showDownloadAppModal() {
+    document.getElementById('download-app-modal')?.remove();
+
+    const installUrl = getAppInstallUrl();
+    const qrUrl = getAppQrImageUrl(240);
+    const canNative = !!deferredPrompt;
+    const installed = isAppInstalled();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    overlay.id = 'download-app-modal';
+    overlay.innerHTML = `
+      <div class="modal modal-download-app" role="dialog" aria-labelledby="download-app-title" aria-modal="true">
+        <div class="modal-header">
+          <h2 class="modal-title" id="download-app-title">Baixar o App Trampolim</h2>
+          <button type="button" class="modal-close" aria-label="Fechar">✕</button>
+        </div>
+        <div class="download-app-body">
+          <p class="download-app-lead">Escaneie o QR Code com a câmera do celular para abrir e instalar o Trampolim.</p>
+          <div class="download-app-layout">
+            <div class="download-app-qr-col">
+              <div class="download-app-qr-wrap">
+                <img class="download-app-qr" src="${qrUrl}" alt="QR Code para baixar o app Trampolim" width="220" height="220">
+              </div>
+              <p class="download-app-url">${installUrl.replace(/\?install=1$/, '')}</p>
+            </div>
+            <div class="download-app-info-col">
+              <h3 class="download-app-how">Como instalar</h3>
+              <ol class="download-app-steps">
+                <li>Abra a câmera do celular e aponte para o QR Code</li>
+                <li>Toque no link do Trampolim</li>
+                <li>No navegador, escolha <strong>Adicionar à tela inicial</strong> ou <strong>Instalar app</strong></li>
+              </ol>
+            </div>
+          </div>
+          <div class="download-app-actions">
+            ${installed
+              ? '<p class="download-app-installed">✅ O app já está instalado neste dispositivo.</p>'
+              : canNative
+                ? '<button type="button" class="btn btn-primary" id="btn-install-native">Instalar neste dispositivo</button>'
+                : '<button type="button" class="btn btn-primary" id="btn-copy-app-link">Copiar link do app</button>'
+            }
+            <button type="button" class="btn btn-outline" id="btn-share-app">Compartilhar</button>
+          </div>
+        </div>
+      </div>`;
+
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('.modal-close')?.addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+
+    document.getElementById('btn-install-native')?.addEventListener('click', async () => {
+      const ok = await promptNativeInstall();
+      if (ok) {
+        showToast('✅ App instalado!');
+        overlay.remove();
+      } else {
+        showToast('Instalação cancelada ou indisponível neste navegador');
+      }
+    });
+
+    document.getElementById('btn-copy-app-link')?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(installUrl);
+        showToast('📋 Link do app copiado!');
+      } catch {
+        showToast(installUrl);
+      }
+    });
+
+    document.getElementById('btn-share-app')?.addEventListener('click', async () => {
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: 'Trampolim',
+            text: 'Baixe o app Trampolim — Seu impulso para o trampo',
+            url: installUrl,
+          });
+        } catch { /* cancelado */ }
+      } else {
+        try {
+          await navigator.clipboard.writeText(installUrl);
+          showToast('📋 Link copiado para compartilhar');
+        } catch {
+          showToast(installUrl);
+        }
+      }
+    });
+  }
+
+  function initFooterAppQr() {
+    const sectionQr = document.getElementById('section-app-qr');
+    const footerQr = document.getElementById('footer-app-qr');
+    const src = getAppQrImageUrl(200);
+    if (sectionQr) sectionQr.src = src;
+    if (footerQr) footerQr.src = getAppQrImageUrl(140);
+  }
+
   function initPWA() {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js').catch(() => {});
@@ -1990,8 +2038,50 @@ const Trampolim = (() => {
       if (!localStorage.getItem('sel-install-dismissed')) showInstallBanner();
     });
 
+    window.addEventListener('appinstalled', () => {
+      deferredPrompt = null;
+      document.getElementById('install-banner')?.remove();
+      showToast('✅ Trampolim instalado com sucesso!');
+    });
+
     window.addEventListener('online', () => document.getElementById('offline-badge')?.classList.remove('visible'));
     window.addEventListener('offline', () => document.getElementById('offline-badge')?.classList.add('visible'));
+
+    initFooterAppQr();
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('install') === '1' && !isAppInstalled()) {
+      setTimeout(() => {
+        if (deferredPrompt) promptNativeInstall();
+        else showDownloadAppModal();
+      }, 600);
+    }
+  }
+
+  function showInstallBanner() {
+    if (document.getElementById('install-banner') || isAppInstalled()) return;
+    const banner = document.createElement('div');
+    banner.id = 'install-banner';
+    banner.className = 'install-banner';
+    banner.innerHTML = `
+      <p>📲 Instale o Trampolim no seu celular!</p>
+      <button type="button" class="btn" id="btn-install">Instalar</button>
+      <button type="button" class="btn btn-ghost-light" id="btn-install-qr">QR Code</button>
+      <button type="button" class="modal-close" id="btn-dismiss-install" aria-label="Fechar">✕</button>`;
+    document.body.appendChild(banner);
+
+    document.getElementById('btn-install')?.addEventListener('click', async () => {
+      const ok = await promptNativeInstall();
+      if (ok) banner.remove();
+      else showDownloadAppModal();
+    });
+    document.getElementById('btn-install-qr')?.addEventListener('click', () => {
+      showDownloadAppModal();
+    });
+    document.getElementById('btn-dismiss-install')?.addEventListener('click', () => {
+      localStorage.setItem('sel-install-dismissed', '1');
+      banner.remove();
+    });
   }
 
   /* ── Cookie consent (LGPD) ── */
@@ -2030,50 +2120,16 @@ const Trampolim = (() => {
     showCookieBanner();
   }
 
-  function showInstallBanner() {
-    if (document.getElementById('install-banner')) return;
-    const banner = document.createElement('div');
-    banner.id = 'install-banner';
-    banner.className = 'install-banner';
-    banner.innerHTML = `
-      <p>📲 Instale o Trampolim no seu celular!</p>
-      <button class="btn" id="btn-install">Instalar</button>
-      <button class="modal-close" id="btn-dismiss-install" aria-label="Fechar">✕</button>`;
-    document.body.appendChild(banner);
-
-    document.getElementById('btn-install')?.addEventListener('click', async () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        await deferredPrompt.userChoice;
-        deferredPrompt = null;
-        banner.remove();
-      }
-    });
-    document.getElementById('btn-dismiss-install')?.addEventListener('click', () => {
-      localStorage.setItem('sel-install-dismissed', '1');
-      banner.remove();
-    });
-  }
-
   /* ── Theme ── */
-  function toggleTheme() {
-    const html = document.documentElement;
-    const isDark = html.dataset.theme === 'dark';
-    html.dataset.theme = isDark ? 'light' : 'dark';
-    localStorage.setItem('sel-theme', html.dataset.theme);
-  }
-
   /* ── Header scroll & search ── */
   function initStateSelects() {
     fillBrazilianStates(document.getElementById('search-state'));
     fillBrazilianStates(document.getElementById('header-search-state'));
     fillBrazilianStates(document.getElementById('hub-state'));
-    fillBrazilianStates(document.getElementById('filter-state'));
   }
 
   function getSearchState() {
-    return document.getElementById('filter-state')?.value
-      || document.getElementById('search-state')?.value
+    return document.getElementById('search-state')?.value
       || document.getElementById('header-search-state')?.value
       || '';
   }
@@ -2081,10 +2137,8 @@ const Trampolim = (() => {
   function syncSearchState(value) {
     const home = document.getElementById('search-state');
     const header = document.getElementById('header-search-state');
-    const filter = document.getElementById('filter-state');
     if (home && home.value !== value) home.value = value;
     if (header && header.value !== value) header.value = value;
-    if (filter && filter.value !== value) filter.value = value;
     productFilters.state = value || '';
   }
 
@@ -2120,6 +2174,30 @@ const Trampolim = (() => {
     }
   }
 
+  function syncHeaderOffset() {
+    const header = document.getElementById('app-header');
+    if (!header) return;
+    const height = Math.ceil(header.getBoundingClientRect().height);
+    document.documentElement.style.setProperty('--header-offset', `${height}px`);
+  }
+
+  function syncFiltersPanelPosition() {
+    // Desktop usa position:sticky (CSS). Limpa estilos inline do antigo fixed.
+    const sidebar = document.getElementById('filters-sidebar');
+    const inner = sidebar?.querySelector('.filters-sidebar-inner');
+    if (inner) {
+      inner.style.left = '';
+      inner.style.width = '';
+      inner.style.top = '';
+      inner.style.height = '';
+      inner.style.maxHeight = '';
+    }
+    if (sidebar) {
+      sidebar.style.width = '';
+      sidebar.style.height = '';
+    }
+  }
+
   function initHeaderScroll() {
     const header = document.getElementById('app-header');
     const progress = document.getElementById('header-scroll-progress');
@@ -2147,7 +2225,17 @@ const Trampolim = (() => {
       }
     };
 
+    const onLayout = () => {
+      syncHeaderOffset();
+      syncFiltersPanelPosition();
+    };
+
     window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onLayout, { passive: true });
+    if (typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(onLayout).observe(header);
+    }
+    onLayout();
     update();
   }
 
@@ -2273,7 +2361,6 @@ const Trampolim = (() => {
       e.preventDefault(); viewHistory = ['home']; navigateTo('home', false);
     });
     document.getElementById('btn-cart-header')?.addEventListener('click', () => navigateTo('cart'));
-    document.getElementById('btn-theme')?.addEventListener('click', toggleTheme);
     document.getElementById('btn-search')?.addEventListener('click', () => {
       if (window.innerWidth >= 1024) {
         document.getElementById('header-search-input')?.focus();
@@ -2294,6 +2381,14 @@ const Trampolim = (() => {
         if (a === 'announce') openAnnounceFree();
         if (a === 'my-listings') openMyListings();
         if (a === 'chat') showChatModal();
+        if (a === 'download-app') { e.preventDefault(); showDownloadAppModal(); }
+        if (a === 'copy-app-link') {
+          e.preventDefault();
+          const url = getAppInstallUrl();
+          navigator.clipboard?.writeText(url)
+            .then(() => showToast('📋 Link do app copiado!'))
+            .catch(() => showToast(url));
+        }
         if (a === 'cookie-settings') { e.preventDefault(); showCookieBanner(true); }
       }
     });
@@ -2542,9 +2637,6 @@ const Trampolim = (() => {
 
   /* ── Init ── */
   async function init() {
-    const savedTheme = localStorage.getItem('sel-theme');
-    if (savedTheme) document.documentElement.dataset.theme = savedTheme;
-
     const params = new URLSearchParams(window.location.search);
     const viewParam = params.get('view');
     const dealParam = params.get('deal');

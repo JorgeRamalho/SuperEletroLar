@@ -3,7 +3,6 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider, useCart } from './context/CartContext';
 import { StoreProvider } from './context/StoreContext';
 import Header from './components/Header';
-import BottomNav from './components/BottomNav';
 import HomeView from './components/HomeView';
 import CategoriesView from './components/CategoriesView';
 import OffersView from './components/OffersView';
@@ -19,7 +18,6 @@ import Footer from './components/Footer';
 function AppContent() {
   const [view, setView] = useState('home');
   const [viewHistory, setViewHistory] = useState(['home']);
-  const [theme, setTheme] = useState(() => localStorage.getItem('sel-theme') || 'light');
   const [toast, setToast] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -27,11 +25,6 @@ function AppContent() {
   const [showAuth, setShowAuth] = useState(false);
   const [authTab, setAuthTab] = useState('login');
   const { cartCount } = useCart();
-
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    localStorage.setItem('sel-theme', theme);
-  }, [theme]);
 
   useEffect(() => {
     if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
@@ -67,8 +60,6 @@ function AppContent() {
         onBack={goBack}
         onHome={goHome}
         onCart={() => navigateTo('cart')}
-        onTheme={() => setTheme(t => t === 'light' ? 'dark' : 'light')}
-        theme={theme}
         cartCount={cartCount}
         currentView={view}
         onNavigate={navigateTo}
@@ -88,7 +79,6 @@ function AppContent() {
       </main>
 
       <Footer onTrack={() => navigateTo('track')} />
-      <BottomNav currentView={view} onNavigate={navigateTo} />
     </>
   );
 }
