@@ -27,6 +27,7 @@ const Trampolim = (() => {
   let hubSearchTimer = null;
   let productFilters = {
     listingType: '',
+    condition: '',
     category: '',
     minPrice: '',
     maxPrice: '',
@@ -46,92 +47,164 @@ const Trampolim = (() => {
 
   const SHOWCASE_THEMES = [
     {
-      id: 'theme-tv-casa',
-      badge: '📺 TV',
-      name: 'Diversão em casa',
-      description: 'Smart TVs para a família',
-      image: 'assets/carousel/lifestyle/tv-casa.png',
+      id: 'theme-tvs',
+      badge: '📺 Produto',
+      name: 'Smart TVs',
+      description: 'Imagem 4K para a sala',
+      image: 'assets/showcase/smart-tvs.png',
       action: 'offers',
       gradient: 'cool',
     },
     {
-      id: 'theme-musica',
-      badge: '🔊 Áudio',
-      name: 'Música no lar',
-      description: 'Som em todo canto',
-      image: 'assets/carousel/lifestyle/musica-casa.png',
-      action: 'categories',
-      gradient: 'purple',
+      id: 'theme-eletrica',
+      badge: '⚡ Serviço',
+      name: 'Serviços elétricos',
+      description: 'Instalações e reparos com segurança',
+      image: 'assets/showcase/servicos/servico-eletrica.png',
+      action: 'hub',
+      gradient: 'electric',
     },
     {
-      id: 'theme-cama',
-      badge: '🛏️ Quarto',
-      name: 'Descanso em casa',
-      description: 'Conforto e climatização',
-      image: 'assets/carousel/lifestyle/cama-descanso.png',
+      id: 'theme-geladeiras',
+      badge: '🧊 Produto',
+      name: 'Geladeiras',
+      description: 'Frost free e duplex',
+      image: 'assets/showcase/geladeiras.png',
       action: 'categories',
       gradient: 'ocean',
     },
     {
-      id: 'theme-cozinha',
-      badge: '🍳 Cozinha',
-      name: 'Dia a dia na cozinha',
-      description: 'Eletrodomésticos essenciais',
-      image: 'assets/carousel/lifestyle/cozinha-eletro.png',
+      id: 'theme-encanamento',
+      badge: '🔧 Serviço',
+      name: 'Encanamento e vazamentos',
+      description: 'Profissionais para consertos em casa',
+      image: 'assets/showcase/servicos/servico-encanamento.png',
+      action: 'hub',
+      gradient: 'warm',
+    },
+    {
+      id: 'theme-fogoes',
+      badge: '🔥 Produto',
+      name: 'Fogões',
+      description: 'Fogões a gás e cooktops',
+      image: 'assets/showcase/fogoes.png',
       action: 'categories',
       gradient: 'warm',
     },
     {
-      id: 'theme-lavanderia',
-      badge: '🫧 Lavar',
-      name: 'Lavanderia prática',
+      id: 'theme-eletro',
+      badge: '🛠️ Serviço',
+      name: 'Reparo de eletrodomésticos',
+      description: 'Técnicos especializados perto de você',
+      image: 'assets/showcase/servicos/servico-eletro.png',
+      action: 'hub',
+      gradient: 'cool',
+    },
+    {
+      id: 'theme-audio',
+      badge: '🔊 Produto',
+      name: 'Áudio',
+      description: 'Soundbars e caixas de som',
+      image: 'assets/showcase/audio.png',
+      action: 'categories',
+      gradient: 'purple',
+    },
+    {
+      id: 'theme-limpeza',
+      badge: '✨ Serviço',
+      name: 'Limpeza profissional',
+      description: 'Casa e escritório impecáveis',
+      image: 'assets/showcase/servicos/servico-limpeza.png',
+      action: 'hub',
+      gradient: 'ocean',
+    },
+    {
+      id: 'theme-lavadoras',
+      badge: '🫧 Produto',
+      name: 'Lavadoras',
       description: 'Lavadoras e lava e seca',
-      image: 'assets/carousel/lifestyle/lavanderia.png',
+      image: 'assets/showcase/lavadoras.png',
       action: 'categories',
       gradient: 'electric',
     },
     {
-      id: 'theme-sala',
-      badge: '❄️ Sala',
-      name: 'Conforto no sofá',
-      description: 'Ar e bem-estar em casa',
-      image: 'assets/carousel/lifestyle/sala-conforto.png',
-      action: 'offers',
-      gradient: 'ocean',
-    },
-    {
-      id: 'theme-servicos',
-      badge: '🔧 Serviços',
-      name: 'Profissional no seu lar',
-      description: 'Técnicos e reparos perto de você',
-      image: 'assets/carousel/lifestyle/servicos-casa.png',
-      action: 'hub',
-      gradient: 'warm',
-    },
-    {
-      id: 'theme-negociacao',
-      badge: '🤝 Usados',
-      name: 'Compre e negocie',
-      description: 'Venda segura entre vizinhos',
-      image: 'assets/carousel/lifestyle/negociacao-lar.png',
+      id: 'theme-pintura',
+      badge: '🎨 Serviço',
+      name: 'Pintura e reforma',
+      description: 'Acabamento com quem entende do trampo',
+      image: 'assets/showcase/servicos/servico-pintura.png',
       action: 'hub',
       gradient: 'purple',
     },
     {
-      id: 'theme-games',
-      badge: '🎮 Games',
-      name: 'Diversão garantida',
-      description: 'Consoles e TVs para jogar',
-      image: 'assets/carousel/lifestyle/games-casa.png',
+      id: 'theme-notebooks',
+      badge: '💻 Produto',
+      name: 'Notebooks',
+      description: 'Para trabalho e estudo',
+      image: 'assets/showcase/notebooks.png',
+      action: 'categories',
+      gradient: 'cool',
+    },
+    {
+      id: 'theme-entrega',
+      badge: '📦 Serviço',
+      name: 'Entregas e fretes',
+      description: 'Leve e receba com praticidade',
+      image: 'assets/showcase/servicos/servico-entrega.png',
+      action: 'hub',
+      gradient: 'warm',
+    },
+    {
+      id: 'theme-ar',
+      badge: '❄️ Produto',
+      name: 'Ar-condicionado',
+      description: 'Splits e inverter',
+      image: 'assets/showcase/ar-condicionado.png',
       action: 'offers',
+      gradient: 'ocean',
+    },
+    {
+      id: 'theme-ti',
+      badge: '🖥️ Serviço',
+      name: 'TI e suporte técnico',
+      description: 'Notebook, rede e instalação',
+      image: 'assets/showcase/servicos/servico-ti.png',
+      action: 'hub',
       gradient: 'electric',
     },
     {
-      id: 'theme-familia',
-      badge: '👨‍👩‍👧 Família',
-      name: 'Lar para todos',
-      description: 'Eletros que unem a família',
-      image: 'assets/carousel/lifestyle/familia-lar.png',
+      id: 'theme-cafeteiras',
+      badge: '☕ Produto',
+      name: 'Cafeteiras',
+      description: 'Espresso e cápsulas',
+      image: 'assets/showcase/cafeteiras.png',
+      action: 'categories',
+      gradient: 'warm',
+    },
+    {
+      id: 'theme-jardim',
+      badge: '🌿 Serviço',
+      name: 'Jardinagem e área externa',
+      description: 'Cuidado com plantas e quintal',
+      image: 'assets/showcase/servicos/servico-jardim.png',
+      action: 'hub',
+      gradient: 'ocean',
+    },
+    {
+      id: 'theme-fritadeiras',
+      badge: '🍳 Produto',
+      name: 'Fritadeiras',
+      description: 'Air fryers sem óleo',
+      image: 'assets/showcase/fritadeiras.png',
+      action: 'categories',
+      gradient: 'purple',
+    },
+    {
+      id: 'theme-aspiradores',
+      badge: '🌀 Produto',
+      name: 'Aspiradores',
+      description: 'Robôs e verticais',
+      image: 'assets/showcase/aspiradores.png',
       action: 'categories',
       gradient: 'cool',
     },
@@ -185,17 +258,17 @@ const Trampolim = (() => {
 
   function getFallbackCategories() {
     return [
-      { id: 'geladeiras', name: 'Geladeiras', icon: '🧊', description: 'Refrigeradores frost free e duplex', image: 'assets/carousel/lifestyle/geladeira-casa.png', fallbackImage: 'assets/showcase/geladeiras.png' },
-      { id: 'fogoes', name: 'Fogões', icon: '🔥', description: 'Fogões a gás e cooktops', image: 'assets/carousel/lifestyle/fogao-casa.png', fallbackImage: 'assets/showcase/geladeiras.png' },
-      { id: 'lavadoras', name: 'Lavadoras', icon: '🫧', description: 'Lavadoras e lava e seca', image: 'assets/carousel/lifestyle/lavadora-casa.png', fallbackImage: 'assets/showcase/geladeiras.png' },
+      { id: 'geladeiras', name: 'Geladeiras', icon: '🧊', description: 'Refrigeradores frost free e duplex', image: 'assets/showcase/geladeiras.png', fallbackImage: 'assets/showcase/geladeiras.png' },
+      { id: 'fogoes', name: 'Fogões', icon: '🔥', description: 'Fogões a gás e cooktops', image: 'assets/showcase/fogoes.png', fallbackImage: 'assets/showcase/fogoes.png' },
+      { id: 'lavadoras', name: 'Lavadoras', icon: '🫧', description: 'Lavadoras e lava e seca', image: 'assets/showcase/lavadoras.png', fallbackImage: 'assets/showcase/lavadoras.png' },
       { id: 'tvs', name: 'Smart TVs', icon: '📺', description: 'Smart TVs 4K e QLED', image: 'assets/showcase/smart-tvs.png', fallbackImage: 'assets/showcase/smart-tvs.png' },
-      { id: 'ar', name: 'Ar-condicionado', icon: '❄️', description: 'Splits e inverter', image: 'assets/carousel/lifestyle/ar-casa.png', fallbackImage: 'assets/showcase/ar-condicionado.png' },
-      { id: 'micro', name: 'Micro-ondas', icon: '📡', description: 'Micro-ondas com grill', image: 'assets/carousel/lifestyle/micro-casa.png', fallbackImage: 'assets/showcase/micro-ondas.png' },
-      { id: 'celulares', name: 'Celulares', icon: '📱', description: 'Smartphones 5G', image: 'assets/carousel/lifestyle/celular-casa.png', fallbackImage: 'assets/showcase/smart-tvs.png' },
-      { id: 'notebooks', name: 'Notebooks', icon: '💻', description: 'Notebooks para trabalho e estudo', image: 'assets/carousel/lifestyle/notebook-casa.png', fallbackImage: 'assets/showcase/smart-tvs.png' },
-      { id: 'aspiradores', name: 'Aspiradores', icon: '🌀', description: 'Robôs e aspiradores verticais', image: 'assets/carousel/lifestyle/aspirador-casa.png', fallbackImage: 'assets/showcase/aspiradores.png' },
-      { id: 'cafeteiras', name: 'Cafeteiras', icon: '☕', description: 'Espresso e cápsulas', image: 'assets/carousel/lifestyle/cafe-casa.png', fallbackImage: 'assets/showcase/fritadeiras.png' },
-      { id: 'fritadeiras', name: 'Fritadeiras', icon: '🍳', description: 'Air fryers sem óleo', image: 'assets/carousel/lifestyle/fritadeira-casa.png', fallbackImage: 'assets/showcase/fritadeiras.png' },
+      { id: 'ar', name: 'Ar-condicionado', icon: '❄️', description: 'Splits e inverter', image: 'assets/showcase/ar-condicionado.png', fallbackImage: 'assets/showcase/ar-condicionado.png' },
+      { id: 'micro', name: 'Micro-ondas', icon: '📡', description: 'Micro-ondas com grill', image: 'assets/showcase/micro-ondas.png', fallbackImage: 'assets/showcase/micro-ondas.png' },
+      { id: 'celulares', name: 'Celulares', icon: '📱', description: 'Smartphones 5G', image: 'assets/showcase/smart-tvs.png', fallbackImage: 'assets/showcase/smart-tvs.png' },
+      { id: 'notebooks', name: 'Notebooks', icon: '💻', description: 'Notebooks para trabalho e estudo', image: 'assets/showcase/notebooks.png', fallbackImage: 'assets/showcase/notebooks.png' },
+      { id: 'aspiradores', name: 'Aspiradores', icon: '🌀', description: 'Robôs e aspiradores verticais', image: 'assets/showcase/aspiradores.png', fallbackImage: 'assets/showcase/aspiradores.png' },
+      { id: 'cafeteiras', name: 'Cafeteiras', icon: '☕', description: 'Espresso e cápsulas', image: 'assets/showcase/cafeteiras.png', fallbackImage: 'assets/showcase/cafeteiras.png' },
+      { id: 'fritadeiras', name: 'Fritadeiras', icon: '🍳', description: 'Air fryers sem óleo', image: 'assets/showcase/fritadeiras.png', fallbackImage: 'assets/showcase/fritadeiras.png' },
       { id: 'audio', name: 'Áudio', icon: '🔊', description: 'Soundbars e caixas de som', image: 'assets/showcase/audio.png', fallbackImage: 'assets/showcase/audio.png' },
     ];
   }
@@ -259,6 +332,7 @@ const Trampolim = (() => {
           ${cat.image ? `<img class="category-img" src="${cat.image}" alt="${cat.name}" loading="lazy" width="120" height="80">` : `<span class="category-icon" aria-hidden="true">${cat.icon}</span>`}
           <span class="category-name">${cat.name}</span>
         </button>`).join('');
+      requestAnimationFrame(updateCategoryArrows);
     }
     const grid = document.getElementById('categories-grid');
     if (grid) {
@@ -328,11 +402,23 @@ const Trampolim = (() => {
     next.disabled = track.scrollLeft >= maxScroll - 4;
   }
 
+  function updateCategoryArrows() {
+    const scroll = document.getElementById('categories-scroll');
+    const prev = document.getElementById('cat-prev');
+    const next = document.getElementById('cat-next');
+    if (!scroll || !prev || !next) return;
+    const maxScroll = scroll.scrollWidth - scroll.clientWidth;
+    prev.disabled = scroll.scrollLeft <= 4;
+    next.disabled = maxScroll <= 4 || scroll.scrollLeft >= maxScroll - 4;
+  }
+
   function renderShowcase() {
     const track = document.getElementById('showcase-track');
     if (!track) return;
 
-    const themeCards = SHOWCASE_THEMES.map(theme => `
+    const mixed = [...SHOWCASE_THEMES].sort(() => Math.random() - 0.5);
+
+    track.innerHTML = mixed.map(theme => `
       <div class="showcase-item showcase-theme showcase-theme-${theme.gradient}" role="listitem" data-showcase-action="${theme.action}" tabindex="0" aria-label="${theme.name}">
         <span class="showcase-item-badge">${theme.badge}</span>
         <div class="showcase-item-visual">
@@ -344,27 +430,6 @@ const Trampolim = (() => {
           <span class="showcase-theme-cta">Explorar →</span>
         </div>
       </div>`).join('');
-
-    const categoryCards = CATEGORIES.map(cat => {
-      const product = PRODUCTS.find(p => p.category === cat.id);
-      const image = getShowcaseImage(cat);
-      const imgHtml = image
-        ? `<img src="${image}" alt="${cat.name} — ${cat.description}" loading="lazy" width="200" height="140" data-fallback="${cat.fallbackImage || ''}" class="showcase-img showcase-cat-img">`
-        : `<div class="showcase-item-placeholder" aria-hidden="true">${cat.icon}</div>`;
-
-      return `
-      <div class="showcase-item" role="listitem" data-category="${cat.id}" tabindex="0">
-        ${product?.badge ? `<span class="showcase-item-badge">${product.badge}</span>` : ''}
-        <div class="showcase-item-visual">${imgHtml}</div>
-        <div class="showcase-item-info">
-          <h4>${cat.icon} ${cat.name}</h4>
-          <span>${product?.name || cat.description}</span>
-          ${product?.price ? `<span class="showcase-price">a partir de ${formatPrice(product.price)}</span>` : ''}
-        </div>
-      </div>`;
-    }).join('');
-
-    track.innerHTML = themeCards + categoryCards;
 
     track.querySelectorAll('.showcase-img').forEach(img => {
       img.addEventListener('error', function onErr() {
@@ -437,7 +502,7 @@ const Trampolim = (() => {
   function hasActiveProductFilters() {
     const f = productFilters;
     return !!(
-      f.listingType || f.category ||
+      f.listingType || f.condition || f.category ||
       f.minPrice || f.maxPrice || f.state ||
       f.freeShipping || f.onSale || (f.sort && f.sort !== 'relevance')
     );
@@ -447,6 +512,7 @@ const Trampolim = (() => {
     const f = productFilters;
     let n = 0;
     if (f.listingType) n++;
+    if (f.condition) n++;
     if (f.category) n++;
     if (f.minPrice) n++;
     if (f.maxPrice) n++;
@@ -473,12 +539,23 @@ const Trampolim = (() => {
     updateFiltersBadge();
   }
 
+  function getProductCondition(product) {
+    if (product?.condition) return product.condition;
+    if (product?.listingType === 'service') return 'service';
+    const badge = String(product?.badge || '').toLowerCase();
+    if (badge.includes('usado') || badge.includes('semi')) {
+      return badge.includes('semi') ? 'semi_used' : 'used';
+    }
+    if (badge.includes('novo') || badge.includes('lançamento') || badge.includes('oferta')) return 'new';
+    return 'new';
+  }
+
   function getFilteredProducts(baseList) {
     const f = productFilters;
-    const q = (document.getElementById('search-input')?.value || document.getElementById('header-search-input')?.value || '').trim().toLowerCase();
+    const q = (document.getElementById('header-search-input')?.value || '').trim().toLowerCase();
     let results = [...(baseList || PRODUCTS)];
 
-    if (f.listingType === 'service') return [];
+    if (f.listingType === 'service' || f.condition === 'opportunity' || f.condition === 'trampo') return [];
 
     if (q) {
       results = results.filter(p =>
@@ -488,6 +565,12 @@ const Trampolim = (() => {
       );
     }
 
+    if (f.listingType === 'product') {
+      results = results.filter(p => (p.listingType || 'product') !== 'service');
+    }
+    if (f.condition) {
+      results = results.filter(p => getProductCondition(p) === f.condition);
+    }
     if (f.category) results = results.filter(p => p.category === f.category);
     if (f.minPrice) results = results.filter(p => p.price >= Number(f.minPrice));
     if (f.maxPrice) results = results.filter(p => p.price <= Number(f.maxPrice));
@@ -504,7 +587,9 @@ const Trampolim = (() => {
   }
 
   function applyProductFilters() {
-    const openHub = productFilters.listingType === 'service';
+    const openHub = productFilters.listingType === 'service'
+      || productFilters.condition === 'opportunity'
+      || productFilters.condition === 'trampo';
     const filtered = getFilteredProducts(PRODUCTS);
     const countEl = document.getElementById('filters-result-count');
 
@@ -550,6 +635,9 @@ const Trampolim = (() => {
 
   function syncSidebarToHub() {
     hubFilters.listingType = productFilters.listingType || '';
+    hubFilters.condition = (productFilters.condition === 'opportunity' || productFilters.condition === 'trampo')
+      ? ''
+      : (productFilters.condition || '');
     hubFilters.minPrice = productFilters.minPrice || '';
     hubFilters.maxPrice = productFilters.maxPrice || '';
     hubFilters.state = productFilters.state || '';
@@ -569,17 +657,38 @@ const Trampolim = (() => {
     document.querySelectorAll('[data-hub-filter="listingType"]').forEach(chip => {
       chip.classList.toggle('active', chip.dataset.value === (hubFilters.listingType || ''));
     });
+    document.querySelectorAll('[data-hub-filter="condition"]').forEach(chip => {
+      chip.classList.toggle('active', chip.dataset.value === (hubFilters.condition || ''));
+    });
   }
 
-  function setFilterChipActive(key, value) {
-    document.querySelectorAll(`[data-filter="${key}"]`).forEach(chip => {
-      chip.classList.toggle('active', chip.dataset.value === value);
-    });
+  function getFilterTypeSelectValue() {
+    if (productFilters.listingType === 'service') return 'service';
+    if (productFilters.listingType === 'product') return 'product';
+    if (productFilters.condition) return productFilters.condition;
+    return '';
+  }
+
+  function setProductTypeFilter(value) {
+    productFilters.listingType = '';
+    productFilters.condition = '';
+
+    if (value === 'product' || value === 'service') {
+      productFilters.listingType = value;
+    } else if (value === 'new' || value === 'semi_used' || value === 'used' || value === 'opportunity' || value === 'trampo') {
+      productFilters.condition = value;
+    }
+
+    const typeSelect = document.getElementById('filter-type');
+    if (typeSelect && typeSelect.value !== getFilterTypeSelectValue()) {
+      typeSelect.value = getFilterTypeSelectValue();
+    }
   }
 
   function clearProductFilters() {
     productFilters = {
       listingType: '',
+      condition: '',
       category: '',
       minPrice: '',
       maxPrice: '',
@@ -590,13 +699,13 @@ const Trampolim = (() => {
     };
     activeCategory = null;
 
-    setFilterChipActive('listingType', '');
-
+    const type = document.getElementById('filter-type');
     const min = document.getElementById('filter-min-price');
     const max = document.getElementById('filter-max-price');
     const sort = document.getElementById('filter-sort');
     const free = document.getElementById('filter-free-shipping');
     const sale = document.getElementById('filter-on-sale');
+    if (type) type.value = '';
     if (min) min.value = '';
     if (max) max.value = '';
     if (sort) sort.value = 'relevance';
@@ -649,9 +758,13 @@ const Trampolim = (() => {
         const key = chip.dataset.filter;
         const val = chip.dataset.value;
         productFilters[key] = val;
-        setFilterChipActive(key, val);
         applyProductFilters();
       }
+    });
+
+    document.getElementById('filter-type')?.addEventListener('change', (e) => {
+      setProductTypeFilter(e.target.value);
+      applyProductFilters();
     });
 
     document.getElementById('filter-min-price')?.addEventListener('input', (e) => {
@@ -810,10 +923,18 @@ const Trampolim = (() => {
   }
 
   function updateFavoritesBadge() {
+    const btn = document.getElementById('btn-favorites-header');
     const badge = document.getElementById('favorites-badge');
+    const count = favorites.length;
+
+    if (btn) {
+      btn.hidden = count === 0;
+      btn.classList.toggle('has-favorites', count > 0);
+    }
     if (badge) {
-      badge.textContent = favorites.length;
-      badge.dataset.count = favorites.length;
+      badge.textContent = count;
+      badge.dataset.count = count;
+      badge.hidden = count === 0;
     }
   }
 
@@ -1212,10 +1333,26 @@ const Trampolim = (() => {
     return `${d}/${m}/${y}`;
   }
 
+  function updateHeaderUser(user = api.getUser()) {
+    const nameEl = document.getElementById('header-user-name');
+    const avatarEl = document.getElementById('header-user-avatar');
+    if (!nameEl || !avatarEl) return;
+
+    if (user?.name) {
+      const first = user.name.trim().split(/\s+/)[0];
+      nameEl.textContent = first;
+      avatarEl.textContent = first.charAt(0).toUpperCase();
+    } else {
+      nameEl.textContent = 'Entrar';
+      avatarEl.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+    }
+  }
+
   function updateAccountView() {
     const user = api.getUser();
     const header = document.querySelector('#view-account .profile-header');
     const panel = document.querySelector('#view-account .account-panel');
+    updateHeaderUser(user);
     if (!header) return;
 
     document.getElementById('account-profile-card')?.remove();
@@ -2123,21 +2260,16 @@ const Trampolim = (() => {
   /* ── Theme ── */
   /* ── Header scroll & search ── */
   function initStateSelects() {
-    fillBrazilianStates(document.getElementById('search-state'));
-    fillBrazilianStates(document.getElementById('header-search-state'));
+    fillBrazilianStates(document.getElementById('header-search-state'), 'BR', 'uf');
     fillBrazilianStates(document.getElementById('hub-state'));
   }
 
   function getSearchState() {
-    return document.getElementById('search-state')?.value
-      || document.getElementById('header-search-state')?.value
-      || '';
+    return document.getElementById('header-search-state')?.value || '';
   }
 
   function syncSearchState(value) {
-    const home = document.getElementById('search-state');
     const header = document.getElementById('header-search-state');
-    if (home && home.value !== value) home.value = value;
     if (header && header.value !== value) header.value = value;
     productFilters.state = value || '';
   }
@@ -2150,23 +2282,18 @@ const Trampolim = (() => {
   }
 
   function syncSearchInputs(value) {
-    const homeInput = document.getElementById('search-input');
     const headerInput = document.getElementById('header-search-input');
-    if (homeInput && homeInput.value !== value) homeInput.value = value;
     if (headerInput && headerInput.value !== value) headerInput.value = value;
     document.getElementById('btn-search-clear')?.toggleAttribute('hidden', !value);
   }
 
   function toggleHeaderSearch(forceOpen) {
     const header = document.getElementById('app-header');
-    const btn = document.getElementById('btn-search');
     const input = document.getElementById('header-search-input');
-    if (!header || !btn) return;
+    if (!header) return;
 
     const isOpen = typeof forceOpen === 'boolean' ? forceOpen : !header.classList.contains('search-open');
     header.classList.toggle('search-open', isOpen);
-    btn.classList.toggle('active', isOpen);
-    btn.setAttribute('aria-expanded', String(isOpen));
 
     if (isOpen) {
       navigateTo('home');
@@ -2241,9 +2368,7 @@ const Trampolim = (() => {
 
   function initHeaderSearch() {
     const headerInput = document.getElementById('header-search-input');
-    const homeInput = document.getElementById('search-input');
     const clearBtn = document.getElementById('btn-search-clear');
-    const homeState = document.getElementById('search-state');
     const headerState = document.getElementById('header-search-state');
 
     const handleSearch = (value) => {
@@ -2255,16 +2380,10 @@ const Trampolim = (() => {
     const handleStateChange = (value) => {
       syncSearchState(value);
       if (currentView !== 'home') navigateTo('home');
-      runProductSearch(homeInput?.value || headerInput?.value || '');
+      runProductSearch(headerInput?.value || '');
     };
 
     headerInput?.addEventListener('input', (e) => handleSearch(e.target.value));
-    homeInput?.addEventListener('input', (e) => {
-      syncSearchInputs(e.target.value);
-      runProductSearch(e.target.value);
-    });
-
-    homeState?.addEventListener('change', (e) => handleStateChange(e.target.value));
     headerState?.addEventListener('change', (e) => handleStateChange(e.target.value));
 
     clearBtn?.addEventListener('click', () => {
@@ -2280,7 +2399,7 @@ const Trampolim = (() => {
     document.addEventListener('click', (e) => {
       const header = document.getElementById('app-header');
       if (!header?.classList.contains('search-open')) return;
-      if (e.target.closest('#header-search') || e.target.closest('#btn-search')) return;
+      if (e.target.closest('#header-search')) return;
       if (window.innerWidth >= 1024) return;
       toggleHeaderSearch(false);
     });
@@ -2294,6 +2413,8 @@ const Trampolim = (() => {
     if (scroll) {
       prev?.addEventListener('click', () => scroll.scrollBy({ left: -200, behavior: 'smooth' }));
       next?.addEventListener('click', () => scroll.scrollBy({ left: 200, behavior: 'smooth' }));
+      scroll.addEventListener('scroll', updateCategoryArrows, { passive: true });
+      updateCategoryArrows();
     }
 
     const showcase = document.getElementById('showcase-track');
@@ -2306,7 +2427,10 @@ const Trampolim = (() => {
       showcase?.scrollBy({ left: SHOWCASE_SCROLL_STEP, behavior: 'smooth' });
     });
     showcase?.addEventListener('scroll', updateShowcaseArrows, { passive: true });
-    window.addEventListener('resize', updateShowcaseArrows);
+    window.addEventListener('resize', () => {
+      updateShowcaseArrows();
+      updateCategoryArrows();
+    });
 
     document.getElementById('hero-prev')?.addEventListener('click', () => { goToHeroSlide(heroIndex - 1); startHeroAutoplay(); });
     document.getElementById('hero-next')?.addEventListener('click', () => { goToHeroSlide(heroIndex + 1); startHeroAutoplay(); });
@@ -2361,14 +2485,6 @@ const Trampolim = (() => {
       e.preventDefault(); viewHistory = ['home']; navigateTo('home', false);
     });
     document.getElementById('btn-cart-header')?.addEventListener('click', () => navigateTo('cart'));
-    document.getElementById('btn-search')?.addEventListener('click', () => {
-      if (window.innerWidth >= 1024) {
-        document.getElementById('header-search-input')?.focus();
-        navigateTo('home');
-        return;
-      }
-      toggleHeaderSearch();
-    });
 
     document.addEventListener('click', (e) => {
       const actionBtn = e.target.closest('[data-action]');
@@ -2652,6 +2768,7 @@ const Trampolim = (() => {
     updateCartBadge();
     updateFavoritesBadge();
     updateChatBadge();
+    updateHeaderUser();
     document.querySelector('.app-shell')?.classList.add('filters-visible');
 
     document.getElementById('app-loading')?.classList.remove('hidden');

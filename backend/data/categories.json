@@ -4,7 +4,7 @@
     "name": "Geladeiras",
     "icon": "🧊",
     "description": "Refrigeradores frost free, duplex e side by side para sua cozinha",
-    "image": "assets/carousel/lifestyle/geladeira-casa.png",
+    "image": "assets/showcase/geladeiras.png",
     "fallbackImage": "assets/showcase/geladeiras.png"
   },
   {
@@ -12,16 +12,16 @@
     "name": "Fogões",
     "icon": "🔥",
     "description": "Fogões a gás, cooktops e fornos elétricos",
-    "image": "assets/carousel/lifestyle/fogao-casa.png",
-    "fallbackImage": "assets/showcase/geladeiras.png"
+    "image": "assets/showcase/fogoes.png",
+    "fallbackImage": "assets/showcase/fogoes.png"
   },
   {
     "id": "lavadoras",
     "name": "Lavadoras",
     "icon": "🫧",
     "description": "Lavadoras e lava e seca com tecnologia inverter",
-    "image": "assets/carousel/lifestyle/lavadora-casa.png",
-    "fallbackImage": "assets/showcase/geladeiras.png"
+    "image": "assets/showcase/lavadoras.png",
+    "fallbackImage": "assets/showcase/lavadoras.png"
   },
   {
     "id": "tvs",
@@ -36,7 +36,7 @@
     "name": "Ar-condicionado",
     "icon": "❄️",
     "description": "Splits, inverter e portáteis para todo conforto",
-    "image": "assets/carousel/lifestyle/ar-casa.png",
+    "image": "assets/showcase/ar-condicionado.png",
     "fallbackImage": "assets/showcase/ar-condicionado.png"
   },
   {
@@ -44,7 +44,7 @@
     "name": "Micro-ondas",
     "icon": "📡",
     "description": "Micro-ondas com grill e função descongelar",
-    "image": "assets/carousel/lifestyle/micro-casa.png",
+    "image": "assets/showcase/micro-ondas.png",
     "fallbackImage": "assets/showcase/micro-ondas.png"
   },
   {
@@ -52,7 +52,7 @@
     "name": "Celulares",
     "icon": "📱",
     "description": "Smartphones 5G com câmeras profissionais",
-    "image": "assets/carousel/lifestyle/celular-casa.png",
+    "image": "assets/showcase/smart-tvs.png",
     "fallbackImage": "assets/showcase/smart-tvs.png"
   },
   {
@@ -60,15 +60,15 @@
     "name": "Notebooks",
     "icon": "💻",
     "description": "Notebooks para trabalho, estudo e entretenimento",
-    "image": "assets/carousel/lifestyle/notebook-casa.png",
-    "fallbackImage": "assets/showcase/smart-tvs.png"
+    "image": "assets/showcase/notebooks.png",
+    "fallbackImage": "assets/showcase/notebooks.png"
   },
   {
     "id": "aspiradores",
     "name": "Aspiradores",
     "icon": "🌀",
     "description": "Aspiradores verticais, robôs e portáteis",
-    "image": "assets/carousel/lifestyle/aspirador-casa.png",
+    "image": "assets/showcase/aspiradores.png",
     "fallbackImage": "assets/showcase/aspiradores.png"
   },
   {
@@ -76,15 +76,15 @@
     "name": "Cafeteiras",
     "icon": "☕",
     "description": "Cafeteiras espresso, cápsulas e filtro",
-    "image": "assets/carousel/lifestyle/cafe-casa.png",
-    "fallbackImage": "assets/showcase/fritadeiras.png"
+    "image": "assets/showcase/cafeteiras.png",
+    "fallbackImage": "assets/showcase/cafeteiras.png"
   },
   {
     "id": "fritadeiras",
     "name": "Fritadeiras",
     "icon": "🍳",
     "description": "Air fryers e fritadeiras elétricas sem óleo",
-    "image": "assets/carousel/lifestyle/fritadeira-casa.png",
+    "image": "assets/showcase/fritadeiras.png",
     "fallbackImage": "assets/showcase/fritadeiras.png"
   },
   {

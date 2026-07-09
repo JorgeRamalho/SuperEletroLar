@@ -29,14 +29,14 @@ window.BR_STATES = [
   { uf: 'TO', name: 'Tocantins' },
 ];
 
-window.fillBrazilianStates = function fillBrazilianStates(selectEl, allLabel = 'Todos os estados') {
+window.fillBrazilianStates = function fillBrazilianStates(selectEl, allLabel = 'Todos os estados', mode = 'full') {
   if (!selectEl || selectEl.dataset.statesFilled === '1') return;
   const current = selectEl.value;
   selectEl.innerHTML = `<option value="">${allLabel}</option>`;
   window.BR_STATES.forEach(({ uf, name }) => {
     const opt = document.createElement('option');
     opt.value = uf;
-    opt.textContent = `${uf} \u2014 ${name}`;
+    opt.textContent = mode === 'uf' ? uf : `${uf} \u2014 ${name}`;
     selectEl.appendChild(opt);
   });
   if (current) selectEl.value = current;

@@ -69,111 +69,92 @@
     <div class="header-scroll-progress" id="header-scroll-progress" aria-hidden="true"></div>
 
     <div class="header-inner">
-      <button class="header-back" id="btn-back" aria-label="Voltar" title="Voltar">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M19 12H5M12 19l-7-7 7-7"/>
-        </svg>
-      </button>
-
-      <a href="#" class="header-brand" id="brand-link" aria-label="Trampolim — Página inicial">
-        <span class="header-brand-mark" aria-hidden="true">
-          <img src="assets/logo.svg" alt="" width="40" height="40">
-        </span>
-        <span class="header-brand-text">
-          <span class="brand-name">🚀 Trampolim</span>
-          <span class="brand-slogan">Seu impulso para o trampo</span>
-        </span>
-      </a>
-
-      <div class="header-search" id="header-search" role="search">
-        <div class="header-search-field">
-          <svg class="header-search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+      <div class="header-start">
+        <button class="header-back" id="btn-back" aria-label="Voltar" title="Voltar">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
           </svg>
-          <label for="header-search-input" class="sr-only">Buscar produtos</label>
-          <input type="search" id="header-search-input" placeholder="Buscar geladeira, TV, fogão..." autocomplete="off" enterkeyhint="search">
-          <button type="button" class="header-search-clear" id="btn-search-clear" aria-label="Limpar busca" hidden>✕</button>
-        </div>
-        <label for="header-search-state" class="sr-only">Filtrar por estado</label>
-        <select id="header-search-state" class="search-state-select" aria-label="Estado">
-          <option value="">Todos os estados</option>
-        </select>
+        </button>
+
+        <a href="#" class="header-brand" id="brand-link" aria-label="Trampolim — Página inicial">
+          <span class="header-brand-mark" aria-hidden="true">
+            <img src="assets/logo.svg" alt="" width="40" height="40">
+          </span>
+          <span class="header-brand-text">
+            <span class="brand-name">Trampolim</span>
+          </span>
+        </a>
       </div>
 
-      <nav class="desktop-nav" aria-label="Navegação principal">
-        <a href="#" data-view="home" class="active">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          <span>Início</span>
-        </a>
-        <a href="#" data-view="categories">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
-          <span>Categorias</span>
-        </a>
-        <a href="#" data-view="hub">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/><path d="M11 8v6M8 11h6"/></svg>
-          <span>Busca</span>
-        </a>
-        <a href="#" data-view="offers">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-          <span>Ofertas</span>
-        </a>
-        <a href="#" data-view="account">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          <span>Conta</span>
-        </a>
-      </nav>
+      <div class="header-search" id="header-search" role="search">
+        <div class="header-search-shell">
+          <div class="header-search-field">
+            <label for="header-search-input" class="sr-only">Buscar no Trampolim</label>
+            <input type="search" id="header-search-input" placeholder='Buscar "trampo, serviço ou produto"' autocomplete="off" enterkeyhint="search">
+            <button type="button" class="header-search-clear" id="btn-search-clear" aria-label="Limpar busca" hidden>✕</button>
+          </div>
+          <div class="header-search-location">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>
+            </svg>
+            <label for="header-search-state" class="sr-only">Filtrar por estado</label>
+            <select id="header-search-state" class="search-state-select" aria-label="Estado">
+              <option value="">BR</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
       <div class="header-actions" role="toolbar" aria-label="Ações rápidas">
-        <button type="button" class="header-action-btn header-action-cta" id="btn-announce" data-action="announce" aria-label="Anunciar grátis" title="Anunciar grátis">
-          <span class="header-action-icon" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+        <button type="button" class="header-link-btn header-action-secondary" id="btn-pro-plan" data-action="hub" aria-label="Radar Pro" title="Radar Pro">
+          <span class="header-link-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/></svg>
           </span>
-          <span class="header-action-label">Anunciar Grátis</span>
+          <span class="header-link-label">Radar Pro</span>
         </button>
 
-        <button type="button" class="header-action-btn" id="btn-my-listings" data-action="my-listings" data-accent="cool" aria-label="Meus anúncios" title="Meus anúncios">
-          <span class="header-action-icon" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>
+        <button type="button" class="header-link-btn header-action-secondary" id="btn-my-listings" data-action="my-listings" aria-label="Meus anúncios" title="Meus anúncios">
+          <span class="header-link-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
           </span>
-          <span class="header-action-label">Meus Anúncios</span>
+          <span class="header-link-label">Meus Anúncios</span>
         </button>
 
-        <button type="button" class="header-action-btn" id="btn-chat-header" data-action="chat" data-accent="purple" aria-label="Chat" title="Chat">
-          <span class="header-action-icon" aria-hidden="true">
+        <button type="button" class="header-link-btn header-action-secondary" id="btn-chat-header" data-action="chat" aria-label="Chat" title="Chat">
+          <span class="header-link-icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
           </span>
-          <span class="header-action-label">Chat</span>
+          <span class="header-link-label">Chat</span>
           <span class="badge badge-chat" id="chat-badge" data-count="0" aria-label="Mensagens não lidas">0</span>
         </button>
 
-        <button type="button" class="header-action-btn" id="btn-favorites-header" data-view="favorites" data-accent="warm" aria-label="Favoritos" title="Favoritos">
-          <span class="header-action-icon" aria-hidden="true">
+        <button type="button" class="header-link-btn" id="btn-favorites-header" data-view="favorites" aria-label="Favoritos" title="Favoritos" hidden>
+          <span class="header-link-icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
           </span>
-          <span class="header-action-label">Favoritos</span>
+          <span class="header-link-label">Favoritos</span>
           <span class="badge badge-fav" id="favorites-badge" data-count="0" aria-label="Itens favoritos">0</span>
         </button>
 
-        <button type="button" class="header-action-btn" id="btn-search" data-accent="primary" aria-label="Buscar produtos" aria-expanded="false" aria-controls="header-search" title="Buscar">
-          <span class="header-action-icon" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-          </span>
-          <span class="header-action-label">Buscar</span>
-        </button>
-
-        <button type="button" class="header-action-btn" id="btn-account-header" data-view="account" data-accent="accent" aria-label="Minha conta" title="Conta">
-          <span class="header-action-icon" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </span>
-          <span class="header-action-label">Conta</span>
-        </button>
-
-        <button type="button" class="header-action-btn header-action-cart" id="btn-cart-header" data-accent="secondary" aria-label="Carrinho de compras" title="Carrinho">
-          <span class="header-action-icon" aria-hidden="true">
+        <button type="button" class="header-link-btn header-action-cart" id="btn-cart-header" aria-label="Carrinho" title="Carrinho">
+          <span class="header-link-icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
           </span>
-          <span class="header-action-label">Carrinho</span>
+          <span class="header-link-label">Carrinho</span>
           <span class="badge badge-cart" id="cart-badge" data-count="0" aria-label="Itens no carrinho">0</span>
+        </button>
+
+        <button type="button" class="header-user-btn" id="btn-account-header" data-view="account" aria-label="Minha conta" title="Conta">
+          <span class="header-user-avatar" id="header-user-avatar" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+          <span class="header-user-name" id="header-user-name">Entrar</span>
+          <svg class="header-user-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+
+        <button type="button" class="header-cta-btn" id="btn-announce" data-action="announce" aria-label="Anunciar grátis" title="Anunciar grátis">
+          <span class="header-cta-plus" aria-hidden="true">+</span>
+          <span>Anunciar grátis</span>
         </button>
       </div>
     </div>
@@ -194,10 +175,20 @@
 
         <div class="filters-group">
           <h3 class="filters-group-title">Tipo</h3>
-          <div class="filters-chips" role="group" aria-label="Tipo de anúncio">
-            <button type="button" class="filter-chip active" data-filter="listingType" data-value="">Todos</button>
-            <button type="button" class="filter-chip" data-filter="listingType" data-value="product">Produtos</button>
-            <button type="button" class="filter-chip" data-filter="listingType" data-value="service">Serviços</button>
+          <div class="filters-field filters-select-field">
+            <label for="filter-type">Tipo de anúncio</label>
+            <div class="filters-select-wrap">
+              <select id="filter-type" aria-label="Filtrar por tipo de anúncio">
+                <option value="">Todos os tipos</option>
+                <option value="product">Produtos</option>
+                <option value="service">Serviços</option>
+                <option value="new">Novos</option>
+                <option value="semi_used">Semi-novos</option>
+                <option value="used">Usados</option>
+                <option value="opportunity">Oportunidades</option>
+                <option value="trampo">Trampo</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -205,12 +196,12 @@
           <h3 class="filters-group-title">Preço</h3>
           <div class="filters-price-row">
             <div class="filters-field">
-              <label for="filter-min-price">Mín.</label>
-              <input type="number" id="filter-min-price" placeholder="R$ 0" min="0" inputmode="numeric">
+              <label for="filter-min-price" class="sr-only">Preço mínimo</label>
+              <input type="number" id="filter-min-price" placeholder="Mín." min="0" inputmode="numeric" aria-label="Preço mínimo">
             </div>
             <div class="filters-field">
-              <label for="filter-max-price">Máx.</label>
-              <input type="number" id="filter-max-price" placeholder="R$ 9999" min="0" inputmode="numeric">
+              <label for="filter-max-price" class="sr-only">Preço máximo</label>
+              <input type="number" id="filter-max-price" placeholder="Máx." min="0" inputmode="numeric" aria-label="Preço máximo">
             </div>
           </div>
         </div>
@@ -291,23 +282,9 @@
         </button>
       </div>
 
-      <div class="search-bar search-bar-with-state" role="search">
-        <div class="search-bar-field">
-          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-          </svg>
-          <label for="search-input" class="sr-only">Buscar produtos</label>
-          <input type="search" id="search-input" placeholder="Buscar geladeira, TV, fogão..." autocomplete="off">
-        </div>
-        <label for="search-state" class="sr-only">Filtrar por estado</label>
-        <select id="search-state" class="search-state-select" aria-label="Estado">
-          <option value="">Todos os estados</option>
-        </select>
-      </div>
-
       <div class="section-header">
-        <h2 class="section-title">🚀 Impulsione seu trampo</h2>
-        <button class="section-link" data-action="hub">Abrir Radar →</button>
+        <h2 class="section-title">📡 Produtos e Serviços</h2>
+        <button class="section-link" data-action="categories">Ver todos →</button>
       </div>
 
       <div class="showcase-wrapper carousel-wrapper">
@@ -315,7 +292,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
         </button>
         <div class="showcase-carousel">
-          <div class="showcase-track" id="showcase-track" role="list" aria-label="Oportunidades Trampolim e categorias de produtos">
+          <div class="showcase-track" id="showcase-track" role="list" aria-label="Produtos e serviços Trampolim">
             <!-- Preenchido via JS -->
           </div>
         </div>
@@ -626,33 +603,82 @@
     <!-- VIEW: POLÍTICA DE PRIVACIDADE -->
     <section class="view" id="view-privacy" aria-label="Política de privacidade">
       <div class="legal-page">
-        <h1 class="section-title">🔒 Política de Privacidade</h1>
-        <p class="legal-updated">Última atualização: 7 de julho de 2026</p>
+        <h1 class="section-title">Política de Privacidade</h1>
+        <p class="legal-lead">Seu trampo, seus dados, seu controle.</p>
+        <p class="legal-updated">Última atualização: 9 de julho de 2026</p>
         <div class="legal-content">
-          <p>A <strong>Trampolim</strong> ("nós") respeita sua privacidade e trata seus dados pessoais em conformidade com a <strong>Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018)</strong>.</p>
+          <p>A <strong>Trampolim</strong> (“nós”, “nosso” ou “plataforma”) é um marketplace digital que conecta pessoas a produtos, serviços, trabalho e oportunidades em todo o Brasil. Esta Política explica, de forma clara, como tratamos seus dados pessoais em conformidade com a <strong>Lei Geral de Proteção de Dados (LGPD — Lei nº 13.709/2018)</strong> e demais normas aplicáveis.</p>
+          <p>Ao usar o site, o app (PWA) ou os serviços da Trampolim, você declara ter lido e compreendido esta Política. Em caso de dúvida, fale conosco pelos canais indicados ao final.</p>
 
-          <h2>1. Dados que coletamos</h2>
+          <h2>1. Quem somos</h2>
+          <p>A Trampolim opera uma plataforma online para anúncios, compras, serviços e oportunidades (“trampo”). O controlador dos dados pessoais tratados neste ambiente é a Trampolim, responsável pelas decisões sobre as finalidades e os meios do tratamento.</p>
           <ul>
-            <li><strong>Cadastro:</strong> nome, e-mail, telefone e senha (criptografada).</li>
-            <li><strong>Compras:</strong> endereço de entrega, histórico de pedidos e pagamentos.</li>
-            <li><strong>Navegação:</strong> preferências (tema, carrinho, favoritos) armazenadas localmente no seu dispositivo.</li>
-            <li><strong>Cookies:</strong> identificadores para funcionamento do site e melhoria da experiência (veja nossa <a href="#" data-view="cookies">Política de Cookies</a>).</li>
+            <li><strong>Contato geral:</strong> <a href="mailto:contato@trampolim.com.br">contato@trampolim.com.br</a></li>
+            <li><strong>Privacidade / Encarregado (DPO):</strong> <a href="mailto:privacidade@trampolim.com.br">privacidade@trampolim.com.br</a></li>
+            <li><strong>Telefone:</strong> <a href="tel:08001234567">0800 123 4567</a></li>
           </ul>
 
-          <h2>2. Finalidade do tratamento</h2>
-          <p>Utilizamos seus dados para processar pedidos, autenticar sua conta, enviar confirmações de compra, melhorar nossos serviços e cumprir obrigações legais.</p>
+          <h2>2. Quais dados coletamos</h2>
+          <p>Coletamos apenas o necessário para operar a plataforma, conforme o seu uso:</p>
+          <ul>
+            <li><strong>Cadastro e conta:</strong> nome, e-mail, telefone e senha (armazenada de forma criptografada).</li>
+            <li><strong>Compras e entregas:</strong> endereço, dados de pedido, histórico de compras e informações necessárias ao pagamento (processadas por parceiros de pagamento; não armazenamos o número completo do cartão).</li>
+            <li><strong>Anúncios e Radar:</strong> conteúdo que você publica (título, descrição, fotos, localização aproximada, categoria) e dados de contato para negociação, quando aplicável.</li>
+            <li><strong>Navegação e preferências:</strong> carrinho, favoritos, filtros e escolhas de cookies, armazenados localmente no seu dispositivo.</li>
+            <li><strong>Comunicações:</strong> mensagens enviadas ao suporte, chat ou formulários de contato.</li>
+            <li><strong>Dados técnicos:</strong> endereço IP, tipo de navegador, dispositivo e registros de acesso, para segurança e funcionamento do serviço.</li>
+          </ul>
+          <p>Detalhes sobre cookies e armazenamento local estão na nossa <a href="#" data-view="cookies">Política de Cookies</a>.</p>
 
-          <h2>3. Compartilhamento</h2>
-          <p>Podemos compartilhar dados com processadores de pagamento (Mercado Pago), serviços de entrega e provedores de hospedagem, sempre no limite necessário para a operação do e-commerce.</p>
+          <h2>3. Para que usamos seus dados</h2>
+          <ul>
+            <li>Criar e autenticar sua conta;</li>
+            <li>Processar pedidos, pagamentos, entregas e rastreamento;</li>
+            <li>Exibir e gerenciar anúncios, serviços e oportunidades;</li>
+            <li>Permitir comunicação entre usuários quando necessário à negociação;</li>
+            <li>Enviar confirmações, avisos operacionais e respostas de suporte;</li>
+            <li>Melhorar a experiência, a segurança e o desempenho da plataforma;</li>
+            <li>Cumprir obrigações legais, regulatórias e de prevenção a fraudes.</li>
+          </ul>
+          <p>Bases legais típicas: execução de contrato, legítimo interesse (segurança e melhoria do serviço), cumprimento de obrigação legal e, quando exigido, consentimento (por exemplo, cookies não essenciais).</p>
 
-          <h2>4. Seus direitos (LGPD)</h2>
-          <p>Você pode solicitar acesso, correção, exclusão, portabilidade ou revogação do consentimento pelo e-mail <a href="mailto:privacidade@trampolim.com.br">privacidade@trampolim.com.br</a>.</p>
+          <h2>4. Com quem compartilhamos</h2>
+          <p>Não vendemos seus dados pessoais. Podemos compartilhar informações apenas quando necessário para:</p>
+          <ul>
+            <li><strong>Pagamentos:</strong> processadores como Mercado Pago;</li>
+            <li><strong>Logística:</strong> transportadoras e serviços de entrega;</li>
+            <li><strong>Infraestrutura:</strong> hospedagem, e-mail e provedores técnicos que nos auxiliam a operar a plataforma;</li>
+            <li><strong>Autoridades:</strong> quando houver obrigação legal ou ordem válida.</li>
+          </ul>
+          <p>Esses parceiros devem tratar os dados conforme a LGPD e apenas para as finalidades contratadas.</p>
 
-          <h2>5. Retenção e segurança</h2>
-          <p>Mantemos os dados pelo tempo necessário para as finalidades descritas e adotamos medidas técnicas como HTTPS, senhas criptografadas e controle de acesso à API.</p>
+          <h2>5. Seus direitos (LGPD)</h2>
+          <p>Você pode, a qualquer momento, solicitar:</p>
+          <ul>
+            <li>confirmação da existência de tratamento e acesso aos dados;</li>
+            <li>correção de dados incompletos, inexatos ou desatualizados;</li>
+            <li>anonimização, bloqueio ou eliminação de dados desnecessários;</li>
+            <li>portabilidade, quando aplicável;</li>
+            <li>informação sobre compartilhamentos;</li>
+            <li>revogação do consentimento, quando o tratamento se basear nele;</li>
+            <li>oposição a tratamentos realizados com base em legítimo interesse, nos limites da lei.</li>
+          </ul>
+          <p>Para exercer seus direitos, escreva para <a href="mailto:privacidade@trampolim.com.br">privacidade@trampolim.com.br</a>. Responderemos no prazo legal.</p>
 
-          <h2>6. Encarregado de dados (DPO)</h2>
-          <p>Contato: <a href="mailto:privacidade@trampolim.com.br">privacidade@trampolim.com.br</a></p>
+          <h2>6. Retenção e segurança</h2>
+          <p>Mantemos os dados pelo tempo necessário às finalidades desta Política, inclusive para cumprimento de obrigações legais (por exemplo, registros fiscais e de pedidos). Depois, eliminamos ou anonimizamos quando possível.</p>
+          <p>Adotamos medidas técnicas e organizacionais razoáveis, como conexão HTTPS, senhas criptografadas, controle de acesso à API e boas práticas de desenvolvimento. Nenhum sistema é 100% seguro; em caso de incidente relevante, seguiremos os procedimentos previstos na LGPD.</p>
+
+          <h2>7. Menores de idade</h2>
+          <p>A plataforma é destinada a pessoas com capacidade legal para contratar. Se identificarmos cadastro indevido de menor sem o devido consentimento parental, poderemos remover a conta e os dados associados.</p>
+
+          <h2>8. Alterações desta Política</h2>
+          <p>Podemos atualizar este documento para refletir mudanças na plataforma ou na legislação. A data de “Última atualização” indica a versão vigente. Alterações relevantes poderão ser comunicadas no site ou por e-mail, quando apropriado.</p>
+
+          <h2>9. Encarregado de dados (DPO)</h2>
+          <p>Para dúvidas, solicitações ou reclamações sobre privacidade:</p>
+          <p><strong>Encarregado (DPO):</strong> <a href="mailto:privacidade@trampolim.com.br">privacidade@trampolim.com.br</a></p>
+          <p>Você também pode registrar reclamação junto à Autoridade Nacional de Proteção de Dados (ANPD).</p>
         </div>
       </div>
     </section>
@@ -660,33 +686,56 @@
     <!-- VIEW: POLÍTICA DE COOKIES -->
     <section class="view" id="view-cookies" aria-label="Política de cookies">
       <div class="legal-page">
-        <h1 class="section-title">🍪 Política de Cookies</h1>
-        <p class="legal-updated">Última atualização: 7 de julho de 2026</p>
+        <h1 class="section-title">Política de Cookies</h1>
+        <p class="legal-lead">Transparência sobre o que fica no seu navegador.</p>
+        <p class="legal-updated">Última atualização: 9 de julho de 2026</p>
         <div class="legal-content">
-          <p>Cookies são pequenos arquivos armazenados no seu navegador para que o site funcione corretamente e ofereça uma melhor experiência de compra.</p>
+          <p>Esta Política descreve como a <strong>Trampolim</strong> usa cookies e tecnologias semelhantes (como <em>localStorage</em>) para fazer o site e o app (PWA) funcionarem, lembrar suas preferências e, com seu consentimento, melhorar a experiência.</p>
+          <p>Cookies são pequenos arquivos ou registros guardados no seu dispositivo. Alguns são essenciais; outros só são usados se você autorizar.</p>
 
-          <h2>1. Cookies essenciais (obrigatórios)</h2>
-          <p>Necessários para o funcionamento do site. Sem eles, recursos como carrinho, login e checkout podem não funcionar.</p>
+          <h2>1. Cookies e armazenamento essenciais</h2>
+          <p>Necessários para o funcionamento básico da plataforma. Sem eles, recursos como login, carrinho, favoritos e preferências de consentimento podem falhar.</p>
           <table class="legal-table">
-            <thead><tr><th>Cookie / Armazenamento</th><th>Finalidade</th><th>Duração</th></tr></thead>
+            <thead>
+              <tr><th>Nome</th><th>Finalidade</th><th>Duração</th></tr>
+            </thead>
             <tbody>
-              <tr><td>sel-cart</td><td>Itens do carrinho</td><td>Persistente</td></tr>
-              <tr><td>sel-token / sel-user</td><td>Sessão de login</td><td>7 dias</td></tr>
-              <tr><td>sel-theme</td><td>Tema claro/escuro</td><td>Persistente</td></tr>
+              <tr><td>sel-cart</td><td>Itens do carrinho de compras</td><td>Persistente (até limpar)</td></tr>
               <tr><td>sel-favorites</td><td>Lista de favoritos</td><td>Persistente</td></tr>
+              <tr><td>sel-token</td><td>Token de autenticação da sessão</td><td>Até logout / expiração</td></tr>
+              <tr><td>sel-user</td><td>Dados básicos do usuário logado</td><td>Até logout</td></tr>
+              <tr><td>sel-cookie-consent</td><td>Registra sua escolha de cookies</td><td>Persistente</td></tr>
+              <tr><td>sel-cookie-consent-date</td><td>Data do consentimento</td><td>Persistente</td></tr>
             </tbody>
           </table>
 
           <h2>2. Cookies de preferência</h2>
-          <p>Guardam suas escolhas, como consentimento de cookies e preferência de instalação do app (PWA).</p>
+          <p>Guardam escolhas que melhoram sua experiência, sem serem estritamente obrigatórios para o núcleo do serviço.</p>
+          <table class="legal-table">
+            <thead>
+              <tr><th>Nome</th><th>Finalidade</th><th>Duração</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>sel-install-dismissed</td><td>Lembra se você fechou o aviso de instalação do app</td><td>Persistente</td></tr>
+            </tbody>
+          </table>
 
-          <h2>3. Cookies de análise (opcionais)</h2>
-          <p>Utilizados apenas com seu consentimento para entender como o site é utilizado e melhorar a navegação. Atualmente não utilizamos ferramentas de analytics de terceiros.</p>
+          <h2>3. Cookies de análise e marketing (opcionais)</h2>
+          <p>Servem para entender como a plataforma é usada e, no futuro, personalizar conteúdo ou campanhas. <strong>Hoje a Trampolim não utiliza ferramentas de analytics ou marketing de terceiros</strong> (como Google Analytics ou pixels de anúncio).</p>
+          <p>Se passarmos a usá-las, pediremos seu consentimento pelo banner e atualizaremos esta Política com os nomes e finalidades.</p>
 
-          <h2>4. Como gerenciar</h2>
-          <p>Você pode aceitar ou recusar cookies não essenciais pelo banner do site ou limpar os dados pelo navegador. A recusa de cookies essenciais pode limitar funcionalidades.</p>
+          <h2>4. Como gerenciar suas escolhas</h2>
+          <ul>
+            <li>Use o banner de cookies na primeira visita;</li>
+            <li>Altere a qualquer momento em <a href="#" data-action="cookie-settings">Gerenciar cookies</a> (também no rodapé);</li>
+            <li>Limpe cookies e dados do site nas configurações do navegador.</li>
+          </ul>
+          <p><strong>Aceitar todos:</strong> permite essenciais, preferências e, quando existirem, cookies opcionais.</p>
+          <p><strong>Apenas essenciais:</strong> mantém só o necessário para login, carrinho e funcionamento básico.</p>
+          <p>A recusa de cookies essenciais pode impedir o uso correto de partes da plataforma.</p>
 
-          <p>Para mais informações, consulte nossa <a href="#" data-view="privacy">Política de Privacidade</a>.</p>
+          <h2>5. Relação com a Privacidade</h2>
+          <p>O tratamento de dados pessoais associados a cookies segue nossa <a href="#" data-view="privacy">Política de Privacidade</a>. Dúvidas: <a href="mailto:privacidade@trampolim.com.br">privacidade@trampolim.com.br</a>.</p>
         </div>
       </div>
     </section>
@@ -737,9 +786,9 @@
   <div id="cookie-banner" class="cookie-banner" role="dialog" aria-labelledby="cookie-banner-title" aria-describedby="cookie-banner-desc" hidden>
     <div class="cookie-banner-inner">
       <p id="cookie-banner-desc" class="cookie-banner-text">
-        <strong id="cookie-banner-title">🍪 Cookies e privacidade</strong><br>
-        Utilizamos cookies essenciais para carrinho, login e preferências. Com seu consentimento, podemos usar cookies para melhorar sua experiência.
-        Leia nossa <a href="#" data-view="privacy">Política de Privacidade</a> e <a href="#" data-view="cookies">Política de Cookies</a>.
+        <strong id="cookie-banner-title">Cookies e privacidade</strong><br>
+        Usamos cookies essenciais para login, carrinho e preferências. Com seu consentimento, podemos usar cookies opcionais para melhorar sua experiência no Trampolim.
+        Leia a <a href="#" data-view="privacy">Política de Privacidade</a> e a <a href="#" data-view="cookies">Política de Cookies</a>.
       </p>
       <div class="cookie-banner-actions">
         <button type="button" class="btn-primary" id="cookie-accept-all">Aceitar todos</button>

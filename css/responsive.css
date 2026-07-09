@@ -74,13 +74,13 @@ body {
 /* ── Mobile (< 480px) ── */
 @media (max-width: 479px) {
   .header-inner {
-    padding: 0 var(--space-xs);
-    gap: var(--space-xs);
+    padding: 8px 10px;
+    gap: 8px;
   }
 
   .header-brand-mark {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
   }
 
   .header-brand-mark img {
@@ -89,19 +89,14 @@ body {
   }
 
   .brand-name {
-    font-size: var(--font-size-sm);
+    font-size: 1rem;
   }
 
   .header-actions {
-    gap: 0;
+    gap: 2px;
   }
 
-  .header-action-btn {
-    min-width: 38px;
-    height: 42px;
-  }
-
-  .header-action-label {
+  .header-link-label {
     display: none !important;
   }
 
@@ -422,6 +417,8 @@ body {
     max-width: var(--max-width);
     margin: 0 auto;
     width: 100%;
+    padding-left: clamp(var(--space-md), 3vw, var(--space-xl));
+    padding-right: clamp(var(--space-md), 3vw, var(--space-xl));
   }
 }
 
@@ -490,35 +487,21 @@ body {
   }
 }
 
-/* ── Header mobile: scroll horizontal se necessário ── */
+/* ── Header mobile: ações compactas ── */
 @media (max-width: 767px) {
   .header-actions {
-    overflow-x: auto;
-    scrollbar-width: none;
-    max-width: 58%;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 2px;
+    overflow-x: visible;
+    max-width: none;
+    padding-bottom: 0;
   }
 
-  .header-action-theme {
-    display: none;
-  }
-
-  .header-action-cta .header-action-label {
+  .header-link-label {
     display: none !important;
   }
 
-  .header-action-cta {
-    min-width: 42px;
-  }
-
-  .header-actions::-webkit-scrollbar {
-    display: none;
-  }
-
   .app-header.search-open .header-search {
-    left: var(--space-xs);
-    right: var(--space-xs);
+    left: 8px;
+    right: 8px;
   }
 
   body.cookie-banner-visible {
@@ -537,6 +520,8 @@ body {
     max-width: var(--max-width);
     margin: 0 auto;
     width: 100%;
+    padding-left: clamp(var(--space-md), 3vw, var(--space-xl));
+    padding-right: clamp(var(--space-md), 3vw, var(--space-xl));
   }
 }
 

@@ -19,15 +19,6 @@ export default function HomeView({ searchQuery, setSearchQuery, navigateTo }) {
         </div>
       </div>
 
-      <div className="search-bar" role="search">
-        <svg className="search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-        </svg>
-        <label htmlFor="search-input" className="sr-only">Buscar produtos</label>
-        <input type="search" id="search-input" placeholder="Buscar geladeira, TV, fogão..."
-          value={searchQuery} onChange={e => setSearchQuery(e.target.value)} autoComplete="off" />
-      </div>
-
       <div className="promo-banners">
         <div className="promo-card blue"><h3>🏷️ Até 40% OFF em Linha Branca</h3><p>Geladeiras, fogões e lavadoras com frete grátis</p></div>
         <div className="promo-card orange"><h3>📺 Smart TVs em 12x sem juros</h3><p>As melhores marcas com entrega rápida</p></div>
