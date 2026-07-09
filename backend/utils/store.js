@@ -1,23 +1,45 @@
-import { initDatabase } from './store-pg.js';
+import { initDatabase, pgStore } from './store-pg.js';
 import { jsonStore } from './store-json.js';
-import { pgStore } from './store-pg.js';
+import { initSqlite, sqliteStore, getSqlitePath } from './store-sqlite.js';
 
 let activeStore = jsonStore;
-let usingPostgres = false;
+let storageMode = 'json';
 
 export async function initStore() {
-  usingPostgres = await initDatabase();
+  const usingPostgres = await initDatabase();
+
   if (usingPostgres) {
     activeStore = pgStore;
+    storageMode = 'postgres';
     console.log('🐘 PostgreSQL conectado');
-  } else {
-    console.log('📁 Armazenamento JSON (desenvolvimento)');
+    return storageMode;
   }
-  return usingPostgres;
+
+  try {
+    initSqlite();
+    activeStore = sqliteStore;
+    storageMode = 'sqlite';
+    console.log(`🗄️  SQLite conectado → ${getSqlitePath()}`);
+    return storageMode;
+  } catch (err) {
+    activeStore = jsonStore;
+    storageMode = 'json';
+    console.warn('⚠️  SQLite indisponível, usando JSON:', err.message);
+    console.log('📁 Armazenamento JSON (fallback)');
+    return storageMode;
+  }
 }
 
 export function isUsingPostgres() {
-  return usingPostgres;
+  return storageMode === 'postgres';
+}
+
+export function isUsingDatabase() {
+  return storageMode === 'postgres' || storageMode === 'sqlite';
+}
+
+export function getStorageMode() {
+  return storageMode;
 }
 
 export const store = {
@@ -34,8 +56,10 @@ export const store = {
   decrementStock: (...a) => activeStore.decrementStock(...a),
 
   insertUser: (...a) => activeStore.insertUser?.(...a),
+  updateUser: (...a) => activeStore.updateUser?.(...a),
   findUserByEmail: (...a) => activeStore.findUserByEmail?.(...a),
   findUserById: (...a) => activeStore.findUserById?.(...a),
+  findUserByCpf: (...a) => activeStore.findUserByCpf?.(...a),
   insertOrder: (...a) => activeStore.insertOrder?.(...a),
   updateOrder: (...a) => activeStore.updateOrder?.(...a),
   findOrderById: (...a) => activeStore.findOrderById?.(...a),

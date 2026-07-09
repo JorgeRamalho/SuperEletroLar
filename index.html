@@ -190,6 +190,105 @@
   <!-- TOAST -->
   <div class="toast-container" id="toast-container" role="status" aria-live="polite"></div>
 
+  <div class="app-shell">
+    <!-- SIDEBAR FILTROS (esquerda) -->
+    <aside class="filters-sidebar" id="filters-sidebar" aria-label="Filtros de produtos e serviços">
+      <div class="filters-sidebar-inner">
+        <div class="filters-sidebar-header">
+          <h2 class="filters-sidebar-title">Filtros</h2>
+          <button type="button" class="filters-clear-btn" id="btn-filters-clear" aria-label="Limpar todos os filtros">Limpar</button>
+          <button type="button" class="filters-close-btn" id="btn-filters-close" aria-label="Fechar filtros">✕</button>
+        </div>
+
+        <div class="filters-group">
+          <h3 class="filters-group-title">Tipo</h3>
+          <div class="filters-chips" role="group" aria-label="Tipo de anúncio">
+            <button type="button" class="filter-chip active" data-filter="listingType" data-value="">Todos</button>
+            <button type="button" class="filter-chip" data-filter="listingType" data-value="product">Produtos</button>
+            <button type="button" class="filter-chip" data-filter="listingType" data-value="service">Serviços</button>
+          </div>
+        </div>
+
+        <div class="filters-group">
+          <h3 class="filters-group-title">Condição</h3>
+          <div class="filters-chips" role="group" aria-label="Condição">
+            <button type="button" class="filter-chip active" data-filter="condition" data-value="">Todas</button>
+            <button type="button" class="filter-chip" data-filter="condition" data-value="new">Novo</button>
+            <button type="button" class="filter-chip" data-filter="condition" data-value="semi_used">Semi-novo</button>
+            <button type="button" class="filter-chip" data-filter="condition" data-value="used">Usado</button>
+            <button type="button" class="filter-chip" data-filter="condition" data-value="service">Serviços</button>
+          </div>
+        </div>
+
+        <div class="filters-group">
+          <h3 class="filters-group-title">Categorias</h3>
+          <div class="filters-categories" id="filters-categories" role="group" aria-label="Categorias">
+            <!-- Preenchido via JS -->
+          </div>
+        </div>
+
+        <div class="filters-group">
+          <h3 class="filters-group-title">Preço</h3>
+          <div class="filters-price-row">
+            <div class="filters-field">
+              <label for="filter-min-price">Mín.</label>
+              <input type="number" id="filter-min-price" placeholder="R$ 0" min="0" inputmode="numeric">
+            </div>
+            <div class="filters-field">
+              <label for="filter-max-price">Máx.</label>
+              <input type="number" id="filter-max-price" placeholder="R$ 9999" min="0" inputmode="numeric">
+            </div>
+          </div>
+        </div>
+
+        <div class="filters-group">
+          <h3 class="filters-group-title">Estado</h3>
+          <div class="filters-field">
+            <label for="filter-state" class="sr-only">Estado</label>
+            <select id="filter-state" aria-label="Filtrar por estado">
+              <option value="">Todos os estados</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="filters-group">
+          <h3 class="filters-group-title">Marca</h3>
+          <div class="filters-brands" id="filters-brands" role="group" aria-label="Marcas">
+            <!-- Preenchido via JS -->
+          </div>
+        </div>
+
+        <div class="filters-group">
+          <h3 class="filters-group-title">Benefícios</h3>
+          <label class="filters-check">
+            <input type="checkbox" id="filter-free-shipping">
+            <span>Frete grátis</span>
+          </label>
+          <label class="filters-check">
+            <input type="checkbox" id="filter-on-sale">
+            <span>Em oferta</span>
+          </label>
+        </div>
+
+        <div class="filters-group">
+          <h3 class="filters-group-title">Ordenar</h3>
+          <div class="filters-field">
+            <label for="filter-sort" class="sr-only">Ordenar por</label>
+            <select id="filter-sort" aria-label="Ordenar resultados">
+              <option value="relevance">Relevância</option>
+              <option value="price-asc">Menor preço</option>
+              <option value="price-desc">Maior preço</option>
+              <option value="rating">Melhor avaliação</option>
+              <option value="name">Nome A–Z</option>
+            </select>
+          </div>
+        </div>
+
+        <p class="filters-result-count" id="filters-result-count" aria-live="polite"></p>
+      </div>
+    </aside>
+    <div class="filters-overlay" id="filters-overlay" hidden></div>
+
   <main id="main-content" class="main-content">
 
     <!-- VIEW: HOME -->
@@ -223,6 +322,16 @@
           <h3>🔧 Máquinas e eletroportáteis</h3>
           <p>Aspiradores, cafeteiras e muito mais</p>
         </div>
+      </div>
+
+      <div class="filters-mobile-bar">
+        <button type="button" class="btn-open-filters" id="btn-open-filters" aria-controls="filters-sidebar" aria-expanded="false">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+          </svg>
+          Filtros
+          <span class="filters-active-badge" id="filters-active-badge" hidden>0</span>
+        </button>
       </div>
 
       <div class="search-bar search-bar-with-state" role="search">
@@ -295,6 +404,15 @@
 
     <!-- VIEW: HUB MULTI-MARKETPLACE -->
     <section class="view" id="view-hub" aria-label="Radar Trampolim — busca multi-marketplace">
+      <div class="filters-mobile-bar">
+        <button type="button" class="btn-open-filters" data-open-filters aria-controls="filters-sidebar" aria-expanded="false">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+          </svg>
+          Filtros
+          <span class="filters-active-badge" hidden>0</span>
+        </button>
+      </div>
       <div class="hub-hero hub-hero-branded">
         <img class="hub-hero-bg" src="assets/brand/trampolim-hero.png" alt="" aria-hidden="true">
         <div class="hub-hero-content">
@@ -390,6 +508,15 @@
 
     <!-- VIEW: CATEGORIAS -->
     <section class="view" id="view-categories" aria-label="Categorias">
+      <div class="filters-mobile-bar">
+        <button type="button" class="btn-open-filters" data-open-filters aria-controls="filters-sidebar" aria-expanded="false">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+          </svg>
+          Filtros
+          <span class="filters-active-badge" hidden>0</span>
+        </button>
+      </div>
       <div class="section-header">
         <h2 class="section-title">Todas as Categorias</h2>
       </div>
@@ -404,6 +531,15 @@
 
     <!-- VIEW: OFERTAS -->
     <section class="view" id="view-offers" aria-label="Ofertas especiais">
+      <div class="filters-mobile-bar">
+        <button type="button" class="btn-open-filters" data-open-filters aria-controls="filters-sidebar" aria-expanded="false">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+          </svg>
+          Filtros
+          <span class="filters-active-badge" hidden>0</span>
+        </button>
+      </div>
       <div class="hero hero-compact">
         <div class="hero-content">
           <span class="hero-emoji" aria-hidden="true">🔥💰</span>
@@ -473,38 +609,40 @@
 
     <!-- VIEW: CONTA -->
     <section class="view" id="view-account" aria-label="Minha conta">
-      <div class="profile-header">
-        <div class="profile-avatar" aria-hidden="true">👤</div>
-        <h2>Bem-vindo à Trampolim</h2>
-        <p class="text-secondary-block" style="margin-top: 0.5rem;">Entre ou cadastre-se para aproveitar todas as vantagens</p>
-        <div class="account-auth-actions">
-          <button class="btn btn-primary btn-sm">Entrar</button>
-          <button class="btn btn-outline btn-sm">Cadastrar</button>
+      <div class="account-panel">
+        <div class="profile-header">
+          <div class="profile-avatar" aria-hidden="true">👤</div>
+          <h2 class="profile-title">Bem-vindo à Trampolim</h2>
+          <p class="profile-subtitle">Entre ou cadastre-se para aproveitar todas as vantagens</p>
+          <div class="account-auth-actions">
+            <button type="button" class="btn btn-primary btn-sm account-auth-btn">Entrar</button>
+            <button type="button" class="btn btn-outline btn-sm account-auth-btn">Cadastrar</button>
+          </div>
         </div>
-      </div>
 
-      <nav class="menu-list" aria-label="Menu da conta">
-        <button class="menu-item" type="button" data-view="orders">
-          <span class="menu-item-icon" aria-hidden="true">📦</span>
-          <span class="menu-item-text">Meus Pedidos</span>
-          <span class="menu-item-arrow" aria-hidden="true">›</span>
-        </button>
-        <button class="menu-item" type="button" data-view="favorites">
-          <span class="menu-item-icon" aria-hidden="true">❤️</span>
-          <span class="menu-item-text">Favoritos</span>
-          <span class="menu-item-arrow" aria-hidden="true">›</span>
-        </button>
-        <button class="menu-item" type="button" data-view="hub">
-          <span class="menu-item-icon" aria-hidden="true">🔎</span>
-          <span class="menu-item-text">Radar Trampolim</span>
-          <span class="menu-item-arrow" aria-hidden="true">›</span>
-        </button>
-        <button class="menu-item" type="button" data-view="track">
-          <span class="menu-item-icon" aria-hidden="true">❓</span>
-          <span class="menu-item-text">Ajuda e Suporte</span>
-          <span class="menu-item-arrow" aria-hidden="true">›</span>
-        </button>
-      </nav>
+        <nav class="menu-list" aria-label="Menu da conta">
+          <button class="menu-item" type="button" data-view="orders">
+            <span class="menu-item-icon" aria-hidden="true">📦</span>
+            <span class="menu-item-text">Meus Pedidos</span>
+            <span class="menu-item-arrow" aria-hidden="true">›</span>
+          </button>
+          <button class="menu-item" type="button" data-view="favorites">
+            <span class="menu-item-icon" aria-hidden="true">❤️</span>
+            <span class="menu-item-text">Favoritos</span>
+            <span class="menu-item-arrow" aria-hidden="true">›</span>
+          </button>
+          <button class="menu-item" type="button" data-view="hub">
+            <span class="menu-item-icon" aria-hidden="true">🔎</span>
+            <span class="menu-item-text">Radar Trampolim</span>
+            <span class="menu-item-arrow" aria-hidden="true">›</span>
+          </button>
+          <button class="menu-item" type="button" data-view="track">
+            <span class="menu-item-icon" aria-hidden="true">❓</span>
+            <span class="menu-item-text">Ajuda e Suporte</span>
+            <span class="menu-item-arrow" aria-hidden="true">›</span>
+          </button>
+        </nav>
+      </div>
     </section>
 
     <!-- VIEW: POLÍTICA DE PRIVACIDADE -->
@@ -576,6 +714,7 @@
     </section>
 
   </main>
+  </div><!-- /.app-shell -->
 
   <!-- FOOTER -->
   <footer class="site-footer" role="contentinfo">

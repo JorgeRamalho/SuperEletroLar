@@ -4,13 +4,35 @@ import { jsonStore } from './store-json.js';
 const { Pool } = pg;
 let pool = null;
 
-export async function initDatabase() {
-  if (!process.env.DATABASE_URL) return false;
+function buildPoolConfig(connectionString) {
+  const url = String(connectionString || '');
+  const isLocal = /localhost|127\.0\.0\.1/.test(url);
+  const isNeon = /neon\.tech/i.test(url);
+  const wantsSsl = !isLocal || /sslmode=require/i.test(url) || isNeon;
 
-  pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: process.env.DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false },
-  });
+  return {
+    connectionString: url,
+    ssl: wantsSsl ? { rejectUnauthorized: false } : false,
+    max: isNeon ? 4 : 10,
+    idleTimeoutMillis: 20_000,
+    connectionTimeoutMillis: 15_000,
+  };
+}
+
+export async function initDatabase() {
+  const connectionString = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.NEON_DATABASE_URL;
+  if (!connectionString) return false;
+
+  pool = new Pool(buildPoolConfig(connectionString));
+
+  try {
+    await pool.query('SELECT 1');
+  } catch (err) {
+    console.error('❌ Falha ao conectar no PostgreSQL/Neon:', err.message);
+    await pool.end().catch(() => {});
+    pool = null;
+    return false;
+  }
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
@@ -19,8 +41,15 @@ export async function initDatabase() {
       email TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL,
       phone TEXT DEFAULT '',
+      cpf TEXT DEFAULT '',
+      birthdate TEXT DEFAULT '',
+      address JSONB DEFAULT '{}',
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
+
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS cpf TEXT DEFAULT '';
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS birthdate TEXT DEFAULT '';
+    ALTER TABLE users ADD COLUMN IF NOT EXISTS address JSONB DEFAULT '{}';
 
     CREATE TABLE IF NOT EXISTS orders (
       id TEXT PRIMARY KEY,
@@ -53,13 +82,34 @@ export async function initDatabase() {
     CREATE INDEX IF NOT EXISTS idx_orders_tracking ON orders(tracking_code);
     CREATE INDEX IF NOT EXISTS idx_payments_order ON payments(order_id);
     CREATE INDEX IF NOT EXISTS idx_payments_external ON payments(external_id);
+    CREATE INDEX IF NOT EXISTS idx_users_cpf ON users(cpf);
   `);
 
+  const host = (() => {
+    try { return new URL(connectionString.replace(/^postgresql:/, 'http:')).host; }
+    catch { return 'postgres'; }
+  })();
+  console.log(`🐘 PostgreSQL/Neon conectado → ${host}`);
   return true;
 }
 
 export function getPool() {
   return pool;
+}
+
+function mapUser(row) {
+  if (!row) return null;
+  return {
+    id: row.id,
+    name: row.name,
+    email: row.email,
+    password: row.password,
+    phone: row.phone || '',
+    cpf: row.cpf || '',
+    birthdate: row.birthdate || '',
+    address: row.address || {},
+    createdAt: row.created_at?.toISOString?.() || row.created_at,
+  };
 }
 
 function mapOrder(row) {
@@ -116,24 +166,62 @@ export const pgStore = {
 
   async insertUser(user) {
     await pool.query(
-      'INSERT INTO users (id, name, email, password, phone, created_at) VALUES ($1,$2,$3,$4,$5,$6)',
-      [user.id, user.name, user.email, user.password, user.phone || '', user.createdAt || new Date().toISOString()]
+      `INSERT INTO users (id, name, email, password, phone, cpf, birthdate, address, created_at)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
+      [
+        user.id,
+        user.name,
+        user.email,
+        user.password,
+        user.phone || '',
+        user.cpf || '',
+        user.birthdate || '',
+        JSON.stringify(user.address || {}),
+        user.createdAt || new Date().toISOString(),
+      ]
     );
     return user;
+  },
+
+  async updateUser(user) {
+    await pool.query(
+      `UPDATE users
+       SET name = $2, email = $3, phone = $4, cpf = $5, birthdate = $6, address = $7,
+           password = COALESCE($8, password)
+       WHERE id = $1`,
+      [
+        user.id,
+        user.name,
+        user.email,
+        user.phone || '',
+        user.cpf || '',
+        user.birthdate || '',
+        JSON.stringify(user.address || {}),
+        user.password || null,
+      ]
+    );
+    return this.findUserById(user.id);
   },
 
   async findUserByEmail(email) {
     const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [email.toLowerCase()]);
     const r = rows[0];
     if (!r) return null;
-    return { id: r.id, name: r.name, email: r.email, password: r.password, phone: r.phone };
+    return mapUser(r);
   },
 
   async findUserById(id) {
     const { rows } = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
     const r = rows[0];
     if (!r) return null;
-    return { id: r.id, name: r.name, email: r.email, password: r.password, phone: r.phone };
+    return mapUser(r);
+  },
+
+  async findUserByCpf(cpf) {
+    const digits = String(cpf || '').replace(/\D/g, '');
+    if (!digits) return null;
+    const { rows } = await pool.query('SELECT * FROM users WHERE cpf = $1', [digits]);
+    return mapUser(rows[0]);
   },
 
   async getOrders() {

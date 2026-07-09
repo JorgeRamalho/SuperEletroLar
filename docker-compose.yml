@@ -1,21 +1,38 @@
 services:
-  super-eletrolar:
+  trampolim:
     build: .
     ports:
       - "4000:4000"
     volumes:
-      - super-eletrolar-data:/app/backend/data
+      - trampolim-data:/app/backend/data
     environment:
       NODE_ENV: production
       PORT: 4000
       JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
       FRONTEND_URL: http://localhost:4000
+      # Para PostgreSQL, descomente e ajuste:
+      # DATABASE_URL: postgresql://trampolim:trampolim@db:5432/trampolim
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:4000/api/health"]
       interval: 30s
       timeout: 5s
       retries: 3
+    # depends_on:
+    #   - db
+
+  # db:
+  #   image: postgres:16-alpine
+  #   environment:
+  #     POSTGRES_DB: trampolim
+  #     POSTGRES_USER: trampolim
+  #     POSTGRES_PASSWORD: trampolim
+  #   volumes:
+  #     - trampolim-pg:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
 
 volumes:
-  super-eletrolar-data:
+  trampolim-data:
+  # trampolim-pg:
+

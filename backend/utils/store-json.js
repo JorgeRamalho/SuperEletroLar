@@ -23,6 +23,36 @@ export const jsonStore = {
   async getCarousel() { return readJSON('carousel.json'); },
   async getUsers() { return readJSON('users.json'); },
   async saveUsers(users) { writeJSON('users.json', users); return users; },
+
+  async insertUser(user) {
+    const users = readJSON('users.json');
+    users.push(user);
+    writeJSON('users.json', users);
+    return user;
+  },
+
+  async updateUser(user) {
+    const users = readJSON('users.json');
+    const idx = users.findIndex(u => u.id === user.id);
+    if (idx < 0) throw new Error('Usuário não encontrado');
+    users[idx] = { ...users[idx], ...user };
+    writeJSON('users.json', users);
+    return users[idx];
+  },
+
+  async findUserByEmail(email) {
+    return readJSON('users.json').find(u => u.email === String(email).toLowerCase()) || null;
+  },
+
+  async findUserById(id) {
+    return readJSON('users.json').find(u => u.id === id) || null;
+  },
+
+  async findUserByCpf(cpf) {
+    const digits = String(cpf || '').replace(/\D/g, '');
+    return readJSON('users.json').find(u => (u.cpf || '').replace(/\D/g, '') === digits) || null;
+  },
+
   async getOrders() { return readJSON('orders.json'); },
   async saveOrders(orders) { writeJSON('orders.json', orders); return orders; },
   async getPayments() { return readJSON('payments.json'); },

@@ -9,6 +9,7 @@ react/dist/
 # Environment
 .env
 backend/.env
+backend/.env.production
 *.local
 
 # OS
@@ -30,3 +31,10 @@ npm-debug.log*
 
 # Generated
 assets/logo-super-eletrolar.png
+
+# Local database
+backend/data/trampolim.db
+backend/data/trampolim.db-*
+*.db
+*.db-shm
+*.db-wal

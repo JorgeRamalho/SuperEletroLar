@@ -54,14 +54,17 @@ class ApiClient {
     return data;
   }
 
-  async register(name, email, password, phone) {
-    const data = await this.request('/auth/register', {
+  async register(data) {
+    const payload = data && typeof data === 'object' && !Array.isArray(data)
+      ? data
+      : { name: data, email: arguments[1], password: arguments[2], phone: arguments[3] };
+    const result = await this.request('/auth/register', {
       method: 'POST',
-      body: JSON.stringify({ name, email, password, phone }),
+      body: JSON.stringify(payload),
     });
-    this.setToken(data.token);
-    this.setUser(data.user);
-    return data;
+    this.setToken(result.token);
+    this.setUser(result.user);
+    return result;
   }
 
   logout() {
@@ -71,6 +74,15 @@ class ApiClient {
 
   async getMe() {
     return this.request('/auth/me');
+  }
+
+  async updateProfile(data) {
+    const user = await this.request('/auth/me', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+    this.setUser(user);
+    return user;
   }
 
   /* Products */

@@ -12,9 +12,10 @@ import cepRoutes from './routes/cep.js';
 import carouselRoutes from './routes/carousel.js';
 import marketplaceRoutes from './routes/marketplace.js';
 import { ensureRuntimeData } from './utils/seed.js';
-import { initStore, isUsingPostgres } from './utils/store.js';
+import { initStore, isUsingPostgres, isUsingDatabase, getStorageMode } from './utils/store.js';
 import { validateMercadoPago } from './services/mercadopago.js';
 import { getPool } from './utils/store-pg.js';
+import { getSqliteDb, getSqlitePath } from './utils/store-sqlite.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 dotenv.config({ path: path.join(__dirname, '.env') });
@@ -29,6 +30,7 @@ const isProd = process.env.NODE_ENV === 'production';
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   process.env.RENDER_EXTERNAL_URL,
+  process.env.SITE_URL,
   'http://localhost:3000',
   'http://localhost:4000',
   'http://localhost:5500',
@@ -59,26 +61,53 @@ app.use('/api/marketplace', marketplaceRoutes);
 
 app.get('/api/health', async (_req, res) => {
   const mp = await validateMercadoPago();
-  let database = { connected: false, message: 'JSON local (dev)' };
+  let database = { connected: false, mode: 'json', message: 'JSON local (fallback)' };
 
   if (isUsingPostgres()) {
     try {
       const pool = getPool();
       await pool.query('SELECT 1');
-      const { rows } = await pool.query('SELECT COUNT(*) FROM orders');
-      database = { connected: true, message: `PostgreSQL OK — ${rows[0].count} pedidos` };
+      const { rows: userRows } = await pool.query('SELECT COUNT(*)::int AS count FROM users');
+      const { rows: orderRows } = await pool.query('SELECT COUNT(*)::int AS count FROM orders');
+      const dbUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.NEON_DATABASE_URL || '';
+      const provider = /neon\.tech/i.test(dbUrl) ? 'neon' : 'postgres';
+      database = {
+        connected: true,
+        mode: 'postgres',
+        provider,
+        message: `PostgreSQL OK (${provider}) — ${userRows[0].count} usuários, ${orderRows[0].count} pedidos`,
+        users: userRows[0].count,
+        orders: orderRows[0].count,
+      };
     } catch (err) {
-      database = { connected: false, message: err.message };
+      database = { connected: false, mode: 'postgres', message: err.message };
+    }
+  } else if (isUsingDatabase()) {
+    try {
+      const sqlite = getSqliteDb();
+      const users = sqlite.prepare('SELECT COUNT(*) AS count FROM users').get().count;
+      const orders = sqlite.prepare('SELECT COUNT(*) AS count FROM orders').get().count;
+      database = {
+        connected: true,
+        mode: 'sqlite',
+        message: `SQLite OK — ${users} usuários, ${orders} pedidos`,
+        path: getSqlitePath(),
+        users,
+        orders,
+      };
+    } catch (err) {
+      database = { connected: false, mode: 'sqlite', message: err.message };
     }
   }
 
   res.json({
     status: 'ok',
     name: 'Trampolim API',
-    version: '1.3.0',
+    version: '1.4.0',
     environment: process.env.NODE_ENV || 'development',
     url: process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`,
     deploy: process.env.RENDER ? 'render' : 'local',
+    storage: getStorageMode(),
     database,
     mercadopago: {
       configured: mp.configured,
@@ -109,6 +138,13 @@ app.get('*', (req, res, next) => {
 });
 
 async function start() {
+  if (isProd && (!process.env.JWT_SECRET || process.env.JWT_SECRET.includes('change-in-production') || process.env.JWT_SECRET.includes('dev-secret'))) {
+    console.warn('⚠️  JWT_SECRET fraco ou padrão em produção — defina um segredo forte no Render.');
+  }
+  if (isProd && !(process.env.DATABASE_URL || process.env.POSTGRES_URL || process.env.NEON_DATABASE_URL)) {
+    console.warn('⚠️  Sem DATABASE_URL em produção — cadastros usarão SQLite do disco (não recomendado no Render free).');
+  }
+
   await initStore();
 
   app.listen(PORT, '0.0.0.0', () => {
@@ -116,7 +152,7 @@ async function start() {
     console.log(`🌐 Site:  http://localhost:${PORT}`);
     console.log(`⚛️  React: http://localhost:${PORT}/app`);
     console.log(`📦 API:   http://localhost:${PORT}/api/health`);
-    console.log(`🐘 DB:    ${isUsingPostgres() ? 'PostgreSQL' : 'JSON'}`);
+    console.log(`🗄️  DB:    ${getStorageMode()}`);
   });
 }
 

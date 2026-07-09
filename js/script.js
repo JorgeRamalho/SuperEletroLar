@@ -25,6 +25,19 @@ const Trampolim = (() => {
   let HUB_PLATFORMS = [];
   let hubFilters = { q: '', marketplace: '', condition: '', listingType: '', minPrice: '', maxPrice: '', state: '', sort: 'relevance' };
   let hubSearchTimer = null;
+  let productFilters = {
+    listingType: '',
+    condition: '',
+    category: '',
+    brand: '',
+    minPrice: '',
+    maxPrice: '',
+    state: '',
+    sort: 'relevance',
+    freeShipping: false,
+    onSale: false,
+  };
+  let filtersApplyTimer = null;
 
   const CONDITION_COLORS = {
     new: '#0066FF',
@@ -415,14 +428,333 @@ const Trampolim = (() => {
     renderHeroCarousel();
     renderShowcase();
     renderCategories();
-    renderProducts('products-grid', PRODUCTS.slice(0, 8));
-    renderProducts('offers-grid', PRODUCTS.filter(p => p.badge));
-    if (activeCategory) {
-      renderProducts('category-products-grid', PRODUCTS.filter(p => p.category === activeCategory));
-    }
+    renderFiltersSidebar();
+    applyProductFilters();
     renderFavorites();
     renderCart();
     updateAccountView();
+  }
+
+  /* ── Sidebar filters ── */
+  function hasActiveProductFilters() {
+    const f = productFilters;
+    return !!(
+      f.listingType || f.condition || f.category || f.brand ||
+      f.minPrice || f.maxPrice || f.state ||
+      f.freeShipping || f.onSale || (f.sort && f.sort !== 'relevance')
+    );
+  }
+
+  function countActiveProductFilters() {
+    const f = productFilters;
+    let n = 0;
+    if (f.listingType) n++;
+    if (f.condition) n++;
+    if (f.category) n++;
+    if (f.brand) n++;
+    if (f.minPrice) n++;
+    if (f.maxPrice) n++;
+    if (f.state) n++;
+    if (f.freeShipping) n++;
+    if (f.onSale) n++;
+    if (f.sort && f.sort !== 'relevance') n++;
+    return n;
+  }
+
+  function updateFiltersBadge() {
+    const count = countActiveProductFilters();
+    document.querySelectorAll('.filters-active-badge, #filters-active-badge').forEach(badge => {
+      if (count > 0) {
+        badge.textContent = String(count);
+        badge.hidden = false;
+      } else {
+        badge.hidden = true;
+      }
+    });
+  }
+
+  function renderFiltersSidebar() {
+    const catEl = document.getElementById('filters-categories');
+    if (catEl) {
+      catEl.innerHTML = `
+        <button type="button" class="filter-cat-btn ${!productFilters.category ? 'active' : ''}" data-filter-category="">
+          <span class="filter-cat-icon" aria-hidden="true">✨</span>
+          <span>Todas as categorias</span>
+        </button>
+        ${CATEGORIES.map(cat => `
+          <button type="button" class="filter-cat-btn ${productFilters.category === cat.id ? 'active' : ''}" data-filter-category="${cat.id}">
+            <span class="filter-cat-icon" aria-hidden="true">${cat.icon || '📦'}</span>
+            <span>${cat.name}</span>
+          </button>
+        `).join('')}`;
+    }
+
+    const brands = [...new Set(PRODUCTS.map(p => p.brand).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+    const brandEl = document.getElementById('filters-brands');
+    if (brandEl) {
+      brandEl.innerHTML = `
+        <button type="button" class="filter-brand-btn ${!productFilters.brand ? 'active' : ''}" data-filter-brand="">Todas as marcas</button>
+        ${brands.map(brand => `
+          <button type="button" class="filter-brand-btn ${productFilters.brand === brand ? 'active' : ''}" data-filter-brand="${brand}">${brand}</button>
+        `).join('')}`;
+    }
+
+    updateFiltersBadge();
+  }
+
+  function getFilteredProducts(baseList) {
+    const f = productFilters;
+    const q = (document.getElementById('search-input')?.value || document.getElementById('header-search-input')?.value || '').trim().toLowerCase();
+    let results = [...(baseList || PRODUCTS)];
+
+    if (f.listingType === 'service') return [];
+
+    if (q) {
+      results = results.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        p.brand?.toLowerCase().includes(q) ||
+        p.description?.toLowerCase().includes(q)
+      );
+    }
+
+    if (f.category) results = results.filter(p => p.category === f.category);
+    if (f.brand) results = results.filter(p => p.brand === f.brand);
+    if (f.minPrice) results = results.filter(p => p.price >= Number(f.minPrice));
+    if (f.maxPrice) results = results.filter(p => p.price <= Number(f.maxPrice));
+    if (f.state) results = results.filter(p => (p.state || '').toUpperCase() === f.state.toUpperCase());
+    if (f.freeShipping) results = results.filter(p => p.freeShipping);
+    if (f.onSale) results = results.filter(p => p.badge || (p.oldPrice && p.oldPrice > p.price));
+
+    if (f.sort === 'price-asc') results.sort((a, b) => a.price - b.price);
+    else if (f.sort === 'price-desc') results.sort((a, b) => b.price - a.price);
+    else if (f.sort === 'rating') results.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    else if (f.sort === 'name') results.sort((a, b) => a.name.localeCompare(b.name, 'pt-BR'));
+
+    return results;
+  }
+
+  function applyProductFilters() {
+    const openHub = productFilters.listingType === 'service'
+      || productFilters.condition === 'service'
+      || productFilters.condition === 'used'
+      || productFilters.condition === 'semi_used';
+    const filtered = getFilteredProducts(PRODUCTS);
+    const countEl = document.getElementById('filters-result-count');
+
+    if (openHub) {
+      if (countEl) countEl.textContent = 'Abrindo Radar Trampolim…';
+      syncSidebarToHub();
+      if (currentView === 'home' || currentView === 'categories' || currentView === 'offers') {
+        navigateTo('hub');
+      }
+      runHubSearch();
+      updateFiltersBadge();
+      closeFiltersDrawer();
+      return;
+    }
+
+    if (currentView === 'hub') {
+      syncSidebarToHub();
+      runHubSearch();
+    }
+
+    const homeList = hasActiveProductFilters() || (document.getElementById('search-input')?.value || '').trim()
+      ? filtered
+      : filtered.slice(0, 8);
+
+    renderProducts('products-grid', homeList);
+
+    const offersBase = PRODUCTS.filter(p => p.badge);
+    renderProducts('offers-grid', getFilteredProducts(offersBase));
+
+    if (activeCategory || productFilters.category) {
+      const catId = productFilters.category || activeCategory;
+      const catProducts = getFilteredProducts(PRODUCTS.filter(p => p.category === catId));
+      renderProducts('category-products-grid', catProducts);
+      const c = CATEGORIES.find(x => x.id === catId);
+      const title = document.getElementById('category-products-title');
+      if (title && c) title.textContent = `${c.icon || ''} ${c.name}`;
+    } else if (document.getElementById('category-products-grid')) {
+      renderProducts('category-products-grid', filtered.slice(0, 12));
+    }
+
+    if (countEl) {
+      countEl.textContent = filtered.length === 1
+        ? '1 resultado encontrado'
+        : `${filtered.length} resultados encontrados`;
+    }
+
+    const emptyMsg = '<p style="text-align:center;color:var(--color-text-muted);padding:2rem;grid-column:1/-1">Nenhum produto encontrado para este filtro.</p>';
+    if (!homeList.length && (hasActiveProductFilters() || (document.getElementById('search-input')?.value || '').trim())) {
+      const grid = document.getElementById('products-grid');
+      if (grid) grid.innerHTML = emptyMsg;
+    }
+
+    updateFiltersBadge();
+  }
+
+  function syncSidebarToHub() {
+    hubFilters.listingType = productFilters.listingType || '';
+    hubFilters.condition = productFilters.condition || '';
+    hubFilters.minPrice = productFilters.minPrice || '';
+    hubFilters.maxPrice = productFilters.maxPrice || '';
+    hubFilters.state = productFilters.state || '';
+    if (productFilters.sort === 'price-asc') hubFilters.sort = 'price_asc';
+    else if (productFilters.sort === 'price-desc') hubFilters.sort = 'price_desc';
+    else hubFilters.sort = 'relevance';
+
+    const hubMin = document.getElementById('hub-min-price');
+    const hubMax = document.getElementById('hub-max-price');
+    const hubState = document.getElementById('hub-state');
+    const hubSort = document.getElementById('hub-sort');
+    if (hubMin) hubMin.value = hubFilters.minPrice;
+    if (hubMax) hubMax.value = hubFilters.maxPrice;
+    if (hubState) hubState.value = hubFilters.state;
+    if (hubSort) hubSort.value = hubFilters.sort;
+
+    document.querySelectorAll('[data-hub-filter="listingType"]').forEach(chip => {
+      chip.classList.toggle('active', chip.dataset.value === (hubFilters.listingType || ''));
+    });
+    document.querySelectorAll('[data-hub-filter="condition"]').forEach(chip => {
+      chip.classList.toggle('active', chip.dataset.value === (hubFilters.condition || ''));
+    });
+  }
+
+  function setFilterChipActive(key, value) {
+    document.querySelectorAll(`[data-filter="${key}"]`).forEach(chip => {
+      chip.classList.toggle('active', chip.dataset.value === value);
+    });
+  }
+
+  function clearProductFilters() {
+    productFilters = {
+      listingType: '',
+      condition: '',
+      category: '',
+      brand: '',
+      minPrice: '',
+      maxPrice: '',
+      state: '',
+      sort: 'relevance',
+      freeShipping: false,
+      onSale: false,
+    };
+    activeCategory = null;
+
+    setFilterChipActive('listingType', '');
+    setFilterChipActive('condition', '');
+
+    const min = document.getElementById('filter-min-price');
+    const max = document.getElementById('filter-max-price');
+    const state = document.getElementById('filter-state');
+    const sort = document.getElementById('filter-sort');
+    const free = document.getElementById('filter-free-shipping');
+    const sale = document.getElementById('filter-on-sale');
+    if (min) min.value = '';
+    if (max) max.value = '';
+    if (state) state.value = '';
+    if (sort) sort.value = 'relevance';
+    if (free) free.checked = false;
+    if (sale) sale.checked = false;
+
+    syncSearchState('');
+    renderFiltersSidebar();
+    applyProductFilters();
+    showToast('Filtros limpos');
+  }
+
+  function openFiltersDrawer() {
+    document.getElementById('filters-sidebar')?.classList.add('is-open');
+    const overlay = document.getElementById('filters-overlay');
+    if (overlay) overlay.hidden = false;
+    document.body.classList.add('filters-drawer-open');
+    document.querySelectorAll('.btn-open-filters, #btn-open-filters').forEach(btn => {
+      btn.setAttribute('aria-expanded', 'true');
+    });
+  }
+
+  function closeFiltersDrawer() {
+    document.getElementById('filters-sidebar')?.classList.remove('is-open');
+    const overlay = document.getElementById('filters-overlay');
+    if (overlay) overlay.hidden = true;
+    document.body.classList.remove('filters-drawer-open');
+    document.querySelectorAll('.btn-open-filters, #btn-open-filters').forEach(btn => {
+      btn.setAttribute('aria-expanded', 'false');
+    });
+  }
+
+  function scheduleApplyFilters() {
+    clearTimeout(filtersApplyTimer);
+    filtersApplyTimer = setTimeout(applyProductFilters, 200);
+  }
+
+  function bindFiltersEvents() {
+    document.getElementById('btn-open-filters')?.addEventListener('click', openFiltersDrawer);
+    document.querySelectorAll('[data-open-filters]').forEach(btn => {
+      btn.addEventListener('click', openFiltersDrawer);
+    });
+    document.getElementById('btn-filters-close')?.addEventListener('click', closeFiltersDrawer);
+    document.getElementById('filters-overlay')?.addEventListener('click', closeFiltersDrawer);
+    document.getElementById('btn-filters-clear')?.addEventListener('click', clearProductFilters);
+
+    document.getElementById('filters-sidebar')?.addEventListener('click', (e) => {
+      const chip = e.target.closest('[data-filter]');
+      if (chip) {
+        const key = chip.dataset.filter;
+        const val = chip.dataset.value;
+        productFilters[key] = val;
+        setFilterChipActive(key, val);
+        applyProductFilters();
+        return;
+      }
+
+      const catBtn = e.target.closest('[data-filter-category]');
+      if (catBtn) {
+        productFilters.category = catBtn.dataset.filterCategory || '';
+        activeCategory = productFilters.category || null;
+        renderFiltersSidebar();
+        applyProductFilters();
+        if (productFilters.category && currentView === 'home') navigateTo('categories');
+        return;
+      }
+
+      const brandBtn = e.target.closest('[data-filter-brand]');
+      if (brandBtn) {
+        productFilters.brand = brandBtn.dataset.filterBrand || '';
+        renderFiltersSidebar();
+        applyProductFilters();
+      }
+    });
+
+    document.getElementById('filter-min-price')?.addEventListener('input', (e) => {
+      productFilters.minPrice = e.target.value;
+      scheduleApplyFilters();
+    });
+    document.getElementById('filter-max-price')?.addEventListener('input', (e) => {
+      productFilters.maxPrice = e.target.value;
+      scheduleApplyFilters();
+    });
+    document.getElementById('filter-state')?.addEventListener('change', (e) => {
+      productFilters.state = e.target.value;
+      syncSearchState(e.target.value);
+      applyProductFilters();
+    });
+    document.getElementById('filter-sort')?.addEventListener('change', (e) => {
+      productFilters.sort = e.target.value;
+      applyProductFilters();
+    });
+    document.getElementById('filter-free-shipping')?.addEventListener('change', (e) => {
+      productFilters.freeShipping = e.target.checked;
+      applyProductFilters();
+    });
+    document.getElementById('filter-on-sale')?.addEventListener('change', (e) => {
+      productFilters.onSale = e.target.checked;
+      applyProductFilters();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeFiltersDrawer();
+    });
   }
 
   /* ── Product Detail ── */
@@ -769,52 +1101,256 @@ const Trampolim = (() => {
   }
 
   /* ── Auth Modal ── */
+  function formatCpf(value) {
+    const d = value.replace(/\D/g, '').slice(0, 11);
+    return d
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+  }
+
+  function formatPhone(value) {
+    const d = value.replace(/\D/g, '').slice(0, 11);
+    if (d.length <= 10) {
+      return d.replace(/(\d{2})(\d)/, '($1) $2').replace(/(\d{4})(\d)/, '$1-$2');
+    }
+    return d.replace(/(\d{2})(\d)/, '($1) $2').replace(/(\d{5})(\d)/, '$1-$2');
+  }
+
+  function formatCep(value) {
+    const d = value.replace(/\D/g, '').slice(0, 8);
+    return d.replace(/(\d{5})(\d)/, '$1-$2');
+  }
+
+  function isValidCpf(cpf) {
+    const d = cpf.replace(/\D/g, '');
+    if (d.length !== 11 || /^(\d)\1+$/.test(d)) return false;
+    let sum = 0;
+    for (let i = 0; i < 9; i++) sum += Number(d[i]) * (10 - i);
+    let rev = (sum * 10) % 11;
+    if (rev === 10) rev = 0;
+    if (rev !== Number(d[9])) return false;
+    sum = 0;
+    for (let i = 0; i < 10; i++) sum += Number(d[i]) * (11 - i);
+    rev = (sum * 10) % 11;
+    if (rev === 10) rev = 0;
+    return rev === Number(d[10]);
+  }
+
   function showAuthModal(tab = 'login') {
     const overlay = document.createElement('div');
     overlay.className = 'modal-overlay';
     overlay.id = 'auth-modal';
+    const isRegister = tab === 'register';
     overlay.innerHTML = `
-      <div class="modal" role="dialog" aria-label="Autenticação">
+      <div class="modal ${isRegister ? 'modal-auth-register' : ''}" role="dialog" aria-label="Autenticação">
         <div class="modal-header">
           <h2 class="modal-title">Minha Conta</h2>
-          <button class="modal-close" aria-label="Fechar">✕</button>
+          <button type="button" class="modal-close" aria-label="Fechar">✕</button>
         </div>
         <div class="form-tabs">
-          <button class="form-tab ${tab === 'login' ? 'active' : ''}" data-auth-tab="login">Entrar</button>
-          <button class="form-tab ${tab === 'register' ? 'active' : ''}" data-auth-tab="register">Cadastrar</button>
+          <button type="button" class="form-tab ${tab === 'login' ? 'active' : ''}" data-auth-tab="login">Entrar</button>
+          <button type="button" class="form-tab ${isRegister ? 'active' : ''}" data-auth-tab="register">Cadastrar</button>
         </div>
-        <form id="auth-form">
-          <div id="register-name" style="display:${tab === 'register' ? 'block' : 'none'}">
-            <div class="form-group"><label class="form-label" for="auth-name">Nome</label>
-              <input class="form-input" id="auth-name" autocomplete="name"></div>
+        <form id="auth-form" class="auth-form ${isRegister ? 'auth-form-register' : ''}">
+          ${isRegister ? `
+          <div class="auth-section">
+            <h3 class="auth-section-title">Dados pessoais</h3>
+            <div class="form-group">
+              <label class="form-label" for="auth-name">Nome completo *</label>
+              <input class="form-input" id="auth-name" autocomplete="name" required placeholder="Seu nome completo">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="auth-cpf">CPF *</label>
+                <input class="form-input" id="auth-cpf" inputmode="numeric" autocomplete="off" required placeholder="000.000.000-00" maxlength="14">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="auth-birthdate">Data de nascimento *</label>
+                <input class="form-input" id="auth-birthdate" type="date" required max="">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="auth-phone">Telefone *</label>
+                <input class="form-input" id="auth-phone" type="tel" inputmode="tel" autocomplete="tel" required placeholder="(11) 99999-9999" maxlength="15">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="auth-email">E-mail *</label>
+                <input class="form-input" id="auth-email" type="email" required autocomplete="email" placeholder="seu@email.com">
+              </div>
+            </div>
           </div>
-          <div class="form-group"><label class="form-label" for="auth-email">E-mail</label>
-            <input class="form-input" id="auth-email" type="email" required autocomplete="email"></div>
-          <div class="form-group"><label class="form-label" for="auth-password">Senha</label>
-            <input class="form-input" id="auth-password" type="password" required minlength="6" autocomplete="current-password"></div>
+          <div class="auth-section">
+            <h3 class="auth-section-title">Endereço</h3>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="auth-cep">CEP *</label>
+                <input class="form-input" id="auth-cep" inputmode="numeric" autocomplete="postal-code" required placeholder="00000-000" maxlength="9">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="auth-number">Número *</label>
+                <input class="form-input" id="auth-number" autocomplete="address-line2" required placeholder="Nº">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="auth-street">Rua / Logradouro *</label>
+              <input class="form-input" id="auth-street" autocomplete="address-line1" required placeholder="Rua, avenida...">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="auth-complement">Complemento</label>
+              <input class="form-input" id="auth-complement" autocomplete="address-line3" placeholder="Apto, bloco, referência...">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="auth-neighborhood">Bairro *</label>
+                <input class="form-input" id="auth-neighborhood" autocomplete="address-level3" required placeholder="Bairro">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="auth-city">Cidade *</label>
+                <input class="form-input" id="auth-city" autocomplete="address-level2" required placeholder="Cidade">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="auth-state">Estado *</label>
+              <select class="form-input" id="auth-state" required>
+                <option value="">Selecione o estado</option>
+              </select>
+            </div>
+          </div>
+          <div class="auth-section">
+            <h3 class="auth-section-title">Acesso</h3>
+            <div class="form-group">
+              <label class="form-label" for="auth-password">Senha *</label>
+              <input class="form-input" id="auth-password" type="password" required minlength="6" autocomplete="new-password" placeholder="Mínimo 6 caracteres">
+            </div>
+          </div>
+          ` : `
+          <div class="form-group">
+            <label class="form-label" for="auth-email">E-mail</label>
+            <input class="form-input" id="auth-email" type="email" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="auth-password">Senha</label>
+            <input class="form-input" id="auth-password" type="password" required minlength="6" autocomplete="current-password">
+          </div>
+          `}
           <div id="auth-error" class="form-error" style="display:none"></div>
-          <button type="submit" class="btn btn-primary" style="width:100%">${tab === 'login' ? 'Entrar' : 'Criar conta'}</button>
+          <button type="submit" class="btn btn-primary auth-submit-btn">${isRegister ? 'Criar conta' : 'Entrar'}</button>
         </form>
       </div>`;
     document.body.appendChild(overlay);
     overlay.dataset.tab = tab;
 
+    if (isRegister) {
+      fillBrazilianStates(document.getElementById('auth-state'));
+      const birth = document.getElementById('auth-birthdate');
+      if (birth) {
+        const max = new Date();
+        max.setFullYear(max.getFullYear() - 16);
+        birth.max = max.toISOString().slice(0, 10);
+      }
+    }
+
     overlay.querySelector('.modal-close').addEventListener('click', () => overlay.remove());
     overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
   }
 
+  async function lookupAuthCep(cep) {
+    const digits = cep.replace(/\D/g, '');
+    if (digits.length !== 8) return;
+    try {
+      const data = await api.getCep(digits);
+      const street = document.getElementById('auth-street');
+      const neighborhood = document.getElementById('auth-neighborhood');
+      const city = document.getElementById('auth-city');
+      const state = document.getElementById('auth-state');
+      if (street && data.street) street.value = data.street;
+      if (neighborhood && data.neighborhood) neighborhood.value = data.neighborhood;
+      if (city && data.city) city.value = data.city;
+      if (state && data.state) state.value = data.state;
+      document.getElementById('auth-number')?.focus();
+    } catch {
+      showToast('CEP não encontrado');
+    }
+  }
+
   /* ── Account View ── */
+  function formatCpfDisplay(cpf) {
+    const d = String(cpf || '').replace(/\D/g, '');
+    if (d.length !== 11) return cpf || '—';
+    return d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+  }
+
+  function formatBirthDisplay(date) {
+    if (!date) return '—';
+    const [y, m, d] = String(date).split('-');
+    if (!y || !m || !d) return date;
+    return `${d}/${m}/${y}`;
+  }
+
   function updateAccountView() {
     const user = api.getUser();
     const header = document.querySelector('#view-account .profile-header');
+    const panel = document.querySelector('#view-account .account-panel');
     if (!header) return;
 
+    document.getElementById('account-profile-card')?.remove();
+
     if (user) {
+      const addr = user.address || {};
       header.innerHTML = `
-        <div class="profile-avatar" aria-hidden="true">${user.name.charAt(0).toUpperCase()}</div>
-        <h2>Olá, ${user.name.split(' ')[0]}!</h2>
-        <p style="color:var(--color-text-secondary)">${user.email}</p>
-        <button class="btn btn-outline btn-sm" id="btn-logout" style="margin-top:1rem">Sair</button>`;
+        <div class="profile-avatar" aria-hidden="true">${(user.name || '?').charAt(0).toUpperCase()}</div>
+        <h2 class="profile-title">Olá, ${user.name.split(' ')[0]}!</h2>
+        <p class="profile-subtitle">${user.email}</p>
+        <div class="account-auth-actions">
+          <button type="button" class="btn btn-outline btn-sm account-auth-btn" id="btn-logout">Sair</button>
+        </div>`;
+
+      if (panel) {
+        const card = document.createElement('div');
+        card.id = 'account-profile-card';
+        card.className = 'account-profile-card';
+        card.innerHTML = `
+          <h3 class="account-profile-title">Seus dados cadastrados</h3>
+          <dl class="account-profile-grid">
+            <div><dt>Nome</dt><dd>${user.name || '—'}</dd></div>
+            <div><dt>E-mail</dt><dd>${user.email || '—'}</dd></div>
+            <div><dt>Telefone</dt><dd>${user.phone || '—'}</dd></div>
+            <div><dt>CPF</dt><dd>${formatCpfDisplay(user.cpf)}</dd></div>
+            <div><dt>Nascimento</dt><dd>${formatBirthDisplay(user.birthdate)}</dd></div>
+            <div><dt>CEP</dt><dd>${addr.cep || '—'}</dd></div>
+            <div class="account-profile-full"><dt>Endereço</dt><dd>${
+              [addr.street, addr.number, addr.complement, addr.neighborhood, addr.city, addr.state]
+                .filter(Boolean).join(', ') || '—'
+            }</dd></div>
+          </dl>
+          <p class="account-profile-note">Dados salvos no banco de dados da Trampolim.</p>`;
+        const menu = panel.querySelector('.menu-list');
+        if (menu) panel.insertBefore(card, menu);
+        else panel.appendChild(card);
+      }
+    } else {
+      header.innerHTML = `
+        <div class="profile-avatar" aria-hidden="true">👤</div>
+        <h2 class="profile-title">Bem-vindo à Trampolim</h2>
+        <p class="profile-subtitle">Entre ou cadastre-se para aproveitar todas as vantagens</p>
+        <div class="account-auth-actions">
+          <button type="button" class="btn btn-primary btn-sm account-auth-btn">Entrar</button>
+          <button type="button" class="btn btn-outline btn-sm account-auth-btn">Cadastrar</button>
+        </div>`;
+    }
+  }
+
+  async function syncUserFromDatabase() {
+    if (!api.token) return null;
+    try {
+      const user = await api.getMe();
+      api.setUser(user);
+      updateAccountView();
+      return user;
+    } catch {
+      return null;
     }
   }
 
@@ -1365,10 +1901,15 @@ const Trampolim = (() => {
 
     document.getElementById('btn-back')?.classList.toggle('visible', viewHistory.length > 1);
 
+    const catalogViews = ['home', 'categories', 'offers', 'hub'];
+    document.querySelector('.app-shell')?.classList.toggle('filters-visible', catalogViews.includes(view));
+    if (!catalogViews.includes(view)) closeFiltersDrawer();
+
     if (view === 'cart') renderCart();
     if (view === 'checkout') { checkoutStep = 1; renderCheckout(); }
     if (view === 'orders') renderOrders();
     if (view === 'favorites') renderFavorites();
+    if (view === 'account') { updateAccountView(); syncUserFromDatabase(); }
     if (view === 'hub') renderHub();
     if (view === 'home') document.title = 'Trampolim — Seu impulso para o trampo';
     if (view === 'hub') document.title = 'Radar Trampolim — Busca';
@@ -1527,10 +2068,12 @@ const Trampolim = (() => {
     fillBrazilianStates(document.getElementById('search-state'));
     fillBrazilianStates(document.getElementById('header-search-state'));
     fillBrazilianStates(document.getElementById('hub-state'));
+    fillBrazilianStates(document.getElementById('filter-state'));
   }
 
   function getSearchState() {
-    return document.getElementById('search-state')?.value
+    return document.getElementById('filter-state')?.value
+      || document.getElementById('search-state')?.value
       || document.getElementById('header-search-state')?.value
       || '';
   }
@@ -1538,56 +2081,18 @@ const Trampolim = (() => {
   function syncSearchState(value) {
     const home = document.getElementById('search-state');
     const header = document.getElementById('header-search-state');
+    const filter = document.getElementById('filter-state');
     if (home && home.value !== value) home.value = value;
     if (header && header.value !== value) header.value = value;
+    if (filter && filter.value !== value) filter.value = value;
+    productFilters.state = value || '';
   }
 
   function runProductSearch(query, gridId = 'products-grid', state) {
-    const q = query.trim();
-    const uf = state !== undefined ? state : getSearchState();
-    const params = {};
-    if (q) params.search = q;
-    if (uf) params.state = uf;
-
-    const filterLocal = (list) => {
-      let results = [...list];
-      if (q) {
-        const lower = q.toLowerCase();
-        results = results.filter(p =>
-          p.name.toLowerCase().includes(lower) ||
-          p.brand?.toLowerCase().includes(lower) ||
-          p.description?.toLowerCase().includes(lower)
-        );
-      }
-      if (uf) results = results.filter(p => (p.state || '').toUpperCase() === uf.toUpperCase());
-      return results;
-    };
-
-    const search = async () => {
-      try {
-        const results = Object.keys(params).length
-          ? await api.getProducts(params)
-          : (uf ? await api.getProducts({ state: uf }) : PRODUCTS.slice(0, 8));
-        renderProducts(gridId, results.length ? results : []);
-        if (results.length === 0 && (q || uf)) {
-          const grid = document.getElementById(gridId);
-          if (grid) {
-            grid.innerHTML = '<p style="text-align:center;color:var(--color-text-muted);padding:2rem;grid-column:1/-1">Nenhum produto encontrado para este filtro.</p>';
-          }
-        }
-      } catch {
-        const base = q || uf ? PRODUCTS : PRODUCTS.slice(0, 8);
-        const results = filterLocal(base);
-        renderProducts(gridId, results);
-        if (!results.length && (q || uf)) {
-          const grid = document.getElementById(gridId);
-          if (grid) {
-            grid.innerHTML = '<p style="text-align:center;color:var(--color-text-muted);padding:2rem;grid-column:1/-1">Nenhum produto encontrado para este filtro.</p>';
-          }
-        }
-      }
-    };
-    return search();
+    if (state !== undefined) syncSearchState(state);
+    syncSearchInputs(query);
+    applyProductFilters();
+    return Promise.resolve();
   }
 
   function syncSearchInputs(value) {
@@ -1758,6 +2263,7 @@ const Trampolim = (() => {
   /* ── Events ── */
   function bindEvents() {
     bindHubEvents();
+    bindFiltersEvents();
     document.querySelectorAll('[data-view]').forEach(el => {
       el.addEventListener('click', (e) => { e.preventDefault(); navigateTo(el.dataset.view); });
     });
@@ -1794,7 +2300,14 @@ const Trampolim = (() => {
 
     document.addEventListener('blur', (e) => {
       if (e.target.id === 'ck-cep') lookupCep(e.target.value);
+      if (e.target.id === 'auth-cep') lookupAuthCep(e.target.value);
     }, true);
+
+    document.addEventListener('input', (e) => {
+      if (e.target.id === 'auth-cpf') e.target.value = formatCpf(e.target.value);
+      if (e.target.id === 'auth-phone') e.target.value = formatPhone(e.target.value);
+      if (e.target.id === 'auth-cep') e.target.value = formatCep(e.target.value);
+    });
 
     document.addEventListener('click', async (e) => {
       const openProd = e.target.closest('[data-open-product]');
@@ -1821,9 +2334,11 @@ const Trampolim = (() => {
       const cat = e.target.closest('[data-category]');
       if (cat) {
         activeCategory = cat.dataset.category;
+        productFilters.category = activeCategory;
         const c = CATEGORIES.find(x => x.id === activeCategory);
         document.getElementById('category-products-title').textContent = `${c?.icon || ''} ${c?.name || ''}`;
-        renderProducts('category-products-grid', PRODUCTS.filter(p => p.category === activeCategory));
+        renderFiltersSidebar();
+        applyProductFilters();
         navigateTo('categories');
         return;
       }
@@ -1876,9 +2391,11 @@ const Trampolim = (() => {
         if (themeAction === 'offers') { navigateTo('offers'); return; }
         if (themeAction === 'categories') { navigateTo('categories'); return; }
         activeCategory = showcase.dataset.category;
+        productFilters.category = activeCategory;
         const c = CATEGORIES.find(x => x.id === activeCategory);
         document.getElementById('category-products-title').textContent = `${c?.icon || ''} ${c?.name || ''}`;
-        renderProducts('category-products-grid', PRODUCTS.filter(p => p.category === activeCategory));
+        renderFiltersSidebar();
+        applyProductFilters();
         navigateTo('categories');
         return;
       }
@@ -1945,11 +2462,34 @@ const Trampolim = (() => {
               document.getElementById('auth-password').value
             );
           } else {
-            await api.register(
-              document.getElementById('auth-name').value,
-              document.getElementById('auth-email').value,
-              document.getElementById('auth-password').value
-            );
+            const cpf = document.getElementById('auth-cpf')?.value || '';
+            if (!isValidCpf(cpf)) {
+              throw new Error('CPF inválido. Verifique os números digitados.');
+            }
+            const birthdate = document.getElementById('auth-birthdate')?.value;
+            if (birthdate) {
+              const birth = new Date(birthdate);
+              const minAge = new Date();
+              minAge.setFullYear(minAge.getFullYear() - 16);
+              if (birth > minAge) throw new Error('É necessário ter pelo menos 16 anos para se cadastrar.');
+            }
+            await api.register({
+              name: document.getElementById('auth-name').value.trim(),
+              email: document.getElementById('auth-email').value.trim(),
+              password: document.getElementById('auth-password').value,
+              phone: document.getElementById('auth-phone').value.trim(),
+              cpf: cpf.replace(/\D/g, ''),
+              birthdate,
+              address: {
+                cep: document.getElementById('auth-cep')?.value.trim() || '',
+                street: document.getElementById('auth-street')?.value.trim() || '',
+                number: document.getElementById('auth-number')?.value.trim() || '',
+                complement: document.getElementById('auth-complement')?.value.trim() || '',
+                neighborhood: document.getElementById('auth-neighborhood')?.value.trim() || '',
+                city: document.getElementById('auth-city')?.value.trim() || '',
+                state: document.getElementById('auth-state')?.value || '',
+              },
+            });
           }
           modal?.remove();
           updateAccountView();
@@ -2020,9 +2560,11 @@ const Trampolim = (() => {
     updateCartBadge();
     updateFavoritesBadge();
     updateChatBadge();
+    document.querySelector('.app-shell')?.classList.add('filters-visible');
 
     document.getElementById('app-loading')?.classList.remove('hidden');
     await loadData();
+    await syncUserFromDatabase();
     document.getElementById('app-loading')?.classList.add('hidden');
 
     if (viewParam) navigateTo(viewParam, false);

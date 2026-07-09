@@ -1,17 +1,21 @@
+# Trampolim — Blueprint de produção (Render)
+# Opção A (padrão): PostgreSQL gerenciado pelo Render
+# Opção B (Neon): após o deploy, substitua DATABASE_URL pela connection string do Neon
+
 databases:
-  - name: super-eletrolar-db
+  - name: trampolim-db
     plan: free
-    databaseName: super_eletrolar
-    user: super_eletrolar
+    databaseName: trampolim
+    user: trampolim
     region: oregon
 
 services:
   - type: web
-    name: super-eletrolar
+    name: trampolim
     runtime: node
     plan: free
     region: oregon
-    repo: https://github.com/JorgeRamalho/SuperEletroLar
+    repo: https://github.com/JorgeRamalho/Trampolim
     branch: main
     buildCommand: npm run deploy:build
     startCommand: npm run start:prod
@@ -20,16 +24,22 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: JWT_SECRET
-        generateValue: true
       - key: PORT
-        value: 4000
+        value: "4000"
       - key: RENDER
         value: "true"
+      - key: JWT_SECRET
+        generateValue: true
+      # Banco Render (troque no painel se usar Neon)
       - key: DATABASE_URL
         fromDatabase:
-          name: super-eletrolar-db
+          name: trampolim-db
           property: connectionString
+      # URL pública — após o deploy, confirme no Environment
+      # (RENDER_EXTERNAL_URL já é injetado automaticamente pelo Render)
+      - key: FRONTEND_URL
+        sync: false
+      # Mercado Pago — preencher no painel após o deploy
       - key: MERCADOPAGO_ACCESS_TOKEN
         sync: false
       - key: MERCADOPAGO_PUBLIC_KEY
